@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="353.0" prefWidth="548.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_DangNhap">
+   <children>
+      <Pane prefHeight="353.0" prefWidth="559.0">
+         <children>
+            <ImageView fitHeight="353.0" fitWidth="634.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/login04.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="txtUser" layoutX="299.0" layoutY="95.0" prefHeight="35.0" prefWidth="221.0" promptText="Tên đăng nhập" style="-fx-background-color: none; -fx-border-color: #d7d7d7;">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </TextField>
+            <Button layoutX="398.0" layoutY="207.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" style="-fx-background-color: none; -fx-border-color: none;" text="Quên mật khẩu?" textFill="#5159c9">
+               <font>
+                  <Font name="System Bold Italic" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnDangNhap" layoutX="355.0" layoutY="254.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #0C4EA2; -fx-border-radius: 8;" text="Đăng nhập" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <PasswordField fx:id="txtPass" layoutX="299.0" layoutY="159.0" prefHeight="35.0" prefWidth="221.0" promptText="Mật khẩu" style="-fx-background-color: none; -fx-border-color: #d7d7d7;">
+               <tooltip>
+                  <Tooltip text="Empty Tooltip" />
+               </tooltip></PasswordField>
+            <CheckBox fx:id="showPss" layoutX="299.0" layoutY="211.0" mnemonicParsing="false" text="Hiện mật khẩu" />
+            <TextField fx:id="txtPassShow" layoutX="299.0" layoutY="159.0" prefHeight="35.0" prefWidth="221.0" style="-fx-background-color: none; -fx-border-color: #d7d7d7;">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </TextField>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

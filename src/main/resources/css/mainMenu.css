@@ -1,0 +1,17 @@
+
+/*
+VBOX MENU
+*/
+.menu-button {
+    -fx-background-color:  #3C7DD9;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 50px;
+
+}
+
+.menu-button .menu-item{
+    -fx-pref-width: 200px;
+    -fx-pref-height: 40px;
+}

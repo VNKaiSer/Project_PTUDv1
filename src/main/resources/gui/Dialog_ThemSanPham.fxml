@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<DialogPane id="dlThemCN" prefHeight="400.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_Dialog_ThemCN">
+   <header>
+      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="800.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="67.0" prefWidth="199.0" text="THÊM SẢN PHẨM MỚI" textFill="#0c4ea2">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </header>
+   <content>
+      <AnchorPane prefHeight="353.0" prefWidth="800.0">
+         <children>
+            <Label layoutX="63.0" layoutY="18.0" prefHeight="36.0" prefWidth="89.0" text="Mã sản phẩm:" />
+            <Label layoutX="57.0" layoutY="81.0" text="Tên sản phẩm:" />
+            <Label layoutX="59.0" layoutY="125.0" text="Số công đoạn:" />
+            <Label layoutX="412.0" layoutY="24.0" prefHeight="18.0" prefWidth="65.0" text="Màu sắc:" />
+            <Label layoutX="410.0" layoutY="72.0" prefHeight="18.0" prefWidth="54.0" text="Chất liệu:" />
+            <Label layoutX="410.0" layoutY="124.0" text="Số lượng sản phẩm yêu cầu:" />
+            <TextField layoutX="155.0" layoutY="17.0" prefHeight="34.0" prefWidth="206.0" style="-fx-border-color: #d7d7d7; -fx-background-color: white;" />
+            <TextField alignment="CENTER" layoutX="155.0" layoutY="70.0" prefHeight="34.0" prefWidth="206.0" style="-fx-border-color: #d7d7d7; -fx-background-color: white;" />
+            <TextField alignment="CENTER" layoutX="492.0" layoutY="17.0" prefHeight="38.0" prefWidth="223.0" style="-fx-border-color: #d7d7d7; -fx-background-color: white;" />
+            <TextField layoutX="492.0" layoutY="69.0" prefHeight="34.0" prefWidth="223.0" />
+            <ComboBox id="cboGioiTinh" fx:id="cboGioiTinh" layoutX="153.0" layoutY="118.0" prefHeight="30.0" prefWidth="80.0" promptText="1" />
+            <ComboBox fx:id="cboTrinhDo" layoutX="227.0" layoutY="164.0" prefHeight="30.0" prefWidth="136.0" visible="false" />
+            <HBox alignment="CENTER" layoutX="91.0" layoutY="299.0" prefHeight="41.0" prefWidth="627.0" stylesheets="@../css/button.css">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Thêm">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Đặt lại">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <Spinner layoutX="590.0" layoutY="120.0" prefHeight="28.0" prefWidth="128.0" />
+         </children>
+      </AnchorPane>
+   </content>
+</DialogPane>

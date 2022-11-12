@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="450.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.InfoSanPham">
+   <children>
+      <DialogPane prefHeight="450.0" prefWidth="650.0" />
+      <Label layoutX="287.0" layoutY="113.0" text="Mã sản phẩm:" />
+      <Label layoutX="286.0" layoutY="157.0" text="Số công đoạn:" />
+      <Label layoutX="287.0" layoutY="196.0" text="Màu sắc:" />
+      <Label layoutX="14.0" layoutY="102.0" prefHeight="336.0" prefWidth="251.0" style="-fx-border-color: gray;" />
+      <Label layoutX="286.0" layoutY="239.0" text="Chất liệu:" />
+      <TextField alignment="CENTER" cacheShape="false" centerShape="false" disable="true" editable="false" focusTraversable="false" layoutX="19.0" layoutY="52.0" prefHeight="39.0" prefWidth="613.0" promptText="ĐẦY ĐỦ TÊN SẢN PHẨM" scaleShape="false" />
+      <TextField cacheShape="false" centerShape="false" disable="true" editable="false" focusTraversable="false" layoutX="367.0" layoutY="102.0" prefHeight="33.0" prefWidth="264.0" scaleShape="false" />
+      <TextField cacheShape="false" centerShape="false" disable="true" editable="false" focusTraversable="false" layoutX="368.0" layoutY="146.0" prefHeight="33.0" prefWidth="264.0" scaleShape="false" />
+      <TextField cacheShape="false" centerShape="false" disable="true" editable="false" focusTraversable="false" layoutX="367.0" layoutY="185.0" prefHeight="33.0" prefWidth="264.0" scaleShape="false" />
+      <TextField cacheShape="false" centerShape="false" disable="true" editable="false" focusTraversable="false" layoutX="368.0" layoutY="228.0" prefHeight="33.0" prefWidth="264.0" scaleShape="false" />
+      <Label alignment="CENTER" layoutX="237.0" layoutY="22.0" prefHeight="50.0" prefWidth="650.0" text="THÔNG TIN SẢN PHẨM" textFill="#0c4ea2" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="532.0" layoutY="396.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="99.0" style="-fx-background-color: #0c4ea2; -fx-text-fill: white; -fx-font-weight: bold;" text="Thoát">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/exit_white.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+   </children>
+</AnchorPane>
