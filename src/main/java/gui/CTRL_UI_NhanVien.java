@@ -142,14 +142,14 @@ public class CTRL_UI_NhanVien implements Initializable{
         cboGioiTinh.setItems(listGioiTinh);
         cbo_ChucVu.setItems(listChucVu);
         connectAPI = new BUS_API();
-        cbo_tinh.setItems(connectAPI.getDanhSachTinh());
+        cbo_tinh.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachTinh()));
         cbo_tinh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 String tinh = cbo_tinh.getValue();
                 cbo_huyen.setDisable(false);
                 String codeProvince = cbo_tinh.getValue();
-                cbo_huyen.setItems(connectAPI.getDanhSachHuyen(codeProvince));
+                cbo_huyen.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachHuyen(codeProvince)));
             }
         });
 
@@ -159,7 +159,7 @@ public class CTRL_UI_NhanVien implements Initializable{
                 String huyen = cbo_tinh.getValue();
                 cbo_phuong.setDisable(false);
                 String codeDis = cbo_huyen.getValue();
-                cbo_phuong.setItems(connectAPI.getDanhSachDuong(codeDis));
+                cbo_phuong.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachDuong(codeDis)));
             }
         });
 

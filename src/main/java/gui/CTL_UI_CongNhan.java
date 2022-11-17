@@ -330,14 +330,14 @@ public class CTL_UI_CongNhan implements Initializable {
         cboGioiTinh.setItems(listGioiTinh);
         cboTrinhDo.setItems(listTrinhDo);
 
-        cboTinh.setItems(connectAPI.getDanhSachTinh());
+        cboTinh.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachTinh()));
         cboTinh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 String tinh = cboTinh.getValue();
                 cboHuyen.setDisable(false);
                 String codeProvince = cboTinh.getValue();
-                cboHuyen.setItems(connectAPI.getDanhSachHuyen(codeProvince));
+                cboHuyen.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachHuyen(codeProvince)));
                 cboTinh.setStyle("-fx-border-color: GREEN;");
                 checkFrom = true;
                 if (cboTinh.getValue().equals("")) {
@@ -353,7 +353,7 @@ public class CTL_UI_CongNhan implements Initializable {
                 String huyen = cboTinh.getValue();
                 cboPhuong.setDisable(false);
                 String codeDis = cboHuyen.getValue();
-                cboPhuong.setItems(connectAPI.getDanhSachDuong(codeDis));
+                cboPhuong.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachDuong(codeDis)));
                 cboHuyen.setStyle("-fx-border-color: GREEN;");
                 checkFrom = true;
                 if (cboHuyen.getValue().equals("")) {

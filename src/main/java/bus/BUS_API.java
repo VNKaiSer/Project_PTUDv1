@@ -1,24 +1,27 @@
 package bus;
 
+import bus.Service.ReadJSONDiaChi;
 import db.ConnectAPI;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+
 public class BUS_API {
-    private ConnectAPI connectAPI;
+    private ReadJSONDiaChi readJSONDiaChi;
     public BUS_API(){
-        connectAPI = new ConnectAPI();
+        readJSONDiaChi = new ReadJSONDiaChi();
     }
 
-    public ObservableList<String> getDanhSachTinh(){
-        return connectAPI.getDsTinh();
+    public ArrayList<String> getDanhSachTinh(){
+        return readJSONDiaChi.getDSTinh();
     }
 
-    public ObservableList<String> getDanhSachHuyen(String tenTinh){
-        return connectAPI.getDsHuyen(tenTinh);
+    public ArrayList<String> getDanhSachHuyen(String tenTinh){
+        return readJSONDiaChi.getDSHuyen(tenTinh);
     }
 
-    public ObservableList<String> getDanhSachDuong(String tenHuyen){
-        return connectAPI.getDuong(tenHuyen);
+    public ArrayList<String> getDanhSachDuong(String tenHuyen){
+        return readJSONDiaChi.getDSDuong(tenHuyen);
     }
 
 

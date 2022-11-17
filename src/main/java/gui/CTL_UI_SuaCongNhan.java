@@ -283,14 +283,14 @@ public class CTL_UI_SuaCongNhan implements Initializable {
         cboGioiTinh.setItems(listGioiTinh);
         cboTrinhDo.setItems(listTrinhDo);
 
-        cboTinh.setItems(CTL_UI_CongNhan.connectAPI.getDanhSachTinh());
+        cboTinh.setItems(FXCollections.observableArrayList(CTL_UI_CongNhan.connectAPI.getDanhSachTinh()));
         cboTinh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 String tinh = cboTinh.getValue();
                 cboHuyen.setDisable(false);
                 String codeProvince = cboTinh.getValue().toString();
-                cboHuyen.setItems(CTL_UI_CongNhan.connectAPI.getDanhSachHuyen(codeProvince));
+                cboHuyen.setItems(FXCollections.observableArrayList( CTL_UI_CongNhan.connectAPI.getDanhSachHuyen(codeProvince)));
             }
         });
 
@@ -300,7 +300,7 @@ public class CTL_UI_SuaCongNhan implements Initializable {
                 String huyen = cboTinh.getValue();
                 cboPhuong.setDisable(false);
                 String codeDis = cboHuyen.getValue().toString();
-                cboPhuong.setItems(CTL_UI_CongNhan.connectAPI.getDanhSachDuong(codeDis));
+                cboPhuong.setItems(FXCollections.observableArrayList(CTL_UI_CongNhan.connectAPI.getDanhSachDuong(codeDis)));
             }
         });
 
