@@ -23,10 +23,9 @@
                   <TableView fx:id="tblBCCCN" focusTraversable="false" layoutX="9.0" layoutY="131.0" prefHeight="459.0" prefWidth="984.0">
                      <columns>
                         <TableColumn fx:id="maNhanVienCol" editable="false" prefWidth="75.0" text="Mã nhân viên" />
-                        <TableColumn fx:id="tenCol" editable="false" prefWidth="75.0" text="Họ và tên" />
-                        <TableColumn fx:id="ngayCCCol" editable="false" prefWidth="75.0" text="Ngày chấm công" />
-                        <TableColumn fx:id="hienDienCol" prefWidth="75.0" text="Hiện diện" />
-                        <TableColumn fx:id="ghiChuCol" prefWidth="75.0" text="Ghi chú" />
+                        <TableColumn fx:id="tenCol" editable="false" prefWidth="405.0" text="Họ và tên" />
+                        <TableColumn fx:id="hienDienCol" prefWidth="86.0" text="Hiện diện" />
+                        <TableColumn fx:id="ghiChuCol" prefWidth="388.0" text="Ghi chú" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

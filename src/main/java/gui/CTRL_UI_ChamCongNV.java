@@ -4,17 +4,16 @@ import bus.BUS_ChamCongNhanVien;
 import bus.BUS_NhanVien;
 import dto.DTO_BCCNhanVien;
 import dto.DTO_NhanVien;
+import dto.DTO_TBW_ChamCongNhanVien;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 public class CTRL_UI_ChamCongNV implements Initializable {
 
@@ -36,7 +34,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
     private TableColumn<?, ?> ghiChuCol;
 
     @FXML
-    private TableColumn<?, ?> hienDienCol;
+    private TableColumn<DTO_TBW_ChamCongNhanVien, ComboBox<String>> hienDienCol;
 
     @FXML
     private TableColumn<?, ?> maNhanVienCol;
@@ -45,7 +43,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
     private TableColumn<?, ?> ngayCCCol;
 
     @FXML
-    private TableView<DTO_BCCNhanVien> tblBCCCN;
+    private TableView<DTO_TBW_ChamCongNhanVien> tblBCCCN;
 
     @FXML
     private TableColumn<?, ?> tenCol;
@@ -67,6 +65,8 @@ public class CTRL_UI_ChamCongNV implements Initializable {
 
     private BUS_ChamCongNhanVien bus_chamCongNhanVien;
 
+    private ComboBox<String> cboChamCong;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // khởi tạo các bus và các danh sách
@@ -74,7 +74,8 @@ public class CTRL_UI_ChamCongNV implements Initializable {
         bus_chamCongNhanVien = new BUS_ChamCongNhanVien();
         dsBCCHienTai = new ArrayList<>();
         dsBCCDaCham = new ArrayList<>();
-
+        cboChamCong = new ComboBox<>();
+        cboChamCong.setItems(FXCollections.observableArrayList("Đi làm","Vắng","Có phép"));
         LocalDate ngayHienTai = Instant.ofEpochMilli(new Date().getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
@@ -82,9 +83,8 @@ public class CTRL_UI_ChamCongNV implements Initializable {
         txtNGayChamCong.setValue(ngayHienTai);
 
         maNhanVienCol.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
-        tenCol.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
-        ngayCCCol.setCellValueFactory(new PropertyValueFactory<>("ngayChamCong"));
-        hienDienCol.setCellValueFactory(new PropertyValueFactory<>("hienDien"));
+        tenCol.setCellValueFactory(new PropertyValueFactory<>("hoTen"));
+        hienDienCol.setCellValueFactory(new PropertyValueFactory<DTO_TBW_ChamCongNhanVien, ComboBox<String>>("hienDien"));
         ghiChuCol.setCellValueFactory(new PropertyValueFactory<>("ghiChu"));
         loadDanhSachChamCongHomNay();
 
@@ -123,36 +123,36 @@ public class CTRL_UI_ChamCongNV implements Initializable {
             }
         });
 
-        tblBCCCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                int idx = tblBCCCN.getSelectionModel().getSelectedIndex();
-                if (idx == -1)
-                    return;
-
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("Dialog_ChamCongNhanVien.fxml"));
-                DialogPane addDialog = null;
-                try {
-                    addDialog = fxmlLoader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                dialog = new Dialog<>();
-                dialog.setDialogPane(addDialog);
-                CTRL_Dialog_CCNV ctrl_dialog_ccnv = fxmlLoader.getController();
-
-                DTO_BCCNhanVien selectCN = tblBCCCN.getSelectionModel().getSelectedItem();
-                ctrl_dialog_ccnv.setData(selectCN.getHienDien(), selectCN.getGhiChu());
-                Optional clickedButton = dialog.showAndWait();
-
-                if (ctrl_dialog_ccnv.getCheckLuu()) {
-                    selectCN.setGhiChu(ctrl_dialog_ccnv.getGhiChu());
-                    selectCN.setHienDien(ctrl_dialog_ccnv.getTrangThai());
-                    tblBCCCN.getItems().set(idx, selectCN);
-                }
-            }
-        });
+//        tblBCCCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                int idx = tblBCCCN.getSelectionModel().getSelectedIndex();
+//                if (idx == -1)
+//                    return;
+//
+//                FXMLLoader fxmlLoader = new FXMLLoader();
+//                fxmlLoader.setLocation(getClass().getResource("Dialog_ChamCongNhanVien.fxml"));
+//                DialogPane addDialog = null;
+//                try {
+//                    addDialog = fxmlLoader.load();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                dialog = new Dialog<>();
+//                dialog.setDialogPane(addDialog);
+//                CTRL_Dialog_CCNV ctrl_dialog_ccnv = fxmlLoader.getController();
+//
+//                DTO_BCCNhanVien selectCN = tblBCCCN.getSelectionModel().getSelectedItem();
+//                ctrl_dialog_ccnv.setData(selectCN.getHienDien(), selectCN.getGhiChu());
+//                Optional clickedButton = dialog.showAndWait();
+//
+//                if (ctrl_dialog_ccnv.getCheckLuu()) {
+//                    selectCN.setGhiChu(ctrl_dialog_ccnv.getGhiChu());
+//                    selectCN.setHienDien(ctrl_dialog_ccnv.getTrangThai());
+//                    tblBCCCN.getItems().set(idx, selectCN);
+//                }
+//            }
+//        });
 
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -171,7 +171,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
 
     private void loadDanhSachChamCongDaCham() {
         tblBCCCN.getItems().clear();
-        tblBCCCN.setItems(FXCollections.observableArrayList(bus_chamCongNhanVien.getDSChamCongTheoNgay(txtNGayChamCong.getValue().toString())));
+        tblBCCCN.setItems(cover(FXCollections.observableArrayList(bus_chamCongNhanVien.getDSChamCongTheoNgay(txtNGayChamCong.getValue().toString()))));
     }
 
     private void loadDanhSachChamCongHomNay() {
@@ -182,7 +182,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
             String maBCC = taoMaBCC(dsNV.get(i).getMaNhanVien());
             dsBCCHienTai.add(new DTO_BCCNhanVien(dsNV.get(i), 1, new Date(), maBCC, ""));
         }
-        tblBCCCN.setItems(FXCollections.observableArrayList(dsBCCHienTai));
+        tblBCCCN.setItems(cover(FXCollections.observableArrayList(dsBCCHienTai)));
 
     }
 
@@ -202,6 +202,19 @@ public class CTRL_UI_ChamCongNV implements Initializable {
     private String taoMaBCC(String maNV){
         String date = new SimpleDateFormat("ddMMyyyy").format(new Date());
         return "CCNV"+date +maNV;
+    }
+
+    private ObservableList<DTO_TBW_ChamCongNhanVien> cover(ObservableList<DTO_BCCNhanVien> bcc){
+        ObservableList<DTO_TBW_ChamCongNhanVien> list = FXCollections.observableArrayList();
+        for (DTO_BCCNhanVien it:
+                bcc) {
+            ComboBox<String> cbo = new ComboBox<>();
+            cbo.setItems(FXCollections.observableArrayList("Đi làm","Vắng","Phép"));
+            cbo.setValue("Đi làm");
+            DTO_TBW_ChamCongNhanVien tmp = new DTO_TBW_ChamCongNhanVien(it.getNhanVien().getMaNhanVien(), it.getNhanVien().getTenNhanVien(), cbo, "");
+            list.add(tmp);
+        }
+        return list;
     }
 
 
