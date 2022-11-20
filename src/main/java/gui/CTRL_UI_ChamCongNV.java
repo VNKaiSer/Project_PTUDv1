@@ -2,6 +2,7 @@ package gui;
 
 import bus.BUS_ChamCongNhanVien;
 import bus.BUS_NhanVien;
+import dto.DTO_BCCCongNhan;
 import dto.DTO_BCCNhanVien;
 import dto.DTO_NhanVien;
 import dto.DTO_TBW_ChamCongNhanVien;
@@ -67,6 +68,10 @@ public class CTRL_UI_ChamCongNV implements Initializable {
 
     private ComboBox<String> cboChamCong;
 
+    private final int COMAT = 1;
+    private final int PHEP = 2;
+    private final int VANG = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // khởi tạo các bus và các danh sách
@@ -86,6 +91,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
         tenCol.setCellValueFactory(new PropertyValueFactory<>("hoTen"));
         hienDienCol.setCellValueFactory(new PropertyValueFactory<DTO_TBW_ChamCongNhanVien, ComboBox<String>>("hienDien"));
         ghiChuCol.setCellValueFactory(new PropertyValueFactory<>("ghiChu"));
+
         loadDanhSachChamCongHomNay();
 
         // băt sự kiện trên các componet
@@ -158,6 +164,20 @@ public class CTRL_UI_ChamCongNV implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (nowCC){
+                    // cập nhật chấm công
+                    Alert a = new Alert(Alert.AlertType.WARNING,"Chỉ chấm công được 1 lần bạn có chắc chắn LƯU", ButtonType.YES, ButtonType.NO);
+                    Optional<ButtonType> result = a.showAndWait();
+                    if (result.get() == ButtonType.NO || !result.isPresent()){
+                        return;
+                    }
+                    int i = 0;
+                    for (DTO_BCCNhanVien it:
+                            dsBCCHienTai) {
+
+                        it.setHienDien(tblBCCCN.getItems().get(i).getHienDien().getSelectionModel().getSelectedIndex());
+                        it.setGhiChu(tblBCCCN.getItems().get(i).getGhiChu().getText());
+                        i++;
+                    }
                     insertToDataBase();
                     nowCC = false;
                     tblBCCCN.setDisable(true);
@@ -170,11 +190,18 @@ public class CTRL_UI_ChamCongNV implements Initializable {
     }
 
     private void loadDanhSachChamCongDaCham() {
+        tblBCCCN.setDisable(true);
         tblBCCCN.getItems().clear();
         tblBCCCN.setItems(cover(FXCollections.observableArrayList(bus_chamCongNhanVien.getDSChamCongTheoNgay(txtNGayChamCong.getValue().toString()))));
     }
 
     private void loadDanhSachChamCongHomNay() {
+        ArrayList<DTO_BCCNhanVien> checkTMP = bus_chamCongNhanVien.getDSChamCongTheoNgay(txtNGayChamCong.getValue().toString());
+        System.out.println(!checkTMP.isEmpty());
+        if (!checkTMP.isEmpty()){
+            loadDanhSachChamCongDaCham();
+            return;
+        }
         dsBCCHienTai = new ArrayList<>();
         ArrayList<DTO_NhanVien> dsNV = bus_nhanVien.getAllDSNhanVien();
         int numNhanVien = dsNV.size();
@@ -209,9 +236,11 @@ public class CTRL_UI_ChamCongNV implements Initializable {
         for (DTO_BCCNhanVien it:
                 bcc) {
             ComboBox<String> cbo = new ComboBox<>();
-            cbo.setItems(FXCollections.observableArrayList("Đi làm","Vắng","Phép"));
-            cbo.setValue("Đi làm");
-            DTO_TBW_ChamCongNhanVien tmp = new DTO_TBW_ChamCongNhanVien(it.getNhanVien().getMaNhanVien(), it.getNhanVien().getTenNhanVien(), cbo, "");
+            TextField t = new TextField(it.getGhiChu());
+
+            cbo.setItems(FXCollections.observableArrayList("Vắng","Có mặt","Phép"));
+            cbo.getSelectionModel().select(it.getHienDien());
+            DTO_TBW_ChamCongNhanVien tmp = new DTO_TBW_ChamCongNhanVien(it.getNhanVien().getMaNhanVien(), it.getNhanVien().getTenNhanVien(), cbo, t);
             list.add(tmp);
         }
         return list;

@@ -84,6 +84,11 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     private Dialog dialog;
 
     private  BUS_ChamCongCN bus_chamCongCN;
+
+    private final int COMAT = 1;
+    private final int PHEP = 2;
+    private final int VANG = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // khởi tạo các bus và các danh sách
@@ -195,6 +200,12 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (nowCC){
+                    // cập nhật chấm công
+                    Alert a = new Alert(Alert.AlertType.WARNING,"Chỉ chấm công được một lần bạn có chắc chắn LƯU", ButtonType.YES, ButtonType.NO);
+                    for (DTO_BCCCongNhan it:
+                            dsBCCHienTai) {
+                        //it.setHienDien();
+                    }
                     insertToDataBase();
                     nowCC = false;
                     tblBCCCN.setDisable(true);
@@ -212,6 +223,12 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     }
 
     private void loadDanhSachChamCongHomNay() throws SQLException, ParseException {
+        // check đã chấm công hôm nay hay chưa
+        ArrayList<DTO_BCCCongNhan> checkTMP = bus_chamCongCN.getDSBCCNTheoNgay(txtNgayChamCong.getValue().toString());
+        if (!checkTMP.isEmpty()){
+            loadDanhSachChamCongDaCham();
+            return;
+        }
         dsBCCHienTai = new ArrayList<>();
         ArrayList<DTO_CongNhan> dsCN = bus_congNhan.getDSCongNhan();
         int numNhanVien = dsCN.size();
@@ -237,4 +254,5 @@ public class CTRL_UI_ChamCongCN implements Initializable {
         String date = new SimpleDateFormat("ddMMyyyy").format(new Date());
         return "CCCN"+date +maNV;
     }
+
 }
