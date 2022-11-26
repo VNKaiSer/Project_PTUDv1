@@ -17,6 +17,9 @@ public class DTO_SanPham {
 	private int soLuongYeuCau;
 	private String chatLieu;
 	private ArrayList<DTO_CongDoan> dsCongDoan;
+	private boolean trangThai;
+
+	private byte [] hinhAnh;
 
 	public DTO_SanPham() {
 		// super();
@@ -44,6 +47,7 @@ public class DTO_SanPham {
 		this.soCongDoan = soCongDoan;
 		this.soLuongYeuCau = soLuongYeuCau;
 		this.dsCongDoan = dsCongDoan;
+		this.trangThai = false;
 	}
 
 	public String getMaSanPham() {
@@ -92,6 +96,23 @@ public class DTO_SanPham {
 	public void setChatLieu(String chatLieu) {
 		this.chatLieu = chatLieu;
 	}
+
+	public boolean isTrangThai() {
+		return trangThai;
+	}
+
+	public void setTrangThai(boolean trangThai) {
+		this.trangThai = trangThai;
+	}
+
+	public byte[] getHinhAnh() {
+		return hinhAnh;
+	}
+
+	public void setHinhAnh(byte[] hinhAnh) {
+		this.hinhAnh = hinhAnh;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

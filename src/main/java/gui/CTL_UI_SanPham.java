@@ -7,19 +7,33 @@ import dto.DTO_CongNhan;
 import dto.DTO_SanPham;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -93,6 +107,15 @@ public class CTL_UI_SanPham implements Initializable {
     ObservableList<String> listChatLieu = FXCollections.observableArrayList("Nỉ", "Kaki","Cotton","Da");
     private ObservableList<DTO_SanPham> listSanPham;
     private BUS_SanPham bus_sanPham = new BUS_SanPham();
+    @FXML
+    private ImageView imgv_anhSp;
+    @FXML
+    private Button btnAnh;
+
+    @FXML
+    private Label lblAnh;
+
+    private File file;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -158,6 +181,13 @@ public class CTL_UI_SanPham implements Initializable {
                 }
             });
 
+            btnAnh.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    ChooseImage(event);
+                }
+            });
+
 
         } catch (Exception e) {
 
@@ -177,6 +207,14 @@ public class CTL_UI_SanPham implements Initializable {
                     btn_themMoi.setText("Lưu");
                     btn_Xoa.setText("Hủy");
                     btn_Sua.setDisable(true);
+                    try {
+                        txt_maSP.setText(taoMaSP());
+                        System.out.println(taoMaSP());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     ShowInfo();
 
                 } else if (btn_themMoi.getText().equalsIgnoreCase("Lưu")) {
@@ -320,7 +358,32 @@ public class CTL_UI_SanPham implements Initializable {
 
             }
         });
+
+        tbl_SanPham.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("Info_SanPham.fxml"));
+                DialogPane addDialog = null;
+                try {
+                    addDialog = fxmlLoader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Dialog hienThi = new Dialog<>();
+                hienThi.setDialogPane(addDialog);
+                hienThi.setTitle("Thông Tin Sản Phẩm");
+                CTL_GUI_DialogInforSP dialogInforSP = fxmlLoader.getController();
+                try {
+                    dialogInforSP.setData(tbl_SanPham.getSelectionModel().getSelectedItem());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Optional<ButtonType> clickedButton = hienThi.showAndWait();
+            }
+        });
     }
+
     private void themSP(){
         try {
             if(Cbo_ChatLieu.getValue() == null){
@@ -339,11 +402,12 @@ public class CTL_UI_SanPham implements Initializable {
             String chatLieu = Cbo_ChatLieu.getValue().toString();
             String maSP =  taoMaSP();
             DTO_SanPham sp = new DTO_SanPham(maSP,tenSP,Integer.parseInt(soCongDoan),Integer.parseInt(soLuongSPYeuCau),chatLieu);
+            sp.setHinhAnh(imagenToByte(file));
             bus_sanPham.insertSanPham(sp);
             loadTableSP();
             //tbl_SanPham.getSelectionModel().selectLast();
         } catch (Exception e) {
-
+            System.err.println(e);
         }
 
     }
@@ -416,7 +480,7 @@ public class CTL_UI_SanPham implements Initializable {
     }
     private String taoMaSP() throws SQLException, ParseException {
         int count = tbl_SanPham.getItems().size();
-        String ma = "null";
+        String ma = "";
         if(count==0){
             ma = "SP"+"0001";
         }
@@ -440,5 +504,33 @@ public class CTL_UI_SanPham implements Initializable {
             }
         }
         return ma;
+    }
+
+    public void ChooseImage (ActionEvent e){
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Choose a image");
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");
+        fc.getExtensionFilters().add(imageFilter);
+        file = fc.showOpenDialog((Stage)((Node) e.getSource()).getScene().getWindow());
+        if (file != null){
+            Image image = new Image(file.toURI().toString(),lblAnh.getWidth(), lblAnh.getHeight(), false, true);
+            imgv_anhSp.setImage(image);
+        }
+    }
+    private byte[] imagenToByte(File f) throws IOException {
+        Image img = imgv_anhSp.getImage();
+        BufferedImage image = ImageIO.read(f);
+
+        // create the object of ByteArrayOutputStream class
+        ByteArrayOutputStream outStreamObj = new ByteArrayOutputStream();
+
+        // write the image into the object of ByteArrayOutputStream class
+        ImageIO.write(image, "jpg", outStreamObj);
+
+        // create the byte array from image
+        byte [] byteArray = outStreamObj.toByteArray();
+
+
+        return byteArray;
     }
 }

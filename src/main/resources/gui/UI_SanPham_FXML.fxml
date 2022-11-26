@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="604.0" prefWidth="939.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_UI_SanPham">
+<AnchorPane prefHeight="604.0" prefWidth="939.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_UI_SanPham">
    <children>
       <BorderPane layoutX="-2.0" layoutY="354.0" prefHeight="250.0" prefWidth="1007.0">
          <center>
@@ -58,7 +58,7 @@
             </Button>
          </children>
       </HBox>
-      <AnchorPane layoutX="2.0" layoutY="52.0" prefHeight="231.0" prefWidth="939.0">
+      <AnchorPane fx:id="root" layoutX="2.0" layoutY="52.0" prefHeight="231.0" prefWidth="939.0">
          <children>
             <Label layoutX="52.0" layoutY="18.0" prefHeight="36.0" prefWidth="89.0" text="Mã sản phẩm:" />
             <Label layoutX="53.0" layoutY="73.0" text="Tên sản phẩm:" />
@@ -134,6 +134,13 @@
             </ImageView>
             <TextField fx:id="txt_soCongDoan" alignment="CENTER" layoutX="155.0" layoutY="107.0" prefHeight="34.0" prefWidth="206.0" style="-fx-border-color: #d7d7d7;" />
             <TextField fx:id="txt_soLuongSPYeuCau" layoutX="217.0" layoutY="156.0" prefHeight="34.0" prefWidth="144.0" style="-fx-border-color: #d7d7d7;" />
+            <Label fx:id="lblAnh" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="574.0" layoutY="9.0" prefHeight="205.0" prefWidth="247.0" style="-fx-border-color: black;" text="Ảnh" textAlignment="JUSTIFY" textOverrun="CENTER_WORD_ELLIPSIS">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnAnh" layoutX="610.0" layoutY="223.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="178.0" stylesheets="@../css/button.css" text="Lấy ảnh" />
+            <ImageView fx:id="imgv_anhSp" fitHeight="205.0" fitWidth="247.0" layoutX="575.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </AnchorPane>
    </children>

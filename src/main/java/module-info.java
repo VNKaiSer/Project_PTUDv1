@@ -8,6 +8,7 @@ module gui {
     requires org.apache.poi.ooxml;
     requires itextpdf;
     requires twilio;
+    requires transitive java.desktop;
 
     opens gui to javafx.fxml;
     exports gui;

@@ -25,7 +25,6 @@
                     <columns>
                       <TableColumn fx:id="maCongNhanCol" editable="false" prefWidth="75.0" text="Mã công nhân" />
                       <TableColumn fx:id="hoTenCol" editable="false" prefWidth="75.0" text="Họ và tên" />
-                        <TableColumn fx:id="ngayChamCongCol" editable="false" prefWidth="75.0" text="Ngày chấm công" />
                         <TableColumn fx:id="hienDienCol" prefWidth="75.0" text="Hiện diện" />
                         <TableColumn fx:id="soLuongCol" prefWidth="75.0" text="Số lượng" />
                         <TableColumn fx:id="ghiChuCol" prefWidth="75.0" text="Ghi chú" />
