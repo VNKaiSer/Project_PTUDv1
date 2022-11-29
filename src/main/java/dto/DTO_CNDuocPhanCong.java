@@ -1,6 +1,7 @@
 package dto;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.CheckBox;
 
 import java.util.Date;
 
@@ -9,6 +10,7 @@ public class DTO_CNDuocPhanCong {
     private DTO_CongDoan congDoan;
     private DTO_SanPham sanPham;
     private int ca;
+   // private CheckBox select;
 
     public DTO_CNDuocPhanCong() {
         super();
@@ -22,6 +24,24 @@ public class DTO_CNDuocPhanCong {
         this.sanPham = sanPham;
         this.ca = ca;
     }
+    public DTO_CNDuocPhanCong(DTO_CongNhan congNhan) {
+        super();
+        this.congNhan = congNhan;
+    }
+
+    /*public DTO_CNDuocPhanCong(DTO_CongNhan congNhan, CheckBox select) {
+        // super();
+        this.congNhan = congNhan;
+        this.select = select;
+    }*/
+    /*public CheckBox getSelect() {
+        return select;
+    }
+
+    public void setSelect(CheckBox select) {
+        this.select = select;
+    }*/
+
     public DTO_CongNhan getCongNhan() {
         return congNhan;
     }

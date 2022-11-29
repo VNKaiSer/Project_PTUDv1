@@ -20,17 +20,32 @@ public class BUS_PhanCong {
     public ArrayList<DTO_BangPhanCong> getDSBPC() throws SQLException, ParseException {
         return dal_bangPhanCong.getDSBangPhanCong();
     }
-    public ArrayList<DTO_BangPhanCong> getDSBPCtheoNgayPhanCong(String ngayPC) throws SQLException, ParseException {
-        return dal_bangPhanCong.getBPCTheoNgayPhanCong(ngayPC);
+    public ArrayList<DTO_BangPhanCong> getDSBPCtheoNgayPhanCong(String ngayPC,String maSP){
+        try {
+            return dal_bangPhanCong.getBPCTheoNgayPhanCong(ngayPC,maSP);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     /*public ArrayList<DTO_CongNhan> getMaCongNhan(Date ngayPhanCong, int ca, String maCongDoan) throws SQLException, ParseException {
         return dal_bangPhanCong.getMaCongNhan(ngayPhanCong, ca, maCongDoan);
     }*/
-    public  void insertBPC(DTO_BangPhanCong bpc) throws SQLException {
-        dal_bangPhanCong.insertBangPhanCong(bpc);
+    public  void insertBPC(DTO_BangPhanCong bpc){
+        try {
+            dal_bangPhanCong.insertBangPhanCong(bpc);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     public  void deleteBPC(String ngayPhanCong) throws SQLException {
         dal_bangPhanCong.deleteBangPhanCong(ngayPhanCong);
+    }
+    public int checkPhanCong(String ma){
+        try {
+            return dal_bangPhanCong.checkPhanCong(ma);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

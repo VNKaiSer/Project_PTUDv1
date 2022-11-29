@@ -6,6 +6,7 @@ package dal;
 
 import db.ConnectDB;
 import dto.DTO_CongNhan;
+import javafx.scene.control.CheckBox;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -131,36 +132,29 @@ public class DAL_CongNhan {
      * Hàm get danh sách công nhân chưa được phân công
      * @return Arraylist<DTO_CongNhan>
      */
-    public ArrayList<DTO_CongNhan> getDSCongNhanChuaDuocPhanCong(String maSP, String maCD, int ca) throws SQLException, ParseException {
+    public ArrayList<DTO_CongNhan> getDSCongNhanChuaDuocPhanCong(String maSP, String maCD, String ca) throws SQLException, ParseException {
         ArrayList<DTO_CongNhan> ds = new ArrayList<DTO_CongNhan>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select *from CongNhan where maCongNhan not in(select maCongNhan from CNDuocPhanCong where (maSanPham = ? and maCongDoan = ? and ca = ?) or maCongDoan not in(?)  )";
+            String sql = "select *from CongNhan where maCongNhan not in(select maCongNhan from CNDuocPhanCong where (maSanPham = ? and maCongDoan = ? and ca = ?) or maCongDoan not in(?) or maSanPham not in (?)  )";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, maSP);
             state.setString(2, maCD);
-            state.setInt(3, ca);
+            state.setString(3, ca);
             state.setString(4, maCD);
+            state.setString(5, maSP);
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_CongNhan tmp;
                 String maCN = rs.getString(1);
                 String tenCN = rs.getString(2);
 
-                String date = rs.getString(3);
-                Date ngayVaoLam = new SimpleDateFormat("yyy-MM-dd").parse(date);
-                Boolean phai = rs.getBoolean(4);
-                date = rs.getString(5);
-                Date ngaySinh = new SimpleDateFormat("yyy-MM-dd").parse(date);
-                String sdt = rs.getString(6);
-                String email = rs.getString(7);
-                String diaChi = rs.getString(8);
-                String trinhDo = rs.getString(9);
-                tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLam, true, sdt, ngaySinh, email, diaChi, trinhDo);
+
+                tmp = new DTO_CongNhan(maCN, tenCN);
                 ds.add(tmp);
 
             }
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException  e) {
             e.printStackTrace();
         }
         finally{
