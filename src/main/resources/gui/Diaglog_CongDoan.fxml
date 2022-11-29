@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<DialogPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_DiaglogCongDoan">
+   <content>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="153.0" prefWidth="379.0">
+         <children>
+            <Label layoutX="21.0" layoutY="53.0" prefHeight="30.0" prefWidth="106.0" text="Tên Công Đoạn:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="21.0" layoutY="104.0" prefHeight="30.0" prefWidth="96.0" text="Đơn Giá:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtCongDoan" layoutX="134.0" layoutY="56.0" prefHeight="25.0" prefWidth="214.0" />
+            <TextField fx:id="txtDonGia" layoutX="134.0" layoutY="107.0" prefHeight="25.0" prefWidth="214.0" />
+            <Label alignment="CENTER" layoutX="103.0" layoutY="14.0" prefHeight="25.0" prefWidth="204.0" text="CÔNG ĐOẠN" textFill="#0c4ea2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </content>
+   <buttonTypes>
+      <ButtonType fx:constant="CANCEL" />
+      <ButtonType fx:constant="OK" />
+   </buttonTypes>
+</DialogPane>

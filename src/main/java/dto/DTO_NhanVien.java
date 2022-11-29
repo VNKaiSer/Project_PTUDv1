@@ -23,8 +23,7 @@ public class DTO_NhanVien {
     private String email;
     private String diaChi;
     private double luongCoBan;
-    private double tienPhuCap;
-    private double tienTrachNhiem;
+
     public DTO_NhanVien() {
         super();
         // TODO Auto-generated constructor stub
@@ -48,8 +47,6 @@ public class DTO_NhanVien {
         this.email = email;
         this.diaChi = diaChi;
         this.luongCoBan = luongCoBan;
-        this.tienPhuCap = tienPhuCap;
-        this.tienTrachNhiem = tienTrachNhiem;
     }
     public String getMaNhanVien() {
         return maNhanVien;
@@ -105,18 +102,6 @@ public class DTO_NhanVien {
     public void setLuongCoBan(double luongCoBan) {
         this.luongCoBan = luongCoBan;
     }
-    public double getTienPhuCap() {
-        return tienPhuCap;
-    }
-    public void setTienPhuCap(double tienPhuCap) {
-        this.tienPhuCap = tienPhuCap;
-    }
-    public double getTienTrachNhiem() {
-        return tienTrachNhiem;
-    }
-    public void setTienTrachNhiem(double tienTrachNhiem) {
-        this.tienTrachNhiem = tienTrachNhiem;
-    }
     public SimpleStringProperty gioiTinhProperty(){
         return phai ? new SimpleStringProperty("Nam") : new SimpleStringProperty("Nữ");
     }
@@ -157,8 +142,7 @@ public class DTO_NhanVien {
                 + tenNhanVien + ", ngayVaoLam=" + ngayVaoLam + ", phai=" + phai
                 + ", ngaySinh=" + ngaySinh + ", soDienThoai=" + soDienThoai
                 + ", email=" + email + ", diaChi=" + diaChi + ", luongCoBan="
-                + luongCoBan + ", tienPhuCap=" + tienPhuCap
-                + ", tienTrachNhiem=" + tienTrachNhiem + "]";
+                + luongCoBan ;
     }
 
 }

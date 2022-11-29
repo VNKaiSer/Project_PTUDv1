@@ -75,7 +75,7 @@
                         <Image url="@../img/loupe.png" />
                      </image>
                   </ImageView>
-                  <ComboBox fx:id="cboThuTu" editable="true" layoutX="60.0" layoutY="94.0" prefHeight="27.0" prefWidth="77.0" style="-fx-border-color: red;" />
+                  <ComboBox fx:id="cboThuTu" disable="true" layoutX="60.0" layoutY="94.0" prefHeight="27.0" prefWidth="77.0" />
                   <Label layoutX="14.0" layoutY="100.0" text="Thứ tự:" />
                </children>
             </Pane>
@@ -140,16 +140,9 @@
                                  </image>
                               </ImageView>
                            </graphic></Button>
-                        <TextField layoutX="624.0" layoutY="25.0" prefHeight="36.0" prefWidth="362.0" promptText="Nhập công đoạn cần tìm...">
-                           <font>
-                              <Font name="System Italic" size="12.0" />
-                           </font>
-                        </TextField>
-                        <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="958.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/loupe.png" />
-                           </image>
-                        </ImageView>
+                        <Button fx:id="btnThemCD" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Thêm CĐ" />
+                        <Button fx:id="btnSuaGia" layoutX="738.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Sửa giá " />
+                        <Button fx:id="btnXoaCD" layoutX="855.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Xóa CĐ" />
                      </children>
                   </Pane>
                </children></Pane>
