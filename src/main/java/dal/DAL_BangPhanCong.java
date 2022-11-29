@@ -14,10 +14,12 @@ public class DAL_BangPhanCong {
     private  DAL_CongDoan dal_congDoan;
     private  DAL_CongNhan dal_congNhan;
     private  DAL_SanPham dal_sanPham;
+    private DAL_CNDuocPhanCong dal_cnDuocPhanCong;
     public DAL_BangPhanCong(){
         dal_congNhan = new DAL_CongNhan();
         dal_congDoan = new DAL_CongDoan();
         dal_sanPham = new DAL_SanPham();
+        dal_cnDuocPhanCong = new DAL_CNDuocPhanCong();
     }
     /**
      * Hàm trả về danh sách bảng phân công
@@ -45,7 +47,7 @@ public class DAL_BangPhanCong {
             int ca = rs.getInt(6);
             DTO_SanPham tmpSanPham = findSanPham(rs.getString(7));
 
-            tmp = new DTO_BangPhanCong(tmpCongDoan,tmpCongNhan,ngayPhanCong,ngayKetThuc,ngayBatDau,ca,tmpSanPham);
+            tmp = new DTO_BangPhanCong(tmpCongDoan,tmpCongNhan,ngayPhanCong,ca,tmpSanPham);
 
             dsBPC.add(tmp);
 
@@ -106,18 +108,14 @@ public class DAL_BangPhanCong {
     public void insertBangPhanCong(DTO_BangPhanCong bangPhanCong) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO BangPhanCong VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO BangPhanCong VALUES(?,?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         String dateTmp = new SimpleDateFormat("yyyy-MM-dd").format(bangPhanCong.getNgayPhanCong());
         ppsm.setString(1,dateTmp);
         ppsm.setString(2,bangPhanCong.getCongNhan().getMaCongNhan());
         ppsm.setString(3, bangPhanCong.getCongDoan().getMaCongDoan());
-        String dateKT = new SimpleDateFormat("yyyy-MM-dd").format(bangPhanCong.getNgayKetThuc());
-        ppsm.setString(4,dateKT);
-        String dateBD = new SimpleDateFormat("yyyy-MM-dd").format(bangPhanCong.getNgayBatDau());
-        ppsm.setString(5,dateBD);
-        ppsm.setInt(6,bangPhanCong.getCa());
-        ppsm.setString(7, bangPhanCong.getSanPham().getMaSanPham());
+        ppsm.setInt(4,bangPhanCong.getCa());
+        ppsm.setString(5, bangPhanCong.getSanPham().getMaSanPham());
 
         ppsm.execute();
         // đóng kết nối
@@ -202,14 +200,14 @@ public class DAL_BangPhanCong {
         }
         return ds;
     }*/
-    public ArrayList<DTO_BangPhanCong> getBPCTheoNgayPhanCong(String ngayPC) throws SQLException {
+    public ArrayList<DTO_BangPhanCong> getBPCTheoNgayPhanCong(String ngayPC,String maSanPham) throws SQLException {
         ArrayList<DTO_BangPhanCong> ds = new ArrayList<DTO_BangPhanCong>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select * from BangPhanCong where ngayPhanCong = ?";
+            String sql = "select * from BangPhanCong where ngayPhanCong = ? and maSanPham = ?";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, ngayPC);
-
+            state.setString(2, maSanPham);
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_BangPhanCong tmp;
@@ -217,14 +215,10 @@ public class DAL_BangPhanCong {
                 Date ngayPhanCong = new SimpleDateFormat("yyy-MM-dd").parse(datePhanCong);
                 DTO_CongNhan tmpCongNhan = findCongNhan(rs.getString(2));
                 DTO_CongDoan tmpCongDoan = findCongDoan(rs.getString(3));
-                String dateKetThuc = rs.getString(4);
-                Date ngayKetThuc = new SimpleDateFormat("yyy-MM-dd").parse(dateKetThuc);
-                String dateBatDau = rs.getString(5);
-                Date ngayBatDau = new SimpleDateFormat("yyy-MM-dd").parse(dateBatDau);
-                int ca = rs.getInt(6);
-                DTO_SanPham tmpSanPham = findSanPham(rs.getString(7));
+                int ca = rs.getInt(4);
+                DTO_SanPham tmpSanPham = findSanPham(rs.getString(5));
 
-                tmp = new DTO_BangPhanCong(tmpCongDoan,tmpCongNhan,ngayPhanCong,ngayKetThuc,ngayBatDau,ca,tmpSanPham);
+                tmp = new DTO_BangPhanCong(tmpCongDoan,tmpCongNhan,ngayPhanCong,ca,tmpSanPham);
 
                 ds.add(tmp);
 
@@ -240,5 +234,34 @@ public class DAL_BangPhanCong {
             }
         }
         return ds;
+    }
+    public int checkPhanCong(String ma) throws SQLException {
+        int flag = 0;
+        ConnectDB.getInstance();
+        ConnectDB.getInstance().connect();
+        PreparedStatement state = null;
+        try {
+            String sql = "select maCongDoan from ChiTietCongDoan where maSanPham = ?";
+            state = ConnectDB.getConnection().prepareStatement(sql);
+            state.setString(1, ma);
+
+            ResultSet rs = state.executeQuery();
+            while(rs.next()){
+                ArrayList<DTO_CNDuocPhanCong> dsCN = dal_cnDuocPhanCong.getCNTheoCongDoanvaSanPham(rs.getString(1),ma);
+                if(dsCN.isEmpty()){
+                    flag = 1;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                state.close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return flag;
     }
 }

@@ -18,8 +18,6 @@ public class DTO_BangPhanCong {
     private DTO_CongDoan congDoan;
     private DTO_CongNhan congNhan;
     private Date ngayPhanCong;
-    private Date ngayKetThuc;
-    private Date ngayBatDau;
     private int ca;
     private DTO_SanPham SanPham;
     public DTO_BangPhanCong() {
@@ -27,14 +25,12 @@ public class DTO_BangPhanCong {
         // TODO Auto-generated constructor stub
     }
     public DTO_BangPhanCong(DTO_CongDoan congDoan, DTO_CongNhan congNhan,
-                            Date ngayPhanCong, Date ngayKetThuc, Date ngayBatDau, int ca,
+                            Date ngayPhanCong, int ca,
                             DTO_SanPham sanPham) {
         super();
         this.congDoan = congDoan;
         this.congNhan = congNhan;
         this.ngayPhanCong = ngayPhanCong;
-        this.ngayKetThuc = ngayKetThuc;
-        this.ngayBatDau = ngayBatDau;
         this.ca = ca;
         SanPham = sanPham;
     }
@@ -56,18 +52,6 @@ public class DTO_BangPhanCong {
     public void setNgayPhanCong(Date ngayPhanCong) {
         this.ngayPhanCong = ngayPhanCong;
     }
-    public Date getNgayKetThuc() {
-        return ngayKetThuc;
-    }
-    public void setNgayKetThuc(Date ngayKetThuc) {
-        this.ngayKetThuc = ngayKetThuc;
-    }
-    public Date getNgayBatDau() {
-        return ngayBatDau;
-    }
-    public void setNgayBatDau(Date ngayBatDau) {
-        this.ngayBatDau = ngayBatDau;
-    }
     public int getCa() {
         return ca;
     }
@@ -79,12 +63,6 @@ public class DTO_BangPhanCong {
     }
     public void setSanPham(DTO_SanPham sanPham) {
         SanPham = sanPham;
-    }
-    public SimpleStringProperty ngayBatDauProperty(){
-        return new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy").format(ngayBatDau));
-    }
-    public SimpleStringProperty ngayKetThucProperty(){
-        return new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy").format(ngayKetThuc));
     }
     public SimpleStringProperty maCongNhanProperty(){
         return new SimpleStringProperty(getCongNhan().getMaCongNhan());
@@ -101,6 +79,12 @@ public class DTO_BangPhanCong {
     public SimpleStringProperty tenCongDoanProperty(){
         return new SimpleStringProperty(getCongDoan().getTenCongDoan());
     }
+    public SimpleStringProperty maSanPhamProperty(){
+        return new SimpleStringProperty(getSanPham().getMaSanPham());
+    }
+    public SimpleStringProperty ngayPhanCongProperty(){
+        return new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy").format(ngayPhanCong));
+    }
     public SimpleStringProperty caLamProperty(){
         String caLam;
         if (ca == 1)
@@ -116,7 +100,6 @@ public class DTO_BangPhanCong {
     public String toString() {
         return "DTO_BangPhanCong [congDoan=" + congDoan + ", congNhan="
                 + congNhan + ", ngayPhanCong=" + ngayPhanCong
-                + ", ngayKetThuc=" + ngayKetThuc + ", ngayBatDau=" + ngayBatDau
                 + ", ca=" + ca + ", SanPham=" + SanPham + "]";
     }
 

@@ -6,6 +6,7 @@ import dto.DTO_CNDuocPhanCong;
 import dto.DTO_CongDoan;
 import dto.DTO_CongNhan;
 import dto.DTO_SanPham;
+import javafx.scene.control.CheckBox;
 
 
 import java.sql.PreparedStatement;
@@ -100,7 +101,7 @@ public class DAL_CNDuocPhanCong {
     public void insertCNDuocPhanCong(DTO_CNDuocPhanCong cnDuocPhanCong) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO CNDuocPhanCong VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO CNDuocPhanCong VALUES(?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,cnDuocPhanCong.getCongNhan().getMaCongNhan());
         ppsm.setString(2,cnDuocPhanCong.getCongDoan().getMaCongDoan());
@@ -115,24 +116,85 @@ public class DAL_CNDuocPhanCong {
      * @param maCN String
      *
      */
-    public void deleteCongNhanDuocPhanCong(String maCN) throws SQLException {
+    public void deleteCongNhanDuocPhanCong(String maCN,String maCD,String maSP,String ca) throws SQLException {
         ConnectDB.getInstance().connect();
-        String sql = "DELETE CNDuocPhanCong WHERE maCongNhan = ?";
+        String sql = "DELETE CNDuocPhanCong WHERE maCongNhan = ? and maCongDoan = ? and maSanPham = ? and ca = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,maCN);
+        ppsm.setString(2,maCD);
+        ppsm.setString(3,maSP);
+        ppsm.setString(4,ca);
+
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
     }
-    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCa(String maSP, String maCD ,int c) throws SQLException {
+    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCa(String maSP, String maCD ,String c) throws SQLException {
         ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select* from CNDuocPhanCong where maSanPham = ? and maCongDoan = ? and ca = ?";
+            String sql = "select * from CNDuocPhanCong where (maSanPham = ? and maCongDoan = ? and ca = ?) ";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, maSP);
             state.setString(2, maCD);
-            state.setInt(3, c);
+            state.setString(3, c);
+            ResultSet rs = state.executeQuery();
+            while(rs.next()){
+                DTO_CNDuocPhanCong tmp;
+                DTO_CongNhan tmpcongNhan = findCongNhan(rs.getString(1));
+
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan);
+                ds.add(tmp);
+
+            }
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                ConnectDB.getConnection().close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return ds;
+    }
+    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCongDoanvaSanPham(String maCD, String maSP) throws SQLException {
+        ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
+        ConnectDB.getInstance().connect();
+        try {
+            String sql = "select * from CNDuocPhanCong where maCongDoan = ? and maSanPham = ?";
+            PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
+            state.setString(1, maCD);
+            state.setString(2, maSP);
+            ResultSet rs = state.executeQuery();
+            while(rs.next()){
+                DTO_CNDuocPhanCong tmp;
+                DTO_CongNhan tmpcongNhan = findCongNhan(rs.getString(1));
+
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan);
+                ds.add(tmp);
+
+            }
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                ConnectDB.getConnection().close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return ds;
+    }
+    public ArrayList<DTO_CNDuocPhanCong> getCNTheoSanPham(String maSP) throws SQLException {
+        ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
+        ConnectDB.getInstance().connect();
+        try {
+            String sql = "select * from CNDuocPhanCong where maSanPham = ?";
+            PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
+            state.setString(1, maSP);
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_CNDuocPhanCong tmp;
@@ -156,5 +218,4 @@ public class DAL_CNDuocPhanCong {
         }
         return ds;
     }
-
 }
