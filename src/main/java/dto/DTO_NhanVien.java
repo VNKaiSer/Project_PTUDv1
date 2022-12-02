@@ -35,8 +35,7 @@ public class DTO_NhanVien {
 
     public DTO_NhanVien(String maNhanVien, String tenNhanVien, Date ngayVaoLam,
                         boolean phai, Date ngaySinh, String soDienThoai, String email,
-                        String diaChi, double luongCoBan, double tienPhuCap,
-                        double tienTrachNhiem) {
+                        String diaChi, double luongCoBan) {
         super();
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;

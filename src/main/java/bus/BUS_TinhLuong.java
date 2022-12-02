@@ -2,7 +2,6 @@ package bus;
 
 import dal.DAL_PhieuLuong;
 import dto.DTO_PhieuLuongCaNhan;
-import dto.DTO_ThongKeDiemDanh;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
@@ -19,23 +18,12 @@ public class BUS_TinhLuong {
         return dal_phieuLuong.getDanhSachPhieuLuongTheoThangNam(thang, nam);
     }
 
-    public ArrayList<DTO_ThongKeDiemDanh> getDSDD(int thang, int nam) throws SQLException {
-        return dal_phieuLuong.layDanhSachPhieuLuong(thang, nam);
+    public boolean kiemTraChamCong(int thang, int nam) throws SQLException {
+        return dal_phieuLuong.kiemTraChamCong(thang, nam);
     }
 
-    public ArrayList<DTO_PhieuLuongCaNhan> sinhDanhSachPhieuLuong(int thang, int nam) throws SQLException {
-        dal_phieuLuong.layDanhSachPhieuLuong(thang, nam);
-        return  dal_phieuLuong.sinhDanhSachPhieuLuong(thang, nam);
-    }
-
-    public void saveDataBase(ObservableList<DTO_PhieuLuongCaNhan> list) throws SQLException {
-        for (DTO_PhieuLuongCaNhan it:
-             list) {
-            dal_phieuLuong.saveToDataBase(it);
+    public void saveDataBase(DTO_PhieuLuongCaNhan items) throws SQLException {
+            dal_phieuLuong.saveToDataBase(items);
         }
-    }
 
-    public DTO_ThongKeDiemDanh getTKDD(Object obj, int thang, int nam) throws SQLException {
-        return dal_phieuLuong.getTKDD(obj, thang, nam);
-    }
 }

@@ -384,7 +384,7 @@ public class CTRL_UI_NhanVien implements Initializable{
             Double tienTrachNhiem = Double.valueOf(cbo_tienTrachNhiem.getValue());
             String diaChi = txt_duong.getText() +"," + cbo_phuong.getValue()+ ", " +cbo_huyen.getValue() + ", "+cbo_tinh.getValue();
             String maNV = taoMaNV();
-            DTO_NhanVien nv = new DTO_NhanVien(maNV,tenNV,ngayVaoLam,phai,ngaySinh,sdt,email,diaChi,luongCoBan,tienPhuCap,tienTrachNhiem);
+            DTO_NhanVien nv = new DTO_NhanVien(maNV,tenNV,ngayVaoLam,phai,ngaySinh,sdt,email,diaChi,luongCoBan);
             bus_nhanVien.insertNhanVien(nv);
             loadTableNV();
             //tbl_SanPham.getSelectionModel().selectLast();

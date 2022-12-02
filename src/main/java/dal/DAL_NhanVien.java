@@ -47,9 +47,7 @@ public class DAL_NhanVien {
             String email = rs.getString(7);
             String diaChi = rs.getString(8);
             double luongCoBan  = rs.getDouble(9);
-            double tienPhuCap  = rs.getDouble(10);
-            double tienTrachNhiem  = rs.getDouble(11);
-            tmp = new DTO_NhanVien(maNV, tenNV, ngayVaoLam, true, ngaySinh, sdt, email, diaChi, luongCoBan, tienPhuCap, tienTrachNhiem);
+            tmp = new DTO_NhanVien(maNV, tenNV, ngayVaoLam, true, ngaySinh, sdt, email, diaChi, luongCoBan);
             dsNhanVien.add(tmp);
         }
         // đóng kết nối
