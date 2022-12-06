@@ -46,7 +46,8 @@ public class DAL_CNDuocPhanCong {
             DTO_CongDoan tmpCongDoan = findCongDoan(rs.getString(2));
             DTO_SanPham tmpSanPham = findSanPham(rs.getString(3));
             int ca = rs.getInt(4);
-            tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca);
+            int SL = rs.getInt(5);
+            tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca,SL);
             ds.add(tmp);
         }
         // đóng kết nối
@@ -101,12 +102,13 @@ public class DAL_CNDuocPhanCong {
     public void insertCNDuocPhanCong(DTO_CNDuocPhanCong cnDuocPhanCong) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO CNDuocPhanCong VALUES(?,?,?,?)";
+        String sql = "INSERT INTO CNDuocPhanCong VALUES(?,?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,cnDuocPhanCong.getCongNhan().getMaCongNhan());
         ppsm.setString(2,cnDuocPhanCong.getCongDoan().getMaCongDoan());
         ppsm.setString(3, cnDuocPhanCong.getSanPham().getMaSanPham());
         ppsm.setInt(4,cnDuocPhanCong.getCa());
+        ppsm.setInt(5,cnDuocPhanCong.getSoLuongPhanCong());
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
@@ -202,7 +204,8 @@ public class DAL_CNDuocPhanCong {
                 DTO_CongDoan tmpCongDoan = findCongDoan(rs.getString(2));
                 DTO_SanPham tmpSanPham = findSanPham(rs.getString(3));
                 int ca = rs.getInt(4);
-                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca);
+                int sl = rs.getInt(5);
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca,sl);
                 ds.add(tmp);
 
             }

@@ -10,18 +10,16 @@ public class DTO_ChiTietCongDoan {
     private DTO_SanPham sanPham;
     private DTO_CongDoan congDoan;
     private String maCTCongDoan;
-    private int thuTuCongDoan;
     public DTO_ChiTietCongDoan() {
         super();
         // TODO Auto-generated constructor stub
     }
     public DTO_ChiTietCongDoan(DTO_SanPham maSanPham, DTO_CongDoan maCongDoan,
-                               String maCTCongDoan, int thuTuCongDoan) {
+                               String maCTCongDoan) {
         super();
         this.sanPham = maSanPham;
         this.congDoan = maCongDoan;
         this.maCTCongDoan = maCTCongDoan;
-        this.thuTuCongDoan = thuTuCongDoan;
     }
     public DTO_SanPham getSanPham() {
         return sanPham;
@@ -40,12 +38,6 @@ public class DTO_ChiTietCongDoan {
     }
     public void setMaCTCongDoan(String maCTCongDoan) {
         this.maCTCongDoan = maCTCongDoan;
-    }
-    public int getThuTuCongDoan() {
-        return thuTuCongDoan;
-    }
-    public void setThuTuCongDoan(int thuTuCongDoan) {
-        this.thuTuCongDoan = thuTuCongDoan;
     }
 
     // Truy xuất dữ liệu trên table view
@@ -83,6 +75,6 @@ public class DTO_ChiTietCongDoan {
     public String toString() {
         return "DTO_ChiTietCongDoan [maSanPham=" + sanPham + ", maCongDoan="
                 + congDoan + ", maCTCongDoan=" + maCTCongDoan
-                + ", thuTuCongDoan=" + thuTuCongDoan + "]";
+                + ", thuTuCongDoan="  + "]";
     }
 }

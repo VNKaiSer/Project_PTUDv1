@@ -204,7 +204,19 @@ public class CTRL_PhanCong implements Initializable {
         btn_them.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                them();
+                TextInputDialog dialog = new TextInputDialog("");
+
+                dialog.setTitle("Phân công số lượng");
+                dialog.setContentText("Số lượng:");
+                dialog.setHeaderText(null);
+
+                Optional<String> result = dialog.showAndWait();
+
+                result.ifPresent(name -> {
+                    int soLuong = Integer.parseInt(name);
+                    them(soLuong);
+                });
+
                 tbl_CNChuaPhanCong.getItems().clear();
                 tbl_CNDaPhanCong.getItems().clear();
                 loadCongNhanChuaPhanCong();
@@ -263,7 +275,7 @@ public class CTRL_PhanCong implements Initializable {
         //col_SelectCNChua.setCellValueFactory(new PropertyValueFactory<>("select"));
         tbl_CNChuaPhanCong.setItems(listCongNhan);
     }
-    private void them(){
+    private void them(int soLuong){
         ObservableList<DTO_CongNhan> selectedItems = tbl_CNChuaPhanCong.getSelectionModel().getSelectedItems();
 
         //System.out.println(selectedItems);
@@ -272,8 +284,17 @@ public class CTRL_PhanCong implements Initializable {
             DTO_CongDoan cd = new DTO_CongDoan(cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5));
             DTO_SanPham sp = new DTO_SanPham(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
             String ca = cbo_ca.getSelectionModel().getSelectedItem();
-            DTO_CNDuocPhanCong cnChua = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca));
-            bus_cnDuocPhanCong.insertCNDuocPhanCong(cnChua);
+            if(soLuong <= soLuong*selectedItems.size()){
+                DTO_CNDuocPhanCong cnChua = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca),soLuong);
+                bus_cnDuocPhanCong.insertCNDuocPhanCong(cnChua);
+            }
+            else{
+                Alert wn = new Alert(Alert.AlertType.WARNING, "Dữ liệu không phù hợ", ButtonType.APPLY);
+                wn.setContentText("Vui lòng nhập số lượng phân công sao cho nhỏ hơn hoặc bằng "+ sp.getSoLuongYeuCau());
+                Optional<ButtonType> showWN = wn.showAndWait();
+                return;
+            }
+
         }
         /*for (DTO_CongNhan tb : tbl_CNChuaPhanCong.getItems() ){
             if(tb.getSelect().isSelected()){

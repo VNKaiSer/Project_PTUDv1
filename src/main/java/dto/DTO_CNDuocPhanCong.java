@@ -9,7 +9,9 @@ public class DTO_CNDuocPhanCong {
     private DTO_CongNhan congNhan;
     private DTO_CongDoan congDoan;
     private DTO_SanPham sanPham;
+
     private int ca;
+    private int soLuongPhanCong;
    // private CheckBox select;
 
     public DTO_CNDuocPhanCong() {
@@ -17,12 +19,13 @@ public class DTO_CNDuocPhanCong {
         // TODO Auto-generated constructor stub
     }
     public DTO_CNDuocPhanCong(DTO_CongNhan congNhan, DTO_CongDoan congDoan,
-                              DTO_SanPham sanPham, int ca) {
+                              DTO_SanPham sanPham, int ca, int soLuongPhanCong) {
         super();
         this.congNhan = congNhan;
         this.congDoan = congDoan;
         this.sanPham = sanPham;
         this.ca = ca;
+        this.soLuongPhanCong = soLuongPhanCong;
     }
     public DTO_CNDuocPhanCong(DTO_CongNhan congNhan) {
         super();
@@ -65,6 +68,12 @@ public class DTO_CNDuocPhanCong {
     }
     public void setCa(int ca) {
         this.ca = ca;
+    }
+    public int getSoLuongPhanCong() {
+        return soLuongPhanCong;
+    }
+    public void setSoLuongPhanCong(int SoLuongPhanCong) {
+        this.soLuongPhanCong = SoLuongPhanCong;
     }
     public SimpleStringProperty maCongNhanProperty(){
         return new SimpleStringProperty(getCongNhan().getMaCongNhan());

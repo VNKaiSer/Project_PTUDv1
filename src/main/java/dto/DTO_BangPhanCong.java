@@ -20,6 +20,8 @@ public class DTO_BangPhanCong {
     private Date ngayPhanCong;
     private int ca;
     private DTO_SanPham SanPham;
+    private int soLuongPhanCong;
+    private boolean trangThai;
     public DTO_BangPhanCong() {
         super();
         // TODO Auto-generated constructor stub
@@ -33,6 +35,19 @@ public class DTO_BangPhanCong {
         this.ngayPhanCong = ngayPhanCong;
         this.ca = ca;
         SanPham = sanPham;
+
+    }
+    public DTO_BangPhanCong(DTO_CongDoan congDoan, DTO_CongNhan congNhan,
+                            Date ngayPhanCong, int ca,
+                            DTO_SanPham sanPham,int soLuongPhanCong, boolean trangThai) {
+        super();
+        this.congDoan = congDoan;
+        this.congNhan = congNhan;
+        this.ngayPhanCong = ngayPhanCong;
+        this.ca = ca;
+        SanPham = sanPham;
+        this.soLuongPhanCong = soLuongPhanCong;
+        this.trangThai = trangThai;
     }
     public DTO_CongDoan getCongDoan() {
         return congDoan;
@@ -40,6 +55,19 @@ public class DTO_BangPhanCong {
     public void setCongDoan(DTO_CongDoan congDoan) {
         this.congDoan = congDoan;
     }
+    public int getSoLuongPhanCong() {
+        return soLuongPhanCong;
+    }
+    public void setSoLuongPhanCong(int soLuongPhanCong) {
+        this.soLuongPhanCong = soLuongPhanCong;
+    }
+    public boolean getTrangThai() {
+        return trangThai;
+    }
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
+    }
+
     public DTO_CongNhan getCongNhan() {
         return congNhan;
     }

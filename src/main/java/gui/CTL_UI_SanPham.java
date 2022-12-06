@@ -209,7 +209,6 @@ public class CTL_UI_SanPham implements Initializable {
                     btn_Sua.setDisable(true);
                     try {
                         txt_maSP.setText(taoMaSP());
-                        System.out.println(taoMaSP());
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     } catch (ParseException e) {
@@ -230,6 +229,7 @@ public class CTL_UI_SanPham implements Initializable {
                     btn_themMoi.setText("Thêm");
                     btn_Xoa.setText("Xóa");
                     btn_Sua.setDisable(false);
+                    HideInfo();
                 } else if (btn_Xoa.getText().equalsIgnoreCase("Xóa")) {
                     xoaSP();
                 }
@@ -252,7 +252,7 @@ public class CTL_UI_SanPham implements Initializable {
                 if(file!=null){
                     try {
                         ConnectDB.getInstance().connect();
-                        String sql = "INSERT INTO SanPham VALUES(?,?,?,?,?)";
+                        String sql = "INSERT INTO SanPham VALUES(?,?,?,?,?,?,?)";
                         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
 
                         FileInputStream fileIn = new FileInputStream(file);
@@ -291,6 +291,7 @@ public class CTL_UI_SanPham implements Initializable {
                             ppsm.setInt(3, (int) row.getCell(1).getNumericCellValue());
                             ppsm.setInt(4, (int) row.getCell(2).getNumericCellValue());
                             ppsm.setString(5, row.getCell(3).getStringCellValue());
+                            ppsm.setBoolean(6, false);
                             ppsm.execute();
                             loadTableSP();
                         }
@@ -315,7 +316,7 @@ public class CTL_UI_SanPham implements Initializable {
 
                 try {
                     ConnectDB.getInstance().connect();
-                    String sql = "SELECT * FROM SanPham";
+                    String sql = "select maSanPham,tenSanPham,soCongDoan,soLuong,chatLieu,trangThai from SanPham";
                     Statement stm = ConnectDB.getConnection().createStatement();
                     ResultSet rs = stm.executeQuery(sql);
 
@@ -325,11 +326,12 @@ public class CTL_UI_SanPham implements Initializable {
                     String ngayHienTai = df.format(ngay);
                     XSSFSheet sh = wb.createSheet("Product_"+ngayHienTai);
                     XSSFRow header = sh.createRow(0);
-                    header.createCell(0).setCellValue("maSanPham");
-                    header.createCell(1).setCellValue("tenSanPham");
-                    header.createCell(2).setCellValue("soCongDoan");
-                    header.createCell(3).setCellValue("soLuong");
-                    header.createCell(4).setCellValue("chatLieu");
+                    header.createCell(0).setCellValue("Mã sản phẩm");
+                    header.createCell(1).setCellValue("Tên sản phẩm");
+                    header.createCell(2).setCellValue("Số công đoạn");
+                    header.createCell(3).setCellValue("Số lượng");
+                    header.createCell(4).setCellValue("Chất liệu");
+                    header.createCell(5).setCellValue("Trạng thấi");
                     int index=1;
                     while (rs.next()){
                         XSSFRow row = sh.createRow(index);
@@ -338,6 +340,11 @@ public class CTL_UI_SanPham implements Initializable {
                         row.createCell(2).setCellValue(rs.getString("soCongDoan"));
                         row.createCell(3).setCellValue(rs.getString("soLuong"));
                         row.createCell(4).setCellValue(rs.getString("chatLieu"));
+                        String trangThai = "Chưa hoàn thành";
+                        if(rs.getBoolean("trangThai") == true){
+                            trangThai = "Đã hoàn thành";
+                        }
+                        row.createCell(5).setCellValue(trangThai);
                         index++;
 
                     }

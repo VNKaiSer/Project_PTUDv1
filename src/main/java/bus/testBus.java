@@ -12,7 +12,7 @@ public class testBus {
         DTO_SanPham sp = new DTO_SanPham("1");
         DTO_CongDoan cd = new DTO_CongDoan("1");
         try {
-            bus_chiTietCongDoan.insertCTCongDoan(new DTO_ChiTietCongDoan(sp,cd,"1",1));
+            bus_chiTietCongDoan.insertCTCongDoan(new DTO_ChiTietCongDoan(sp,cd,"1"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -108,7 +108,7 @@ public class DAL_BangPhanCong {
     public void insertBangPhanCong(DTO_BangPhanCong bangPhanCong) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO BangPhanCong VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO BangPhanCong VALUES(?,?,?,?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         String dateTmp = new SimpleDateFormat("yyyy-MM-dd").format(bangPhanCong.getNgayPhanCong());
         ppsm.setString(1,dateTmp);
@@ -116,6 +116,8 @@ public class DAL_BangPhanCong {
         ppsm.setString(3, bangPhanCong.getCongDoan().getMaCongDoan());
         ppsm.setInt(4,bangPhanCong.getCa());
         ppsm.setString(5, bangPhanCong.getSanPham().getMaSanPham());
+        ppsm.setInt(6,bangPhanCong.getSoLuongPhanCong());
+        ppsm.setBoolean(7, bangPhanCong.getTrangThai());
 
         ppsm.execute();
         // đóng kết nối

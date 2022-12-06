@@ -41,9 +41,8 @@ public class DAL_ChiTietCongDoan {
             DTO_SanPham tmpSanPham = findSanPham(rs.getString(1));
             DTO_CongDoan tmpCongDoan = findCongDoan(rs.getString(2));
             String maChiTietCongDoan = rs.getString(3);
-            int thuTuCongDoan = rs.getInt(4);
 
-            tmp = new DTO_ChiTietCongDoan(tmpSanPham,tmpCongDoan,maChiTietCongDoan,thuTuCongDoan);
+            tmp = new DTO_ChiTietCongDoan(tmpSanPham,tmpCongDoan,maChiTietCongDoan);
             dsChiTietCongDoan.add(tmp);
         }
         // đóng kết nối
@@ -88,12 +87,11 @@ public class DAL_ChiTietCongDoan {
     public  void insertChiTietCongDoan(DTO_ChiTietCongDoan chiTietCongDoan) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO chiTietCongDoan VALUES(?,?,?,?)";
+        String sql = "INSERT INTO chiTietCongDoan VALUES(?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,chiTietCongDoan.getSanPham().getMaSanPham());
         ppsm.setString(2,chiTietCongDoan.getCongDoan().getMaCongDoan());
         ppsm.setString(3, chiTietCongDoan.getMaCTCongDoan());
-        ppsm.setInt(4, chiTietCongDoan.getThuTuCongDoan());
 
 
         ppsm.execute();
@@ -122,13 +120,13 @@ public class DAL_ChiTietCongDoan {
     public void updateChiTietCongDoan(DTO_ChiTietCongDoan ChiTietCongDoan) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql = "UPDATE chiTietCongDoan " +
-                "SET maSanPham = ?, maCongDoan = ?, thuTuCongDoan = ? " +
+                "SET maSanPham = ?, maCongDoan = ?" +
                 "WHERE maCTCongDoan = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1, ChiTietCongDoan.getSanPham().getMaSanPham());
         ppsm.setString(2, ChiTietCongDoan.getCongDoan().getMaCongDoan());
         ppsm.setString(3,ChiTietCongDoan.getMaCTCongDoan());
-        ppsm.setInt(4,ChiTietCongDoan.getThuTuCongDoan());
+
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
@@ -154,9 +152,8 @@ public class DAL_ChiTietCongDoan {
                 DTO_SanPham tmpSanPham = findSanPham(rs.getString(1));
                 DTO_CongDoan tmpCongDoan = findCongDoan(rs.getString(2));
                 String maChiTietCongDoan = rs.getString(3);
-                int thuTuCongDoan = rs.getInt(4);
 
-                tmp = new DTO_ChiTietCongDoan(tmpSanPham,tmpCongDoan,maChiTietCongDoan,thuTuCongDoan);
+                tmp = new DTO_ChiTietCongDoan(tmpSanPham,tmpCongDoan,maChiTietCongDoan);
                 ds.add(tmp);
 
 
