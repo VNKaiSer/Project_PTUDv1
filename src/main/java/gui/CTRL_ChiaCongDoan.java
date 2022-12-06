@@ -13,16 +13,18 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CTRL_ChiaCongDoan implements Initializable {
@@ -43,8 +45,6 @@ public class CTRL_ChiaCongDoan implements Initializable {
     @FXML
     private TableColumn<?, ?> tenSanPhamCol;
 
-    @FXML
-    public ComboBox<String> cboThuTu;
     @FXML
     private TextField txtMaSanPham;
 
@@ -67,7 +67,6 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
     private DTO_SanPham sanPhamClick;
 
-    ObservableList<String> listThuTu;
     private BUS_SanPham bus_sanPham;
 
     private BUS_CongDoan bus_congDoan;
@@ -102,8 +101,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
     private TableColumn<?, ?> tenCongDoanPCDCol;
     @FXML
     private TableColumn<?, ?> tenSanPhamPCDCol;
-    @FXML
-    private TableColumn<?, ?> thuTuCongDoanCol;
+
     @FXML
     private TableColumn<?, ?> maSanPhamPCDCol;
     @FXML
@@ -128,7 +126,13 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
     @FXML
     private Button btnXoa;
-
+    private ArrayList<DTO_CongDoan> listCongDoan;
+    @FXML
+    private Button btnThemCD;
+    @FXML
+    private Button btnSuaGia;
+    @FXML
+    private Button btnXoaCD;
 
 
     @Override
@@ -136,7 +140,10 @@ public class CTRL_ChiaCongDoan implements Initializable {
         bus_chiTietCongDoan = new BUS_ChiTietCongDoan();
         bus_sanPham = new BUS_SanPham();
         bus_congDoan = new BUS_CongDoan();
-        cboThuTu.setItems(listThuTu);
+        tblCongDoan.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
+        );
+
         loadSanPham();
         loadCongDong();
         loadCTCongDoan();
@@ -156,9 +163,15 @@ public class CTRL_ChiaCongDoan implements Initializable {
             soCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("soCongDoan"));
             soLuongCol.setCellValueFactory(new PropertyValueFactory<>("soLuongYeuCau"));
 
+            modelSanPham = FXCollections.observableArrayList();
 
-            modelSanPham = FXCollections.observableArrayList(listSanPham);
-            System.out.println(modelSanPham);
+
+            for (DTO_SanPham it :
+                    listSanPham) {
+                if (!it.isTrangThai())
+                    modelSanPham.add(it);
+            }
+
             tblSanPham.setItems(modelSanPham);
 
         } catch (SQLException e) {
@@ -174,7 +187,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
     private void loadCongDong() {
 
         try {
-            ArrayList<DTO_CongDoan> listCongDoan = new BUS_CongDoan().getAllCongDoan();
+            listCongDoan = new BUS_CongDoan().getAllCongDoan();
             maCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("maCongDoan"));
             tenCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("tenCongDoan"));
             donGiaCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("donGiaCongDoan"));
@@ -195,25 +208,47 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
         // Sự kiện trên bảng sản phẩm
         tblSanPham.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            sanPhamClick = tblSanPham.getSelectionModel().getSelectedItem();
-            txtMaSanPham.setText(sanPhamClick.getMaSanPham());
-            txtTenSanPham.setText(sanPhamClick.getTenSanPham());
-            txtSoLuong.setText(sanPhamClick.getSoLuongYeuCau() + "");
-            sinhThuTuCongDoan(sanPhamClick.getSoCongDoan());
             try {
+                listCongDoan = bus_congDoan.getAllCongDoan();
+
+
+                sanPhamClick = tblSanPham.getSelectionModel().getSelectedItem();
+                txtMaSanPham.setText(sanPhamClick.getMaSanPham());
+                txtTenSanPham.setText(sanPhamClick.getTenSanPham());
+                txtSoLuong.setText(sanPhamClick.getSoLuongYeuCau() + "");
+
                 //tblPCCD.getItems().clear();
                 tblPCCD.setItems(FXCollections.observableArrayList(bus_chiTietCongDoan.getDSTheoMaSP(sanPhamClick.getMaSanPham())));
+                sinhThuTuCongDoan(sanPhamClick.getSoCongDoan());
+
+                modelCongDoan = FXCollections.observableArrayList(listCongDoan);
+                for (DTO_ChiTietCongDoan it:
+                     tblPCCD.getItems()) {
+                    modelCongDoan.remove(it.getCongDoan());
+                }
+                tblCongDoan.setItems(modelCongDoan);
+
+                ct_CongDoanBanDau = tblPCCD.getItems();
+                if(sanPhamClick.getSoCongDoan() == tblPCCD.getItems().size()){
+                    btnXoa.setDisable(true);
+                    btnLuu.setDisable(true);
+                    btnDatLai.setDisable(true);
+                } else {
+                    btnXoa.setDisable(false);
+                    btnLuu.setDisable(false);
+                    btnDatLai.setDisable(false);
+                }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (ParseException ex) {
                 throw new RuntimeException(ex);
             }
-            ct_CongDoanBanDau = tblPCCD.getItems();
 
         });
 
         // Sự kiện trên bảng công đoạn
         tblCongDoan.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            tblSanPham.getSelectionModel().clearSelection();
             congDoanClick = tblCongDoan.getSelectionModel().getSelectedItem();
             txtMaCongDoan.setText(congDoanClick.getMaCongDoan());
             txtTenCongDoan.setText(congDoanClick.getTenCongDoan());
@@ -221,34 +256,31 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
         // Sự kiện trên nút thêm
         btnThem.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            System.out.println(tblPCCD.getItems().size());
-            if (sanPhamClick.getSoCongDoan() <= tblPCCD.getItems().size()){
-
-                Alert al = new Alert(Alert.AlertType.ERROR, "Sản phẩm này đã đầy đủ công đoạn", ButtonType.APPLY);
-                al.showAndWait();
-                return;
-            }
-
             if (sanPhamClick == null) {
                 Alert al = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn sản phẩm", ButtonType.APPLY);
                 al.showAndWait();
                 return;
             }
 
+            if (sanPhamClick.getSoCongDoan() <= tblPCCD.getItems().size()) {
+                Alert al = new Alert(Alert.AlertType.ERROR, "Sản phẩm này đã đầy đủ công đoạn", ButtonType.APPLY);
+                al.showAndWait();
+                return;
+            }
+
+
             if (congDoanClick == null) {
                 Alert al = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn", ButtonType.APPLY);
                 al.showAndWait();
                 return;
             }
-
-            if (cboThuTu.getValue() == null){
-                Alert al = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn thứ tự công đoạn", ButtonType.APPLY);
-                al.showAndWait();
-                return;
+            try {
+                handleThemCT();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
             }
-
-
-            handleThemCT();
 
 
         });
@@ -256,21 +288,17 @@ public class CTRL_ChiaCongDoan implements Initializable {
         btnDatLai.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                tblPCCD.getItems().clear();
-                tblPCCD.setItems(FXCollections.observableArrayList(ct_CongDoanBanDau));
-            }
-        });
-
-
-
-        cboThuTu.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (cboThuTu.getValue() == null){
-                    cboThuTu.setStyle("-fx-border-color: red");
-                } else {
-                    cboThuTu.setStyle("-fx-border-color: green");
+                try {
+                    tblCongDoan.setItems(FXCollections.observableArrayList(bus_congDoan.getAllCongDoan()));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
                 }
+                // xoa chitietcongdoan da them
+                bus_chiTietCongDoan.rmDSTheoMaSP(bus_chiTietCongDoan.getDSTheoMaSP(sanPhamClick.getMaSanPham()));
+                tblPCCD.getItems().clear();
+                tblPCCD.setItems(FXCollections.observableArrayList());
             }
         });
 
@@ -284,15 +312,6 @@ public class CTRL_ChiaCongDoan implements Initializable {
                 // xóa trong RAM
                 bus_chiTietCongDoan.rmCTCD(tblPCCD.getSelectionModel().getSelectedItem());
 
-                // thêm lại thứ tự trên bảng công đoạn
-                String thuTu= String.valueOf(tblPCCD.getSelectionModel().getSelectedItem().getThuTuCongDoan());
-                listThuTu.add(thuTu);
-                listThuTu.sort(new Comparator<String>() {
-                    @Override
-                    public int compare(String o1, String o2) {
-                        return o1.compareTo(o2);
-                    }
-                });
 
                 modelCongDoan.add(tblPCCD.getSelectionModel().getSelectedItem().getCongDoan());
 
@@ -305,9 +324,89 @@ public class CTRL_ChiaCongDoan implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
+                    if (tblCongDoan.getItems().size() < sanPhamClick.getSoCongDoan()) {
+                        Alert al = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn đủ số công đoạn trước khi lưu", ButtonType.APPLY);
+                        al.showAndWait();
+                        return;
+                    }
                     bus_chiTietCongDoan.luuCTCDCuaSanPham(tblPCCD.getItems());
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                }
+            }
+        });
+
+        btnThemCD.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("Diaglog_CongDoan.fxml"));
+                    DialogPane addDialog = fxmlLoader.load();
+                    Dialog dialog = new Dialog<>();
+                    dialog.setDialogPane(addDialog);
+                    dialog.setTitle("Thêm Công Đoạn");
+                    CTL_DiaglogCongDoan controller = fxmlLoader.getController();
+                    controller.setData(true, new DTO_CongDoan());
+                    Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+                    if (clickedButton.get() == ButtonType.OK) {
+                        bus_congDoan.insertCongDoan(controller.getData());
+                        modelCongDoan.add(controller.getData());
+                        tblCongDoan.setItems(modelCongDoan);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+            }
+        });
+
+        btnSuaGia.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (tblCongDoan.getSelectionModel().getSelectedItem() == null) {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn cần sửa", ButtonType.OK);
+                    return;
+                }
+
+
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("Diaglog_CongDoan.fxml"));
+                DialogPane addDialog = null;
+                try {
+                    addDialog = fxmlLoader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Dialog dialog = new Dialog<>();
+                dialog.setDialogPane(addDialog);
+                dialog.setTitle("Sửa Giá Công Đoạn");
+                CTL_DiaglogCongDoan controller = fxmlLoader.getController();
+                DTO_CongDoan congDoanSua = tblCongDoan.getSelectionModel().getSelectedItem();
+                controller.setData(false, congDoanSua);
+                Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+                if (clickedButton.get() == ButtonType.OK) {
+                    modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
+                    modelCongDoan.add(controller.getData());
+                    tblCongDoan.setItems(modelCongDoan);
+                }
+            }
+        });
+
+        btnXoaCD.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (tblCongDoan.getSelectionModel().getSelectedItem() == null) {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn cần sửa", ButtonType.OK);
+                } else {
+
+                    modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
+                    tblCongDoan.getSelectionModel().clearSelection();
                 }
             }
         });
@@ -317,17 +416,16 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
     private void loadCongDoan(ObservableList<DTO_ChiTietCongDoan> model) {
 
-            maSanPhamPCDCol.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
-            tenSanPhamPCDCol.setCellValueFactory(new PropertyValueFactory<>("tenSanPham"));
-            soCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("soCongDoan"));
-            maCongDoanPCDCol.setCellValueFactory(new PropertyValueFactory<>("maCongDoan"));
-            tenCongDoanPCDCol.setCellValueFactory(new PropertyValueFactory<>("tenCongDoan"));
-            donGiaCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("donGiaCongDoan"));
-            thuTuCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("thuTuCongDoan"));
-            soLuongYeuCauPCDCol.setCellValueFactory(new PropertyValueFactory<>("soLuongYeuCau"));
-            donGiaPCDCol.setCellValueFactory(new PropertyValueFactory<>("donGiaCongDoan"));
+        maSanPhamPCDCol.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
+        tenSanPhamPCDCol.setCellValueFactory(new PropertyValueFactory<>("tenSanPham"));
+        soCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("soCongDoan"));
+        maCongDoanPCDCol.setCellValueFactory(new PropertyValueFactory<>("maCongDoan"));
+        tenCongDoanPCDCol.setCellValueFactory(new PropertyValueFactory<>("tenCongDoan"));
+        donGiaCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("donGiaCongDoan"));
+        soLuongYeuCauPCDCol.setCellValueFactory(new PropertyValueFactory<>("soLuongYeuCau"));
+        donGiaPCDCol.setCellValueFactory(new PropertyValueFactory<>("donGiaCongDoan"));
 
-            tblPCCD.setItems(model);
+        tblPCCD.setItems(model);
 
 
     }
@@ -335,7 +433,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
     /**
      * Hàm khowri tạo bảng CTCD
      */
-    private void loadCTCongDoan(){
+    private void loadCTCongDoan() {
         ArrayList<DTO_ChiTietCongDoan> listCTCD;
         try {
 
@@ -351,23 +449,55 @@ public class CTRL_ChiaCongDoan implements Initializable {
         }
     }
 
-    private void handleThemCT(){
-        try {
-            int thuTu =  Integer.parseInt(cboThuTu.getValue()+"");
-            cboThuTu.getItems().remove(cboThuTu.getSelectionModel().getSelectedItem());
-            DTO_ChiTietCongDoan ct = new DTO_ChiTietCongDoan(sanPhamClick, congDoanClick, sinhMaCTCD(tblSanPham.getSelectionModel().getSelectedItem().getMaSanPham(), tblCongDoan.getSelectionModel().getSelectedItem().getMaCongDoan(), cboThuTu.getValue()),thuTu);
-            bus_chiTietCongDoan.addCTCD(ct);
-            // remove CD
-            modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
-            //bus_chiTietCongDoan.insertCTCongDoan(ct);
-            tblPCCD.getItems().add(ct);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    /**
+     * Hàm thêm vào table chia công đoạn
+     */
+    private void handleThemCT() throws SQLException, ParseException {
+
+        ObservableList<DTO_CongDoan> listCDThem = FXCollections.observableArrayList();
+        listCDThem = tblCongDoan.getSelectionModel().getSelectedItems();
+        //Nếu số công đoạn đã chọn quá nhiều
+        if (listCDThem.size() > sanPhamClick.getSoCongDoan()) {
+            Alert a = new Alert(Alert.AlertType.ERROR, "Số lượng công đoạn đã chọn vượt quá số công đoạn của sản phẩm", ButtonType.CANCEL);
+            a.showAndWait();
+            return;
         }
+
+        /**
+         * Kiểm tra thử là click vào một công đoạn hay nhiều công đoạn
+         */
+        int i = 0;
+        if (listCDThem.size() == 1) {
+            try {
+
+                DTO_ChiTietCongDoan ct = new DTO_ChiTietCongDoan(sanPhamClick, congDoanClick, sinhMaCTCD(sanPhamClick.getMaSanPham(), congDoanClick.getMaCongDoan(), i++)/*sinhMaCTCD(tblSanPham.getSelectionModel().getSelectedItem().getMaSanPham(), tblCongDoan.getSelectionModel().getSelectedItem().getMaCongDoan(), cboThuTu.getValue())*/);
+                bus_chiTietCongDoan.addCTCD(ct);
+                modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
+                tblPCCD.getItems().add(ct);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else { // Nhiều công đoạn
+            for (DTO_CongDoan it : listCDThem) {
+                DTO_ChiTietCongDoan ct = new DTO_ChiTietCongDoan(sanPhamClick, it, sinhMaCTCD(sanPhamClick.getMaSanPham(), it.getMaCongDoan(), i++)/*sinhMaCTCD(tblSanPham.getSelectionModel().getSelectedItem().getMaSanPham(), tblCongDoan.getSelectionModel().getSelectedItem().getMaCongDoan(), cboThuTu.getValue())*/);
+                bus_chiTietCongDoan.addCTCD(ct);
+                tblPCCD.getItems().add(ct);
+            }
+            // xóa các công đoạn ra khỏi table
+
+            modelCongDoan = FXCollections.observableArrayList(bus_congDoan.getAllCongDoan());
+            modelCongDoan.removeAll(listCDThem);
+
+
+            tblCongDoan.setItems(FXCollections.observableArrayList(modelCongDoan));
+        }
+
+
     }
 
-    private void fillTableSanPham(){
-        FilteredList<DTO_SanPham> filteredListSanPhams = new FilteredList<>(modelSanPham, b-> true);
+    private void fillTableSanPham() {
+        FilteredList<DTO_SanPham> filteredListSanPhams = new FilteredList<>(modelSanPham, b -> true);
         txtTimSanPham.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredListSanPhams.setPredicate(dto_sanPham -> {
                 // If filter text is empty, display all persons.
@@ -379,15 +509,12 @@ public class CTRL_ChiaCongDoan implements Initializable {
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (dto_sanPham.getMaSanPham().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                if (dto_sanPham.getMaSanPham().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true;
-                } else if (dto_sanPham.getTenSanPham().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-                    return true;
-                }
-                else if (String.valueOf(dto_sanPham.getSoCongDoan()).indexOf(lowerCaseFilter)!=-1)
-                    return true;
-                else
-                    return false; // Does not match.
+                } else // Does not match.
+                    if (dto_sanPham.getTenSanPham().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                        return true;
+                    } else return String.valueOf(dto_sanPham.getSoCongDoan()).indexOf(lowerCaseFilter) != -1;
             });
         });
         SortedList<DTO_SanPham> sortedData = new SortedList<>(filteredListSanPhams);
@@ -395,8 +522,8 @@ public class CTRL_ChiaCongDoan implements Initializable {
         tblSanPham.setItems(sortedData);
     }
 
-    private void filerTableCongDoan(){
-        FilteredList<DTO_CongDoan> filteredListCongDoan = new FilteredList<>(modelCongDoan, b-> true);
+    private void filerTableCongDoan() {
+        FilteredList<DTO_CongDoan> filteredListCongDoan = new FilteredList<>(modelCongDoan, b -> true);
         txtTimCongDoan.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredListCongDoan.setPredicate(dto_congDoan -> {
                 // If filter text is empty, display all persons.
@@ -408,15 +535,12 @@ public class CTRL_ChiaCongDoan implements Initializable {
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (dto_congDoan.getMaCongDoan().toLowerCase().indexOf(lowerCaseFilter) != -1 ) {
+                if (dto_congDoan.getMaCongDoan().toLowerCase().indexOf(lowerCaseFilter) != -1) {
                     return true;
-                } else if (dto_congDoan.getTenCongDoan().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-                    return true;
-                }
-                else if (String.valueOf(dto_congDoan.getDonGiaCongDoan()).indexOf(lowerCaseFilter)!=-1)
-                    return true;
-                else
-                    return false; // Does not match.
+                } else // Does not match.
+                    if (dto_congDoan.getTenCongDoan().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                        return true;
+                    } else return String.valueOf(dto_congDoan.getDonGiaCongDoan()).indexOf(lowerCaseFilter) != -1;
             });
         });
         SortedList<DTO_CongDoan> sortedData = new SortedList<>(filteredListCongDoan);
@@ -424,16 +548,13 @@ public class CTRL_ChiaCongDoan implements Initializable {
         tblCongDoan.setItems(sortedData);
     }
 
-    private String sinhMaCTCD(String maSP, String maCD, String stt){
-        return "CTCD"+maCD+maCD+stt;
+    private String sinhMaCTCD(String maSP, String maCD, int stt) {
+        return "CTCD" + maSP + maCD + stt;
     }
 
-    private void sinhThuTuCongDoan(int slcd){
-        listThuTu = FXCollections.observableArrayList();
-        for (int i = 1; i <= slcd ; i++) {
-            listThuTu.add(i+"");
-        }
-        cboThuTu.setItems(listThuTu);
+    private void sinhThuTuCongDoan(int slcd) {
+        String hienThi = slcd < tblPCCD.getItems().size() + 1 ? "" : String.valueOf(tblPCCD.getItems().size() + 1);
+
     }
 
 }

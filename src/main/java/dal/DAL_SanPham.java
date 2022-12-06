@@ -42,10 +42,12 @@ public class DAL_SanPham {
             int soCongDoan = rs.getInt(3);
             int soLuong = rs.getInt(4);
             String chatLieu = rs.getString(5);
+            boolean trangThai = rs.getBoolean(6);
             byte [] hinhAnh = rs.getBytes(7);
 
             tmp = new DTO_SanPham(maSP,tenSP,soCongDoan,soLuong,chatLieu);
             tmp.setHinhAnh(hinhAnh);
+            tmp.setTrangThai(trangThai);
             dsSanPham.add(tmp);
         }
         // đóng kết nối

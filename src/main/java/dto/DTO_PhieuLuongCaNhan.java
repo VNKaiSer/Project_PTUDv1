@@ -5,7 +5,9 @@
 package dto;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.TableView;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,8 +15,8 @@ import java.util.Objects;
  * @author 20116031_Võ Tấn Đạt
  *
  */
-public abstract class  DTO_PhieuLuongCaNhan{
-    protected String maPhieuLuongNV;
+public abstract class  DTO_PhieuLuongCaNhan {
+    protected String maPhieuLuong;
     protected int soNgayCong;
     protected int nam;
     protected int thang;
@@ -29,11 +31,17 @@ public abstract class  DTO_PhieuLuongCaNhan{
     protected double tongLuong;
     protected double thucNhan;
 
+    protected int coMat;
+    protected int vang;
+    protected int phep;
+
+    private final DecimalFormat df = new DecimalFormat("###,###VNĐ");
+
     public DTO_PhieuLuongCaNhan() {
     }
 
     public DTO_PhieuLuongCaNhan(String maPhieuLuongNV, int soNgayCong, int nam, int thang, double tienThuong, double tienPhat, float thue, double tienTrachNhiem, double tienPhuCap, double tamUng, double tongLuong, double thucNhan) {
-        this.maPhieuLuongNV = maPhieuLuongNV;
+        this.maPhieuLuong = maPhieuLuongNV;
         this.soNgayCong = soNgayCong;
         this.nam = nam;
         this.thang = thang;
@@ -48,7 +56,7 @@ public abstract class  DTO_PhieuLuongCaNhan{
     }
 
     public void setMaPhieuLuongNV(String maPhieuLuongNV) {
-        this.maPhieuLuongNV = maPhieuLuongNV;
+        this.maPhieuLuong = maPhieuLuongNV;
     }
 
     public void setSoNgayCong(int soNgayCong) {
@@ -87,6 +95,12 @@ public abstract class  DTO_PhieuLuongCaNhan{
         this.tamUng = tamUng;
     }
 
+    public void ungLuong(double tamUng){
+        this.tamUng = tamUng;
+        this.tongLuong = tongLuong - tamUng;
+        thucLanh();
+    }
+
     public void setTongLuong(double tongLuong) {
         this.tongLuong = tongLuong;
     }
@@ -95,8 +109,8 @@ public abstract class  DTO_PhieuLuongCaNhan{
         this.thucNhan = thucNhan;
     }
 
-    public String getMaPhieuLuongNV() {
-        return maPhieuLuongNV;
+    public String getMaPhieuLuong() {
+        return maPhieuLuong;
     }
 
     public int getSoNgayCong() {
@@ -143,22 +157,50 @@ public abstract class  DTO_PhieuLuongCaNhan{
         return thucNhan;
     }
 
+    public SimpleStringProperty tienPhuCapProperty(){
+        return new SimpleStringProperty(df.format(tienPhuCap));
+    }
+    public SimpleStringProperty tienTrachNhiemProperty(){
+        return new SimpleStringProperty(df.format(tienTrachNhiem));
+    }
+
+    public SimpleStringProperty tongLuongProperty(){
+        return new SimpleStringProperty(df.format(tongLuong));
+    }
+
+    public SimpleStringProperty tienPhatProperty(){
+        return new SimpleStringProperty(df.format(tienPhat));
+    }
+
+    public SimpleStringProperty tamUngProperty(){
+        return new SimpleStringProperty(df.format(tamUng));
+    }
+
+    public SimpleStringProperty thucNhanProperty(){
+        return new SimpleStringProperty(df.format(thucNhan));
+    }
+    public SimpleStringProperty thueProperty(){
+        return new SimpleStringProperty(df.format(thue));
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DTO_PhieuLuongNhanVien that)) return false;
-        return getMaPhieuLuongNV().equals(that.getMaPhieuLuongNV());
+        return getMaPhieuLuong().equals(that.getMaPhieuLuong());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMaPhieuLuongNV());
+        return Objects.hash(getMaPhieuLuong());
     }
 
     @Override
     public String toString() {
         return "DTO_PhieuLuongNhanVien{" +
-                "maPhieuLuongNV='" + maPhieuLuongNV + '\'' +
+                "maPhieuLuongNV='" + maPhieuLuong + '\'' +
                 ", soNgayCong=" + soNgayCong +
                 ", nam=" + nam +
                 ", thang=" + thang +
@@ -176,54 +218,27 @@ public abstract class  DTO_PhieuLuongCaNhan{
     public abstract void tinhTongLuong();
     public abstract void thucLanh();
 
-    class DTO_ThongKeDiemDanh {
-        private Object caNhan;
-        private int coMat;
-        private int vang;
-        private int coPhep;
-
-        public DTO_ThongKeDiemDanh() {
-        }
-
-        public DTO_ThongKeDiemDanh(Object caNhan, int coMat, int vang, int coPhep) {
-            this.caNhan = caNhan;
-            this.coMat = coMat;
-            this.vang = vang;
-            this.coPhep = coPhep;
-        }
-
-        public Object getCaNhan() {
-            return caNhan;
-        }
-
-        public int getCoMat() {
-            return coMat;
-        }
-
-        public int getVang() {
-            return vang;
-        }
-
-        public int getCoPhep() {
-            return coPhep;
-        }
-
-        public void setCaNhan(Object caNhan) {
-            this.caNhan = caNhan;
-        }
-
-        public void setCoMat(int coMat) {
-            this.coMat = coMat;
-        }
-
-        public void setVang(int vang) {
-            this.vang = vang;
-        }
-
-        public void setCoPhep(int coPhep) {
-            this.coPhep = coPhep;
-        }
+    public int getCoMat() {
+        return coMat;
     }
 
+    public void setCoMat(int coMat) {
+        this.coMat = coMat;
+    }
 
+    public int getVang() {
+        return vang;
+    }
+
+    public void setVang(int vang) {
+        this.vang = vang;
+    }
+
+    public int getPhep() {
+        return phep;
+    }
+
+    public void setPhep(int phep) {
+        this.phep = phep;
+    }
 }

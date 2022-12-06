@@ -19,12 +19,15 @@ public class DTO_PhieuLuongNhanVien extends DTO_PhieuLuongCaNhan{
     private DTO_NhanVien nhanVien;
 
 
-    public DTO_PhieuLuongNhanVien(String maPhieuLuongNV, int soNgayCong, int nam, int thang, double tienThuong, double tienPhat, float thue, double tienTrachNhiem, double tienPhuCap, double tamUng, double tongLuong, double thucNhan, double luongCoBan, DTO_NhanVien nhanVien) {
+    public DTO_PhieuLuongNhanVien(String maPhieuLuongNV, int soNgayCong, int nam, int thang, double tienThuong, double tienPhat, float thue, double tienTrachNhiem, double tienPhuCap, double tamUng, double tongLuong, double thucNhan, double luongCoBan, DTO_NhanVien nhanVien, int vang, int phep) {
         super(maPhieuLuongNV, soNgayCong, nam, thang, tienThuong, tienPhat, thue, tienTrachNhiem, tienPhuCap, tamUng, tongLuong, thucNhan);
+        this.nhanVien = nhanVien;
+        this.luongCoBan = nhanVien.getLuongCoBan();
+        this.vang = vang;
+        this.phep = phep;
         tinhTongLuong();
         thucLanh();
-        this.luongCoBan = luongCoBan;
-        this.nhanVien = nhanVien;
+
     }
 
     public DTO_PhieuLuongNhanVien(){
@@ -55,30 +58,44 @@ public class DTO_PhieuLuongNhanVien extends DTO_PhieuLuongCaNhan{
         this.nhanVien = nhanVien;
     }
 
+    @Override
+    public void tinhTongLuong() {
+        this.tongLuong = ( luongCoBan / 26 ) * soNgayCong + tienPhuCap;
 
+    }
 
+    @Override
+    public void thucLanh() {
+        if (soNgayCong >= 26){
+            tienThuong = 200000;
+            tienTrachNhiem = 300000;
+        }
+        tienPhat = (vang * (luongCoBan / 26) + (phep * (luongCoBan / 52)));
+
+        thue = (float) (tongLuong * 0.08);
+        thucNhan = tongLuong - thue - tamUng + tienThuong - tienPhat;
+    }
 
     @Override
     public String toString() {
         return "DTO_PhieuLuongNhanVien{" +
                 "luongCoBan=" + luongCoBan +
                 ", nhanVien=" + nhanVien +
+                ", maPhieuLuongNV='" + maPhieuLuong + '\'' +
+                ", soNgayCong=" + soNgayCong +
+                ", nam=" + nam +
+                ", thang=" + thang +
+                ", tienThuong=" + tienThuong +
+                ", tienPhat=" + tienPhat +
+                ", thue=" + thue +
+                ", tienTrachNhiem=" + tienTrachNhiem +
+                ", tienPhuCap=" + tienPhuCap +
+                ", tamUng=" + tamUng +
+                ", tongLuong=" + tongLuong +
+                ", thucNhan=" + thucNhan +
+                ", coMat=" + coMat +
+                ", vang=" + vang +
+                ", phep=" + phep +
                 '}';
     }
-
-    @Override
-    public void tinhTongLuong() {
-        double tienTru = 0;
-        if (soNgayCong < 26){
-            tienTru = (( 26 - soNgayCong ) * luongCoBan )/ 26;
-        }
-        tongLuong = luongCoBan + tienThuong + tienPhuCap - tienPhat - tienTru;
-    }
-
-    @Override
-    public void thucLanh() {
-        thucNhan = tongLuong - tongLuong*thue - tamUng;
-    }
-
-
 }

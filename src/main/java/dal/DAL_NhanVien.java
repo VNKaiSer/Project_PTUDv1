@@ -47,9 +47,7 @@ public class DAL_NhanVien {
             String email = rs.getString(7);
             String diaChi = rs.getString(8);
             double luongCoBan  = rs.getDouble(9);
-            double tienPhuCap  = rs.getDouble(10);
-            double tienTrachNhiem  = rs.getDouble(11);
-            tmp = new DTO_NhanVien(maNV, tenNV, ngayVaoLam, true, ngaySinh, sdt, email, diaChi, luongCoBan, tienPhuCap, tienTrachNhiem);
+            tmp = new DTO_NhanVien(maNV, tenNV, ngayVaoLam, true, ngaySinh, sdt, email, diaChi, luongCoBan);
             dsNhanVien.add(tmp);
         }
         // đóng kết nối
@@ -65,7 +63,7 @@ public class DAL_NhanVien {
     public  void insertNhanVien(DTO_NhanVien nhanvien) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO NhanVien VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO NhanVien VALUES(?,?,?,?,?,?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,nhanvien.getMaNhanVien());
         ppsm.setString(2,nhanvien.getTenNhanVien());
@@ -79,8 +77,6 @@ public class DAL_NhanVien {
         ppsm.setString(8,nhanvien.getDiaChi());
         ppsm.setDouble(9,nhanvien.getLuongCoBan());
         ppsm.setDouble(9,nhanvien.getLuongCoBan());
-        ppsm.setDouble(10,nhanvien.getTienPhuCap());
-        ppsm.setDouble(11,nhanvien.getTienTrachNhiem());
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
@@ -107,8 +103,8 @@ public class DAL_NhanVien {
     public void updateNhanVien(DTO_NhanVien nhanVien) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql = "UPDATE NhanVien " +
-                "SET tenNhanVien = ?, ngayVaoLam = ?, phai = ?, [ ngaySinh ] = ?, SDT = ?, email = ?, diaChi = ?, luongCoBan = ?, tienPhuCap = ?, tienTrachNhiem = ? " +
-                "WHERE maNhanVien = ?";
+                "SET tenNhanVien = ?, ngayVaoLam = ?, phai = ?, [ ngaySinh ] = ?, SDT = ?, email = ?, diaChi = ?, luongCoBan = ?" +
+                "\nWHERE maNhanVien = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,nhanVien.getTenNhanVien());
         String dateTmp = new SimpleDateFormat("yyyy-MM-dd").format(nhanVien.getNgayVaoLam());
@@ -120,8 +116,6 @@ public class DAL_NhanVien {
         ppsm.setString(6, nhanVien.getEmail());
         ppsm.setString(7,nhanVien.getDiaChi());
         ppsm.setDouble(8,nhanVien.getLuongCoBan());
-        ppsm.setDouble(9,nhanVien.getTienPhuCap());
-        ppsm.setDouble(10,nhanVien.getTienTrachNhiem());
         ppsm.setString(11,nhanVien.getMaNhanVien());
         ppsm.execute();
         // đóng kết nối

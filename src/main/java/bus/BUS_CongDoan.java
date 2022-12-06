@@ -21,4 +21,9 @@ public class BUS_CongDoan {
     public ArrayList<DTO_CongDoan> getDSCongDoanTheoMaSP(String ma) throws SQLException, ParseException {
         return  dal_congDoan.getDSCongDoanTheoMaSP(ma);
     }
+
+
+    public void insertCongDoan(DTO_CongDoan data) throws SQLException {
+        dal_congDoan.insertCongDoan(data);
+    }
 }

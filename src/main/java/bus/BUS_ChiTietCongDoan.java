@@ -25,7 +25,7 @@ public class BUS_ChiTietCongDoan {
         return listChiTietCongDoan;
     }
 
-    public ArrayList<DTO_ChiTietCongDoan> getDSTheoMaSP(String maSP) throws SQLException, ParseException {
+    public ArrayList<DTO_ChiTietCongDoan> getDSTheoMaSP(String maSP){
          ArrayList<DTO_ChiTietCongDoan> rs = new ArrayList<>();
         for (DTO_ChiTietCongDoan it:
                 listChiTietCongDoan) {
@@ -36,9 +36,14 @@ public class BUS_ChiTietCongDoan {
         return rs;
     }
 
+    public void rmDSTheoMaSP(ArrayList<DTO_ChiTietCongDoan> it)  {
+       listChiTietCongDoan.removeAll(it);
+    }
+
     public void luuCTCDCuaSanPham(ObservableList<DTO_ChiTietCongDoan> list) throws SQLException {
         for (DTO_ChiTietCongDoan it:
              list) {
+
             dal_chiTietCongDoan.insertChiTietCongDoan(it);
         }
     }

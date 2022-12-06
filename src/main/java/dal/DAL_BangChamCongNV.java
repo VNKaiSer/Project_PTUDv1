@@ -86,7 +86,7 @@ public class DAL_BangChamCongNV {
     public void insertBCCNhanVien(DTO_BCCNhanVien bcccnhanvien) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO BangChamCongNV VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO BangChamCongNV VALUES(?,?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1, bcccnhanvien.getMaBCCNV());
         ppsm.setInt(2, bcccnhanvien.getHienDien());
@@ -94,7 +94,6 @@ public class DAL_BangChamCongNV {
         ppsm.setString(3, dateTmp);
         ppsm.setString(4, bcccnhanvien.getNhanVien().getMaNhanVien());
         ppsm.setString(5, bcccnhanvien.getGhiChu());
-        ppsm.setBoolean(6,true);
 
         ppsm.execute();
         // đóng kết nối
