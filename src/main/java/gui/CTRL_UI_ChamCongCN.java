@@ -2,6 +2,8 @@ package gui;
 
 import bus.BUS_ChamCongCN;
 import bus.BUS_CongNhan;
+import bus.BUS_PhanCong;
+import bus.BUS_TinhLuong;
 import dto.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,10 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class CTRL_UI_ChamCongCN implements Initializable {
     @FXML
@@ -32,10 +31,10 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     private Button btnLuu;
 
     @FXML
-    private ComboBox<?> cboMaCaLam;
+    private ComboBox<String> cboMaCaLam;
 
     @FXML
-    private ComboBox<?> cboMaCongDoan;
+    private ComboBox<String> cboTenCaLam;
 
     @FXML
     private TableColumn<?, ?> hienDienCol;
@@ -79,10 +78,16 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     private final int COMAT = 1;
     private final int PHEP = 2;
     private final int VANG = 0;
+    private HashMap<String, Integer> dicCongNhanSoLuong;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        dicCongNhanSoLuong = new HashMap<>();
         // khởi tạo các bus và các danh sách
+        cboMaCaLam.setItems(FXCollections.observableArrayList("Tất cả","1","2","3"));
+        cboMaCaLam.setValue("Tất cả");
+        cboTenCaLam.setValue("Tất cả");
+        cboTenCaLam.setItems(FXCollections.observableArrayList("Tất cả","Sáng","Chiều","Tối"));
         bus_congNhan = new BUS_CongNhan();
         try {
             bus_chamCongCN = new BUS_ChamCongCN();
@@ -113,19 +118,32 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             throw new RuntimeException(e);
         }
 
+        try {
+            loadDanhSachChamCongHomNay();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         // băt sự kiện trên các componet
         txtNgayChamCong.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // ngày chấm công lơn hơn ngày hiện tại
                 Date ngayCC = Date.from(txtNgayChamCong.getValue().atStartOfDay()
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant());
+                            .atZone(ZoneId.systemDefault())
+                            .toInstant());
                 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                 if (df.format(ngayCC).equals(df.format(new Date()))){
                     // đã chấm cho hôm nay rồi
                     if (!nowCC){
-                        loadDanhSachChamCongDaCham();
+                        try {
+                            loadDanhSachChamCongDaCham();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
                         return;
                     }
                     nowCC = true;
@@ -146,68 +164,43 @@ public class CTRL_UI_ChamCongCN implements Initializable {
                     txtNgayChamCong.setValue(ngayHienTai);
                 }
                 else if (ngayCC.before(new Date())){
-                    loadDanhSachChamCongDaCham();
+                    try {
+                        loadDanhSachChamCongDaCham();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     tblBCCCN.setDisable(true);
                 }
-
-
             }
         });
 
-//        tblBCCCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                int idx = tblBCCCN.getSelectionModel().getSelectedIndex();
-//                if (idx == -1)
-//                    return;
-//
-//                FXMLLoader fxmlLoader = new FXMLLoader();
-//                fxmlLoader.setLocation(getClass().getResource("Dialog_ChamCongCongNhan.fxml"));
-//                DialogPane addDialog = null;
-//                try {
-//                    addDialog = fxmlLoader.load();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                dialog = new Dialog<>();
-//                dialog.setDialogPane(addDialog);
-//                CTRL_Dialog_CCCN ctrl_dialog_ccnv = fxmlLoader.getController();
-//
-//                DTO_BCCCongNhan selectCN = tblBCCCN.getSelectionModel().getSelectedItem();
-//                ctrl_dialog_ccnv.setData(selectCN.getHienDien(), selectCN.getGhiChu(), selectCN.getSoLuongSanPhamLamDuoc());
-//                Optional clickedButton = dialog.showAndWait();
-//
-//                if (ctrl_dialog_ccnv.getCheckLuu()) {
-//                    selectCN.setGhiChu(ctrl_dialog_ccnv.getGhiChu());
-//                    selectCN.setHienDien(ctrl_dialog_ccnv.getTrangThai());
-//                    selectCN.setSoLuongSanPhamLamDuoc(ctrl_dialog_ccnv.getSoLuong());
-//                    tblBCCCN.getItems().set(idx, selectCN);
-//                }
-//            }
-//        });
+        cboMaCaLam.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                cboTenCaLam.getSelectionModel().select(cboMaCaLam.getSelectionModel().getSelectedIndex());
+            }
+        });
 
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                if (nowCC){
-                    // cập nhật chấm công
-                    Alert a = new Alert(Alert.AlertType.WARNING,"Chỉ chấm công được một lần bạn có chắc chắn LƯU", ButtonType.YES, ButtonType.NO);
-                    for (DTO_BCCCongNhan it:
-                            dsBCCHienTai) {
-                        //it.setHienDien();
-                    }
+            public void handle(ActionEvent event) {
+                try {
                     insertToDataBase();
-                    nowCC = false;
-                    tblBCCCN.setDisable(true);
-
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
+
 
 
     }
 
-    private void loadDanhSachChamCongDaCham() {
+    private void loadDanhSachChamCongDaCham() throws SQLException, ParseException {
+        System.out.println(tblBCCCN.getItems());
+        tblBCCCN.setDisable(true);
         tblBCCCN.getItems().clear();
         tblBCCCN.setItems(cover(FXCollections.observableArrayList(bus_chamCongCN.getDSBCCNTheoNgay(txtNgayChamCong.getValue().toString()))));
     }
@@ -220,7 +213,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             return;
         }
         dsBCCHienTai = new ArrayList<>();
-        ArrayList<DTO_CongNhan> dsCN = bus_congNhan.getDSCongNhan();
+        ArrayList<DTO_CongNhan> dsCN = bus_congNhan.getDSCongNhanDuocPhanCong(txtNgayChamCong.getValue().toString());
         int numNhanVien = dsCN.size();
         for (int i = 0; i < numNhanVien; i++) {
             String maBCC = taoMaBCC(dsCN.get(i).getMaCongNhan());
@@ -228,7 +221,6 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             dsBCCHienTai.add(new DTO_BCCCongNhan(dsCN.get(i), 1,0, new Date(), maBCC, ""));
         }
         tblBCCCN.setItems(cover(FXCollections.observableArrayList(dsBCCHienTai)));
-
     }
 
     void closeDialog() {
@@ -236,7 +228,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
         dialog.close();
     }
 
-    void insertToDataBase(){
+    void insertToDataBase() throws SQLException {
         bus_chamCongCN.insertBCCNVToDatabase(dsBCCHienTai);
     }
 
@@ -245,7 +237,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
         return "CCCN"+date +maNV;
     }
 
-    private ObservableList<DTO_TBW_ChamCongCongNhan> cover(ObservableList<DTO_BCCCongNhan> bcc){
+    private ObservableList<DTO_TBW_ChamCongCongNhan> cover(ObservableList<DTO_BCCCongNhan> bcc) throws SQLException {
         ObservableList<DTO_TBW_ChamCongCongNhan> list = FXCollections.observableArrayList();
         for (DTO_BCCCongNhan it:
                 bcc) {
@@ -255,9 +247,15 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             cbo.setItems(FXCollections.observableArrayList("Vắng","Có mặt","Phép"));
             cbo.getSelectionModel().select(it.getHienDien());
             DTO_TBW_ChamCongCongNhan tmp = new DTO_TBW_ChamCongCongNhan(it.getCongNhan().getMaCongNhan(), it.getCongNhan().getTenCongNhan(), cbo, t, t1);
+            tmp.setSoSanPhamDuocPhanCong(new BUS_PhanCong().getSoLuongPC(it.getCongNhan().getMaCongNhan(), txtNgayChamCong.getValue().toString()));
+
             list.add(tmp);
         }
         return list;
     }
+
+
+
+
 
 }

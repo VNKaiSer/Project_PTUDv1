@@ -5,6 +5,7 @@
 package dal;
 
 import db.ConnectDB;
+import dto.DTO_BCCCongNhan;
 import dto.DTO_CongNhan;
 import javafx.scene.control.CheckBox;
 
@@ -165,6 +166,42 @@ public class DAL_CongNhan {
             }
         }
         return ds;
+    }
+
+    public ArrayList<DTO_CongNhan> getDSCongNhanDuocPhanCong(String date) throws SQLException, ParseException {
+        String sql =  "SELECT        CongNhan.*\n" +
+                "FROM            CongNhan INNER JOIN\n" +
+                "                         BangPhanCong ON CongNhan.maCongNhan = BangPhanCong.maCongNhan\n" +
+                "WHERE ngayPhanCong = ?";
+        ConnectDB.getInstance().connect();
+        //scrip sql
+        ArrayList<DTO_CongNhan> dsCongNhan = new ArrayList<>();
+        PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
+        ppsm.setString(1, date);
+        ResultSet rs = ppsm.executeQuery();
+        // get dữ liệu
+        while (rs.next()) {
+            DTO_CongNhan tmp;
+            String maCN = rs.getString(1);
+            String tenCN = rs.getString(2);
+
+            String d = rs.getString(3);
+            Date ngayVaoLam = new SimpleDateFormat("yyy-MM-dd").parse(d);
+            Boolean phai = rs.getBoolean(4);
+            date = rs.getString(5);
+            Date ngaySinh = new SimpleDateFormat("yyy-MM-dd").parse(d);
+            String sdt = rs.getString(6);
+            String email = rs.getString(7);
+            String diaChi = rs.getString(8);
+            String trinhDo = rs.getString(9);
+            tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLam, true, sdt, ngaySinh, email, diaChi, trinhDo);
+            dsCongNhan.add(tmp);
+        }
+        // đóng kết nối
+        ConnectDB.getConnection().close();
+        //ObservableList<DTO_CongNhan>  tmp =FXCollections.observableArrayList(dsCongNhan);
+        return dsCongNhan;
+
     }
 
 

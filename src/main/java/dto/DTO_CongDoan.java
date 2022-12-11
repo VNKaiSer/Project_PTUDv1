@@ -5,7 +5,10 @@
 package dto;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 /**
  * @author 20116031_Võ Tấn Đạt
@@ -55,6 +58,9 @@ public class DTO_CongDoan {
 		this.donGiaCongDoan = donGiaCongDoan;
 	}
 
+	public  SimpleStringProperty donGiaCongDoanProperty(){
+		return new SimpleStringProperty(new DecimalFormat("###,###VNĐ").format(donGiaCongDoan));
+	}
 
 	@Override
 	public int hashCode() {

@@ -33,10 +33,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class CTL_UI_CongNhan implements Initializable {
     @FXML
@@ -136,9 +133,12 @@ public class CTL_UI_CongNhan implements Initializable {
     private boolean checkLuu = false;
     private boolean checkXoa = true;
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         connectAPI = new BUS_API();
+
         // thêm các sự kiện kiểm lỗi cho các componet
         try {
             // table
@@ -420,8 +420,6 @@ public class CTL_UI_CongNhan implements Initializable {
                     // đổi nút
                     btnThem.setText("Lưu");
                     checkLuu = true;
-                    //Image img = new Image(getClass().getResourceAsStream("img/save-file_white.png").toString());
-                    //imgvThem = new ImageView(img);
                     btnXoa.setText("Hủy");
                     checkXoa = false;
                     btnSua.setDisable(true);

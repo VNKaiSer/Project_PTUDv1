@@ -345,7 +345,7 @@ public class CTL_UI_SuaCongNhan implements Initializable {
                 Optional<ButtonType> showWN = wn.showAndWait();
                 return;
             }
-            System.out.print(checkFrom);
+
             String maCN = txtMaCN.getText();
             String tenCN = txtHoTen.getText();
             String ngaySinh = txtNgaySinh.getValue().toString();

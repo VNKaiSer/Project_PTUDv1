@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 public class DAL_BangPhanCong {
 
@@ -15,6 +16,8 @@ public class DAL_BangPhanCong {
     private  DAL_CongNhan dal_congNhan;
     private  DAL_SanPham dal_sanPham;
     private DAL_CNDuocPhanCong dal_cnDuocPhanCong;
+
+
     public DAL_BangPhanCong(){
         dal_congNhan = new DAL_CongNhan();
         dal_congDoan = new DAL_CongDoan();
@@ -268,4 +271,24 @@ public class DAL_BangPhanCong {
         }
         return flag;
     }
+
+    public int laySoLuongSanPham(String maCN, String date) throws SQLException {
+        int soLuong = 0;
+        String sql = "{?= call laySoLuongPhanCong(?,?)}";
+        ConnectDB.getInstance().connect();
+        CallableStatement cstm = ConnectDB.getConnection().prepareCall(sql);
+        cstm.setString(2, maCN);
+        cstm.setString(3, date);
+        cstm.registerOutParameter(1, Types.INTEGER);
+        cstm.execute();
+        soLuong = cstm.getInt(1);
+        return  soLuong;
+    }
+
+    public ArrayList<DTO_BangPhanCong> getDSCongNhanTheoCa(){
+        String sql = "SELECT * FROM BangPhanCong\n" +
+                "WHERE ca = ? and ngayPhanCong = ?";
+        return null;
+    }
+
 }

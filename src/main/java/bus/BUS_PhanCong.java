@@ -48,4 +48,8 @@ public class BUS_PhanCong {
         }
     }
 
+    public int getSoLuongPC(String maCN, String date) throws SQLException {
+        return dal_bangPhanCong.laySoLuongSanPham(maCN, date);
+    }
+
 }

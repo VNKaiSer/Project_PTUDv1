@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 public class CTL_DiaglogCongDoan implements Initializable {
     private boolean choice;
     private DTO_CongDoan cd;
-
+    // Hello tú :vv
     @FXML
     private TextField txtCongDoan;
 
@@ -30,6 +30,8 @@ public class CTL_DiaglogCongDoan implements Initializable {
         if (!choice){
             txtCongDoan.setText(cd.getTenCongDoan());
             txtDonGia.setText(cd.getDonGiaCongDoan()+"");
+        }else {
+            txtCongDoan.setDisable(false);
         }
 
     }
@@ -38,7 +40,7 @@ public class CTL_DiaglogCongDoan implements Initializable {
         if (!choice){
             cd.setDonGiaCongDoan(Double.parseDouble(txtDonGia.getText()));
         } else {
-            cd = new DTO_CongDoan("122312",txtCongDoan.getText(), Double.parseDouble(txtDonGia.getText()));
+            cd = new DTO_CongDoan("",txtCongDoan.getText(), Double.parseDouble(txtDonGia.getText()));
         }
         return this.cd;
     }

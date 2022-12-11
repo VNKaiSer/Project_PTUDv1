@@ -229,7 +229,9 @@ public class CTRL_ChiaCongDoan implements Initializable {
                 tblCongDoan.setItems(modelCongDoan);
 
                 ct_CongDoanBanDau = tblPCCD.getItems();
-                if(sanPhamClick.getSoCongDoan() == tblPCCD.getItems().size()){
+                // Ẩn đi các nút khi sản phẩm đã được chia công đoaạn
+
+                if(checkCongDoan() == 1){
                     btnXoa.setDisable(true);
                     btnLuu.setDisable(true);
                     btnDatLai.setDisable(true);
@@ -285,6 +287,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
         });
 
+        // Sự kiện trên nút đặt lại
         btnDatLai.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -311,20 +314,19 @@ public class CTRL_ChiaCongDoan implements Initializable {
             public void handle(ActionEvent actionEvent) {
                 // xóa trong RAM
                 bus_chiTietCongDoan.rmCTCD(tblPCCD.getSelectionModel().getSelectedItem());
-
-
                 modelCongDoan.add(tblPCCD.getSelectionModel().getSelectedItem().getCongDoan());
-
                 tblPCCD.getItems().remove(tblPCCD.getSelectionModel().getSelectedItem());
 
             }
         });
 
+        // Sự kiện trên nút lưu
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    if (tblCongDoan.getItems().size() < sanPhamClick.getSoCongDoan()) {
+                    if (tblPCCD.getItems().size() < sanPhamClick.getSoCongDoan()) {
+                        System.out.println(tblCongDoan.getItems().size() +"  "+ sanPhamClick.getSoCongDoan());
                         Alert al = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn đủ số công đoạn trước khi lưu", ButtonType.APPLY);
                         al.showAndWait();
                         return;
@@ -336,6 +338,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
             }
         });
 
+        // Sự kiện khi thêm một công đoạn mới
         btnThemCD.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -352,12 +355,14 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
                     if (clickedButton.get() == ButtonType.OK) {
                         bus_congDoan.insertCongDoan(controller.getData());
-                        modelCongDoan.add(controller.getData());
+                        modelCongDoan = FXCollections.observableArrayList(bus_congDoan.getAllCongDoan());
                         tblCongDoan.setItems(modelCongDoan);
                     }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
 
@@ -365,6 +370,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
             }
         });
 
+        // Sự kiện trên nút sửa giá
         btnSuaGia.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -394,17 +400,23 @@ public class CTRL_ChiaCongDoan implements Initializable {
                     modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
                     modelCongDoan.add(controller.getData());
                     tblCongDoan.setItems(modelCongDoan);
+                    //bus_congDoan.update();
                 }
             }
         });
 
+        // Sự kiện trên nút xóa công đoạn
         btnXoaCD.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (tblCongDoan.getSelectionModel().getSelectedItem() == null) {
                     Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn cần sửa", ButtonType.OK);
                 } else {
-
+                    try {
+                        bus_congDoan.removeCD(tblCongDoan.getSelectionModel().getSelectedItem().getMaCongDoan());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                     modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
                     tblCongDoan.getSelectionModel().clearSelection();
                 }
@@ -414,8 +426,11 @@ public class CTRL_ChiaCongDoan implements Initializable {
 
     }
 
+    /**
+     * Hàm loading công đoạn khi khởi động chương trình
+     * @param model
+     */
     private void loadCongDoan(ObservableList<DTO_ChiTietCongDoan> model) {
-
         maSanPhamPCDCol.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
         tenSanPhamPCDCol.setCellValueFactory(new PropertyValueFactory<>("tenSanPham"));
         soCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("soCongDoan"));
@@ -457,7 +472,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
         ObservableList<DTO_CongDoan> listCDThem = FXCollections.observableArrayList();
         listCDThem = tblCongDoan.getSelectionModel().getSelectedItems();
         //Nếu số công đoạn đã chọn quá nhiều
-        if (listCDThem.size() > sanPhamClick.getSoCongDoan()) {
+        if (listCDThem.size() + tblPCCD.getItems().size() > sanPhamClick.getSoCongDoan()) {
             Alert a = new Alert(Alert.AlertType.ERROR, "Số lượng công đoạn đã chọn vượt quá số công đoạn của sản phẩm", ButtonType.CANCEL);
             a.showAndWait();
             return;
@@ -522,6 +537,9 @@ public class CTRL_ChiaCongDoan implements Initializable {
         tblSanPham.setItems(sortedData);
     }
 
+    /**
+     * Hàm tìm kiếm trên bang công đoạn
+     */
     private void filerTableCongDoan() {
         FilteredList<DTO_CongDoan> filteredListCongDoan = new FilteredList<>(modelCongDoan, b -> true);
         txtTimCongDoan.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -552,9 +570,21 @@ public class CTRL_ChiaCongDoan implements Initializable {
         return "CTCD" + maSP + maCD + stt;
     }
 
+    /**
+     * Hàm sinh thứ tự cho công đoạn
+     * @param slcd
+     */
     private void sinhThuTuCongDoan(int slcd) {
         String hienThi = slcd < tblPCCD.getItems().size() + 1 ? "" : String.valueOf(tblPCCD.getItems().size() + 1);
+    }
 
+    /**
+     * Hàm kiểm tra công đoạn đã chia hoàn thành hay chưa
+     * @return int
+     * @throws SQLException
+     */
+    private int checkCongDoan() throws SQLException {
+        return bus_chiTietCongDoan.checkCongDoan(tblSanPham.getSelectionModel().getSelectedItem().getMaSanPham());
     }
 
 }

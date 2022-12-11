@@ -6,10 +6,7 @@ package dal;
 import db.ConnectDB;
 import dto.DTO_TaiKhoan;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 
 public class DAL_TaiKhoan {
     public DAL_TaiKhoan(){
@@ -53,8 +50,8 @@ public class DAL_TaiKhoan {
     public void updateTaiKhoan(DTO_TaiKhoan taiKhoan) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql = "UPDATE TaiKhoan " +
-                "SET matKhau = ?  " +
-                "WHERE tenDangNhap = ?";
+                     "SET matKhau = ?  " +
+                     "WHERE tenDangNhap = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
 
 
@@ -65,6 +62,13 @@ public class DAL_TaiKhoan {
         ConnectDB.getConnection().close();
     }
 
+    /**
+     * Hàm đăng nhập
+     * @param user
+     * @param pass
+     * @return
+     * @throws SQLException
+     */
     public int dangNhap(String user, String pass) throws SQLException {
         String sql = "{?= call dangNhap(?,?)}";
         ConnectDB.getInstance().connect();
@@ -74,5 +78,23 @@ public class DAL_TaiKhoan {
         cstm.registerOutParameter(1, Types.INTEGER);
         cstm.execute();
         return  cstm.getInt(1);
+    }
+
+    /**
+     * Hàm lấy tên của nhân viên đăng nhập
+     * @param name
+     * @return
+     * @throws SQLException
+     */
+    public String getName(String name) throws SQLException {
+        String sql = "SELECT        tenNhanVien\n" +
+                     "FROM          NhanVien\n" +
+                     "WHERE maNhanVien = ?";
+        ConnectDB.getInstance().connect();
+        PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
+        ppsm.setString(1, name);
+        ResultSet rs = ppsm.executeQuery();
+        rs.next();
+        return rs.getString(1);
     }
 }

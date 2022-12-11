@@ -18,12 +18,15 @@ public class BUS_ChamCongCN {
         return dal_bangChamCongCN.getDSBangCCCN();
     }
 
-    public ArrayList<DTO_BCCCongNhan> getDSBCCNTheoNgay(String ngay){
+    public ArrayList<DTO_BCCCongNhan> getDSBCCNTheoNgay(String ngay) throws SQLException, ParseException {
         return dal_bangChamCongCN.getDsTheoNgay(ngay);
     }
 
 
-    public void insertBCCNVToDatabase(ArrayList<DTO_BCCCongNhan> dsBCCHienTai) {
-
+    public void insertBCCNVToDatabase(ArrayList<DTO_BCCCongNhan> dsBCCHienTai) throws SQLException {
+        for (DTO_BCCCongNhan it :
+                dsBCCHienTai) {
+            dal_bangChamCongCN.insertBCCNhanVien(it);
+        }
     }
 }

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1000.0" stylesheets="@../css/mainMenu.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_MainMenu">
+<AnchorPane prefHeight="650.0" prefWidth="100.0" stylesheets="@../css/mainMenu.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_MainMenu">
    <children>
       <BorderPane prefHeight="650.0" prefWidth="1200.0">
          <center>
@@ -42,10 +42,10 @@
                         </Label>
                         <TextField focusTraversable="false" prefHeight="35.0" prefWidth="330.0" promptText="Tìm kiếm..." />
                         <ImageView fitHeight="39.0" fitWidth="411.0" pickOnBounds="true" preserveRatio="true" />
-                        <MenuButton cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" prefHeight="52.0" prefWidth="208.0" scaleShape="false" style="-fx-background-color: #0C4EA2;" text="Châu Bích Tuyền" textFill="WHITE">
+                        <MenuButton fx:id="lblName" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" prefHeight="52.0" prefWidth="208.0" scaleShape="false" style="-fx-background-color: #0C4EA2;" text="Châu Bích Tuyền" textFill="WHITE">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="Đổi mật khẩu" />
-                            <MenuItem mnemonicParsing="false" text="Đăng xuất" />
+                            <MenuItem fx:id="mni_doiMatKhau" mnemonicParsing="false" text="ĐỔI MẬT KHẨU" />
+                            <MenuItem fx:id="mni_DangXuat" mnemonicParsing="false" text="ĐĂNG XUẤT" />
                           </items>
                            <graphic>
                               <ImageView fitHeight="42.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
@@ -92,13 +92,13 @@
                   </Label>
                   <VBox layoutX="77.0" prefHeight="540.0" prefWidth="196.0" stylesheets="@../css/mainMenu.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                      <children>
-                        <MenuButton cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="60.0" prefWidth="200.0" scaleShape="false" text="QUẢN LÝ" textFill="WHITE">
+                        <MenuButton fx:id="mnbt_QuanLy" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="60.0" prefWidth="200.0" scaleShape="false" text="QUẢN LÝ" textFill="WHITE">
                           <items>
-                            <MenuItem fx:id="mni_themCongNhan" mnemonicParsing="false" text="Thêm công nhân" />
-                            <MenuItem fx:id="mni_themNhanVien" mnemonicParsing="false" text="Thêm nhân viên" />
-                              <MenuItem fx:id="mni_ChamCong" mnemonicParsing="false" text="Chấm công CN" />
-                              <MenuItem fx:id="mni_CCNV" mnemonicParsing="false" text="Chấm công NV" />
-                              <MenuItem fx:id="mni_TinhLuong" mnemonicParsing="false" text="Tính lương" />
+                            <MenuItem fx:id="mni_themCongNhan" mnemonicParsing="false" text="QUẢN LÝ CN" />
+                            <MenuItem fx:id="mni_themNhanVien" mnemonicParsing="false" text="QUẢN LÝ NV" />
+                              <MenuItem fx:id="mni_ChamCong" mnemonicParsing="false" text="CHẤM CÔNG NV" />
+                              <MenuItem fx:id="mni_CCNV" mnemonicParsing="false" text="CHẤM CÔNG CN" />
+                              <MenuItem fx:id="mni_TinhLuong" mnemonicParsing="false" text="TÍNH LƯƠNG" />
                           </items>
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -110,14 +110,13 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </MenuButton>
-                        <MenuButton layoutX="10.0" layoutY="50.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="NHÂN VIÊN" textFill="WHITE">
+                        <MenuButton fx:id="mnbt_nhanVien" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="NHÂN VIÊN" textFill="WHITE">
                            <items>
-                              <MenuItem fx:id="mni_SanPham" mnemonicParsing="false" text="Sản phẩm" />
-                              <MenuItem fx:id="mni_chiaCongDoan" mnemonicParsing="false" text="Chia công đoạn" />
-                              <MenuItem fx:id="mni_PhanCong" mnemonicParsing="false" text="Phân công" />
-                              <MenuItem mnemonicParsing="false" text="Thống kê" />
-                              <MenuItem mnemonicParsing="false" text="Báo cáo" />
-                              <MenuItem mnemonicParsing="false" text="Đổi mật khẩu" />
+                              <MenuItem fx:id="mni_SanPham" mnemonicParsing="false" text="QUẢN LÝ SẢN PHẨM" />
+                              <MenuItem fx:id="mni_chiaCongDoan" mnemonicParsing="false" text="CHIA CÔNG ĐOẠN" />
+                              <MenuItem fx:id="mni_PhanCong" mnemonicParsing="false" text="PHÂN CÔNG" />
+                              <MenuItem mnemonicParsing="false" text="THỐNG KÊ" />
+                              <MenuItem mnemonicParsing="false" text="BÁO CÁO" />
                            </items>
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">

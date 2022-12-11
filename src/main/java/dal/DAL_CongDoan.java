@@ -1,10 +1,7 @@
 package dal;
 
 import db.ConnectDB;
-import dto.DTO_BCCNhanVien;
-import dto.DTO_CongDoan;
-import dto.DTO_NhanVien;
-import dto.DTO_SanPham;
+import dto.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -71,12 +69,12 @@ public class DAL_CongDoan {
      * @param congDoan DTO_CongDoan
      *
      */
-    public  void insertCongDoan(DTO_CongDoan congDoan) throws SQLException {
+    public  void insertCongDoan(DTO_CongDoan congDoan) throws SQLException, ParseException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO CongDoan VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO CongDoan VALUES(?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
-        ppsm.setString(1,congDoan.getMaCongDoan());
+        ppsm.setString(1,sinhMaCD());
         ppsm.setString(2,congDoan.getTenCongDoan());
         ppsm.setDouble(3,congDoan.getDonGiaCongDoan());
 
@@ -107,12 +105,11 @@ public class DAL_CongDoan {
     public void updateCongDoan(DTO_CongDoan congDoan) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql = "UPDATE CongDoan " +
-                "SET tenCongDoan= ?, donGiaCongDoan = ?, thuTuCongDoan = ?, maSanPham = ? " +
+                "donGiaCongDoan = ?" +
                 "WHERE maCongDoan = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
-        ppsm.setString(1, congDoan.getTenCongDoan());
-        ppsm.setDouble(2, congDoan.getDonGiaCongDoan());
-        ppsm.setString(3,congDoan.getMaCongDoan());
+        ppsm.setString(2, congDoan.getMaCongDoan());
+        ppsm.setDouble(1, congDoan.getDonGiaCongDoan());
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
@@ -156,4 +153,34 @@ public class DAL_CongDoan {
         }
         return ds;
     }
+
+    public String sinhMaCD() throws SQLException, ParseException {
+
+        int count = getDSCongDoan().size();
+
+        String ma = "null";
+        if(count==0){
+            ma = "CD"+"001";
+        }
+        else{
+            for (DTO_CongDoan n : getDSCongDoan()) {
+                int stt = Integer.parseInt(n.getMaCongDoan().substring(2));
+                if (count<=stt) {
+                    count = stt+1;
+                    String soThuTu = String.valueOf(count);
+                    if(soThuTu.length()==1){
+                        soThuTu="00"+count;
+                    } else if (soThuTu.length()==2) {
+                        soThuTu="0"+count;
+                    } else if (soThuTu.length()==4) {
+                        soThuTu = String.valueOf(count);
+                    }
+                    ma = "CD"+soThuTu;
+                }
+            }
+        }
+        return ma;
+    }
+
+
 }

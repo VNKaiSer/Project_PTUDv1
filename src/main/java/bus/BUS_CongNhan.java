@@ -38,4 +38,14 @@ public class BUS_CongNhan {
         }
     }
 
+    public ArrayList<DTO_CongNhan> getDSCongNhanDuocPhanCong(String date) {
+        try {
+            return dal_congNhan.getDSCongNhanDuocPhanCong(date);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

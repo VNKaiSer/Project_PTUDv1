@@ -46,7 +46,7 @@ public class DTO_ChiTietCongDoan {
     public SimpleStringProperty soLuongYeuCauProperty(){ return new SimpleStringProperty(sanPham.getSoLuongYeuCau()+"");}
     public SimpleStringProperty maCongDoanProperty(){return new SimpleStringProperty(congDoan.getMaCongDoan());}
     public SimpleStringProperty tenCongDoanProperty(){return new SimpleStringProperty(congDoan.getTenCongDoan());}
-    public SimpleStringProperty donGiaCongDoanProperty(){return new SimpleStringProperty(congDoan.getDonGiaCongDoan()+"");}
+    public SimpleStringProperty donGiaCongDoanProperty(){return  congDoan.donGiaCongDoanProperty();}
     @Override
     public int hashCode() {
         final int prime = 31;

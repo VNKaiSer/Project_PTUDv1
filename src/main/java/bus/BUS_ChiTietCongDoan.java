@@ -58,4 +58,8 @@ public class BUS_ChiTietCongDoan {
     public ArrayList<DTO_ChiTietCongDoan> getDSCongDoanTheoSP(String maSP) throws SQLException, ParseException {
         return dal_chiTietCongDoan.getDSCongDoanTheoMaSP(maSP);
     }
+
+    public int checkCongDoan(String maSP) throws SQLException {
+         return dal_chiTietCongDoan.checkPhanCD(maSP);
+    }
 }

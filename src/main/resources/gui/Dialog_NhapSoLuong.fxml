@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<DialogPane prefHeight="128.0" prefWidth="346.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DialogNhapSoLuong">
+   <header>
+      <Label alignment="CENTER" text="NHẬP SỐ LƯỢNG PHÂN CÔNG" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+   </header>
+   <buttonTypes>
+      <ButtonType fx:constant="OK" />
+      <ButtonType fx:constant="CANCEL" />
+   </buttonTypes>
+   <content>
+      <AnchorPane prefHeight="48.0" prefWidth="346.0">
+         <children>
+            <TextField fx:id="txtSoLuong" layoutX="121.0" layoutY="24.0" prefHeight="30.0" prefWidth="201.0" />
+            <Label layoutX="21.0" layoutY="29.0" prefHeight="20.0" prefWidth="78.0" text="SỐ LƯỢNG">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </content>
+</DialogPane>

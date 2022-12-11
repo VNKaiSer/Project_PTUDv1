@@ -1,6 +1,11 @@
 package dto;
 
+import bus.BUS_PhanCong;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -10,6 +15,7 @@ public class DTO_TBW_ChamCongCongNhan {
     private ComboBox<String> hienDien;
     private TextField soLuongSanPhamLamDuoc;
     private TextField ghiChu;
+    private int soSanPhamDuocPhanCong;
 
     public DTO_TBW_ChamCongCongNhan(String maCongNhan, String tenCongNhan, ComboBox<String> hienDien, TextField soLuongSanPhamLamDuoc, TextField ghiChuv) {
         this.maCongNhan = new SimpleStringProperty(maCongNhan);
@@ -17,6 +23,7 @@ public class DTO_TBW_ChamCongCongNhan {
         this.hienDien = hienDien;
         this.soLuongSanPhamLamDuoc = soLuongSanPhamLamDuoc;
         this.ghiChu = ghiChuv;
+        setConstain();
     }
 
     public String getMaCongNhan() {
@@ -59,11 +66,56 @@ public class DTO_TBW_ChamCongCongNhan {
         this.soLuongSanPhamLamDuoc = soLuongSanPhamLamDuoc;
     }
 
+    public int getSoSanPhamDuocPhanCong() {
+        return soSanPhamDuocPhanCong;
+    }
+
+    public void setSoSanPhamDuocPhanCong(int soSanPhamDuocPhanCong) {
+        this.soSanPhamDuocPhanCong = soSanPhamDuocPhanCong;
+    }
+
     public TextField getGhiChu() {
         return ghiChu;
     }
 
     public void setGhiChu(TextField ghiChu) {
         this.ghiChu = ghiChu;
+    }
+
+    private void setConstain(){
+        soLuongSanPhamLamDuoc.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                soLuongSanPhamLamDuoc.setText(newValue.replaceAll("[^\\d,]", ""));
+                StringBuilder aus = new StringBuilder();
+                aus.append(soLuongSanPhamLamDuoc.getText());
+                boolean firstPointFound = false;
+                newValue = aus.toString();
+                soLuongSanPhamLamDuoc.setText(newValue);
+            } else {
+                soLuongSanPhamLamDuoc.setText(newValue);
+            }
+        });
+
+        // Kiểm tra khi người dùng rời khỏi ô sản phẩm có nhập đúng hay không
+        soLuongSanPhamLamDuoc.focusedProperty().addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue)
+                {
+                    if (Integer.parseInt(soLuongSanPhamLamDuoc.getText()) > soSanPhamDuocPhanCong){
+                        Alert a = new Alert(Alert.AlertType.ERROR, "Số sản phẩm quá lớn.\n Lượng sản phẩm của nhân viên phải từ [0,"+(soSanPhamDuocPhanCong+5)+"]", ButtonType.CANCEL);
+                        a.showAndWait();
+                        soLuongSanPhamLamDuoc.requestFocus();
+                        return;
+                    }
+
+                }
+
+            }
+        });
+        soLuongSanPhamLamDuoc.setText(0+"");
+        ghiChu.setText("");
     }
 }

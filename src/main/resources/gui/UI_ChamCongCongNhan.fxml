@@ -60,7 +60,7 @@
                   <Label layoutX="43.0" layoutY="82.0" text="Mã ca làm:" />
                   <DatePicker fx:id="txtNgayChamCong" layoutX="525.0" layoutY="76.0" prefHeight="30.0" prefWidth="200.0" />
                   <ComboBox fx:id="cboMaCaLam" layoutX="136.0" layoutY="79.0" prefHeight="30.0" prefWidth="199.0" />
-                  <ComboBox fx:id="cboMaCongDoan" layoutX="136.0" layoutY="123.0" prefHeight="30.0" prefWidth="199.0" />
+                  <ComboBox fx:id="cboTenCaLam" disable="true" layoutX="136.0" layoutY="123.0" prefHeight="30.0" prefWidth="199.0" />
                   <Label layoutX="43.0" layoutY="130.0" text="Ca làm" />
                   <Button fx:id="btnIn" layoutX="490.0" layoutY="13.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #0c4ea2; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: #0C4EA2; -fx-border-radius: 5;" text="In">
                      <graphic>

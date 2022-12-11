@@ -3,6 +3,7 @@ package dal;
 import db.ConnectDB;
 import dto.DTO_BCCCongNhan;
 import dto.DTO_BCCNhanVien;
+import dto.DTO_BangPhanCong;
 import dto.DTO_CongNhan;
 
 import java.sql.PreparedStatement;
@@ -97,14 +98,32 @@ public class DAL_BangChamCongCN {
         return dsCBCCCN;
     }
 
-    public ArrayList<DTO_BCCCongNhan> getDsTheoNgay(String ncc) {
+    public ArrayList<DTO_BCCCongNhan> getDsTheoNgay(String ncc) throws SQLException, ParseException {
         ArrayList<DTO_BCCCongNhan> dsCCTheoNgay = new ArrayList<>();
-        for (DTO_BCCCongNhan it :
-                dsCBCCCN) {
-            String date = new SimpleDateFormat("yyyy-MM-dd").format(it.getNgayChamCong());
-            if (date.equals(ncc))
-                dsCCTheoNgay.add(it);
+        ConnectDB.getInstance().connect();
+        //scrip sql
+        String sql = "SELECT * FROM BangChamCongCN\n" +
+                "WHERE ngayChamCong = ?";
+        PreparedStatement stm = ConnectDB.getConnection().prepareStatement(sql);
+        stm.setString(1, ncc);
+        ResultSet rs = stm.executeQuery();
+        // get dữ liệu
+        while (rs.next()) {
+            DTO_BCCCongNhan tmp;
+            String maBCCNV = rs.getString(1);
+            int hienDien = rs.getInt(2);
+
+            String date = rs.getString(3);
+            Date ngayChamCong = new SimpleDateFormat("yyy-MM-dd").parse(date);
+            DTO_CongNhan tmpCN = findCongNhan(rs.getString(4));
+            String ghiChu = rs.getString(6);
+            int soLuong = rs.getInt(5);
+
+            tmp = new DTO_BCCCongNhan(tmpCN, hienDien, soLuong,ngayChamCong,maBCCNV, ghiChu);
+            dsCCTheoNgay.add(tmp);
         }
+        // đóng kết nối
+        ConnectDB.getConnection().close();
         return dsCCTheoNgay;
     }
 
@@ -125,4 +144,33 @@ public class DAL_BangChamCongCN {
         // đóng kết nối
         ConnectDB.getConnection().close();
     }
+
+    public ArrayList<DTO_BCCCongNhan> getDSCongNhanTheoCa(String ca) throws SQLException, ParseException {
+        String sql ="SELECT * FROM BangPhanCong\n" +
+                "WHERE ca = ?";
+        ConnectDB.getInstance().connect();
+        //scrip sql
+        ArrayList<DTO_BCCCongNhan> listCongNhanTheoCa = new ArrayList<>();
+        PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
+        ppsm.setString(1, ca);
+        ResultSet rs = ppsm.executeQuery(sql);
+        while (rs.next()) {
+            DTO_BCCCongNhan tmp;
+            String maBCCNV = rs.getString(1);
+            int hienDien = rs.getInt(2);
+
+            String date = rs.getString(3);
+            Date ngayChamCong = new SimpleDateFormat("yyy-MM-dd").parse(date);
+            DTO_CongNhan tmpCN = findCongNhan(rs.getString(4));
+            String ghiChu = rs.getString(6);
+            int soLuong = rs.getInt(5);
+            tmp = new DTO_BCCCongNhan(tmpCN, hienDien, soLuong,ngayChamCong,maBCCNV, ghiChu);
+            listCongNhanTheoCa.add(tmp);
+        }
+        // đóng kết nối
+        ConnectDB.getConnection().close();
+        return listCongNhanTheoCa;
+    }
+
+
 }

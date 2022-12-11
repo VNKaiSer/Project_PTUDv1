@@ -1,5 +1,6 @@
 package gui;
 
+import bus.BUS_TaiKhoan;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +38,9 @@ public class CTRL_DangNhap implements Initializable {
     @FXML
     private Button btnDangNhap;
 
+    private String nguoiDangNhap;
+    private int tk;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,24 +48,28 @@ public class CTRL_DangNhap implements Initializable {
         btnDangNhap.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (dangNhap()){
-                    try {
-                        FXMLLoader fxmlLoader = new FXMLLoader();
-                        fxmlLoader.setLocation(getClass().getResource("MainMenu.fxml"));
-                        /*
-                         * if "fx:controller" is not set in fxml
-                         * fxmlLoader.setController(NewWindowController);
-                         */
-                        Scene scene = new Scene(fxmlLoader.load());
-                        Stage stage = new Stage();
-                        stage.setTitle("Main Menu");
-                        stage.setScene(scene);
-                        ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
-                        stage.show();
-                    } catch (IOException e) {
-                        Logger logger = Logger.getLogger(getClass().getName());
-                        logger.log(Level.SEVERE, "Failed to create new Window.", e);
+                try {
+                    if (dangNhap()){
+                        try {
+                            FXMLLoader fxmlLoader = new FXMLLoader();
+                            fxmlLoader.setLocation(getClass().getResource("MainMenu.fxml"));
+                            Scene scene = new Scene(fxmlLoader.load());
+                            Stage stage = new Stage();
+                            stage.setTitle("Main Menu");
+                            stage.setScene(scene);
+                            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+                            CTRL_MainMenu ctrlMainMenu = fxmlLoader.getController();
+                            ctrlMainMenu.setName(nguoiDangNhap);
+                            if (tk == 1) ctrlMainMenu.isQuanLy();
+                            else if (tk == 2) ctrlMainMenu.isNhanVien();
+                            stage.show();
+                        } catch (IOException e) {
+                            Logger logger = Logger.getLogger(getClass().getName());
+                            logger.log(Level.SEVERE, "Failed to create new Window.", e);
+                        }
                     }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
@@ -81,15 +90,33 @@ public class CTRL_DangNhap implements Initializable {
     }
 
 
-    private boolean dangNhap() {
+    private boolean dangNhap() throws SQLException {
         boolean check = false;
-        if (txtUser.getText().equals("admin") && txtPass.getText().equals("admin")) {
-            return true;
-        }
-        Alert alert = new Alert(Alert.AlertType.ERROR, "User or Pass Wrong", ButtonType.APPLY);
-        alert.showAndWait();
+        tk = new BUS_TaiKhoan().dangNhap(txtUser.getText(), txtPass.getText());
+       if (tk == 1){
+           nguoiDangNhap = "Quản Lý";
+           return true;
+       } else if(tk == -1){
+           Alert alert = new Alert(Alert.AlertType.ERROR, "Không tồn tại tên tài khoản này", ButtonType.APPLY);
+           alert.showAndWait();
+           return false;
+       } else if(tk == -2){
+           Alert alert = new Alert(Alert.AlertType.ERROR, "Sai mật khẩu", ButtonType.APPLY);
+           alert.showAndWait();
+           return false;
+       }else {
+           nguoiDangNhap = getName();
+           return true;
+       }
 
-        return false;
+    }
+
+    /**
+     * Hàm lấy tên
+     * @return
+     */
+    private String getName() throws SQLException {
+        return new BUS_TaiKhoan().getTenNguoiDangNhan(txtUser.getText());
     }
 
 }

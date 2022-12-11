@@ -50,6 +50,7 @@ public class PdfFileExporter {
             fc.getExtensionFilters().add(ef);
             fc.setInitialFileName(pl.getMaPhieuLuong());
             File file = fc.showSaveDialog(null);
+
             if (file != null) {
                 PdfWriter.getInstance(document, new FileOutputStream(file));
                 // Mở file để thực hiện ghi

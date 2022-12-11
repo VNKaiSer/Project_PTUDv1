@@ -23,7 +23,15 @@ public class BUS_CongDoan {
     }
 
 
-    public void insertCongDoan(DTO_CongDoan data) throws SQLException {
+    public void insertCongDoan(DTO_CongDoan data) throws SQLException, ParseException {
         dal_congDoan.insertCongDoan(data);
+    }
+
+    public void removeCD(String ma) throws SQLException {
+        dal_congDoan.deleteCongDoan(ma);
+    }
+
+    public void update(DTO_CongDoan dt) throws SQLException {
+        dal_congDoan.updateCongDoan(dt);
     }
 }

@@ -197,7 +197,6 @@ public class CTRL_UI_ChamCongNV implements Initializable {
 
     private void loadDanhSachChamCongHomNay() {
         ArrayList<DTO_BCCNhanVien> checkTMP = bus_chamCongNhanVien.getDSChamCongTheoNgay(txtNGayChamCong.getValue().toString());
-        System.out.println(!checkTMP.isEmpty());
         if (!checkTMP.isEmpty()){
             loadDanhSachChamCongDaCham();
             return;
