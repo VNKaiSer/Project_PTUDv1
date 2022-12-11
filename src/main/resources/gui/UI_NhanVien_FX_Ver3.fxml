@@ -34,8 +34,6 @@
                         <TableColumn fx:id="col_DiaChi" prefWidth="100.800048828125" text="Địa chỉ" />
                         <TableColumn fx:id="col_email" prefWidth="107.199951171875" text="Email" />
                         <TableColumn fx:id="col_luongCoBan" prefWidth="93.60003662109375" text="Lương cơ bản" />
-                        <TableColumn fx:id="col_tienPhuCap" prefWidth="95.199951171875" text="Phụ cấp" />
-                        <TableColumn fx:id="col_tienTrachNhiem" prefWidth="107.199951171875" text="Tiền trách nhiệm" />
                     </columns>
                   </TableView>
                </content>
@@ -129,19 +127,7 @@
                                     <Font size="13.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="27.0" layoutY="71.0" text="Tiền phụ cấp:">
-                                 <font>
-                                    <Font size="13.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="25.0" layoutY="117.0" text="Tiền trách nhiệm:">
-                                 <font>
-                                    <Font size="13.0" />
-                                 </font>
-                              </Label>
                               <ComboBox fx:id="cbo_luongCoBan" editable="true" layoutX="140.0" layoutY="16.0" prefHeight="30.0" prefWidth="141.0" />
-                              <ComboBox fx:id="cbo_tienPhuCap" editable="true" layoutX="140.0" layoutY="65.0" prefHeight="30.0" prefWidth="141.0" />
-                              <ComboBox fx:id="cbo_tienTrachNhiem" editable="true" layoutX="141.0" layoutY="113.0" prefHeight="30.0" prefWidth="140.0" />
                            </children>
                         </Pane>
                         <Label layoutX="35.0" layoutY="211.0" text="Chức vụ:">

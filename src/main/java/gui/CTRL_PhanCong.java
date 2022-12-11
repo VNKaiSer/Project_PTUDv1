@@ -1,6 +1,8 @@
 package gui;
 import bus.*;
 import dto.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static org.apache.xmlbeans.impl.common.XMLChar.isInvalid;
 
 public class CTRL_PhanCong implements Initializable {
 
@@ -83,6 +87,8 @@ public class CTRL_PhanCong implements Initializable {
 
     @FXML
     private TableColumn<DTO_BangPhanCong, String> col_tenCongNhan;
+    @FXML
+    private TableColumn<DTO_CNDuocPhanCong, String> col_soLuongPhanCong;
 
     @FXML
     private DatePicker dtk_ngayPhanCong;
@@ -162,6 +168,13 @@ public class CTRL_PhanCong implements Initializable {
                 cbo_ca.getSelectionModel().clearSelection();
                 tbl_CNDaPhanCong.getItems().clear();
                 tbl_CNChuaPhanCong.getItems().clear();
+                if(checkSoLuongPhanCong()==0){
+                    btn_them.setDisable(true);
+                }
+                else {
+                    btn_them.setDisable(false);
+                }
+
             }
         });
         cbo_congDoan.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -211,16 +224,20 @@ public class CTRL_PhanCong implements Initializable {
                 dialog.setHeaderText(null);
 
                 Optional<String> result = dialog.showAndWait();
-
                 result.ifPresent(name -> {
-                    int soLuong = Integer.parseInt(name);
-                    them(soLuong);
+                        int soLuong = Integer.parseInt(name);
+                        them(soLuong);
                 });
-
                 tbl_CNChuaPhanCong.getItems().clear();
                 tbl_CNDaPhanCong.getItems().clear();
                 loadCongNhanChuaPhanCong();
                 loadCongNhanDaPhanCong();
+                if(checkSoLuongPhanCong()==0){
+                    btn_them.setDisable(true);
+                }
+                else {
+                    btn_them.setDisable(false);
+                }
             }
         });
         btn_bo.setOnAction(new EventHandler<ActionEvent>() {
@@ -231,6 +248,12 @@ public class CTRL_PhanCong implements Initializable {
                 tbl_CNDaPhanCong.getItems().clear();
                 loadCongNhanChuaPhanCong();
                 loadCongNhanDaPhanCong();
+                if(checkSoLuongPhanCong()==0){
+                    btn_them.setDisable(true);
+                }
+                else {
+                    btn_them.setDisable(false);
+                }
             }
         });
         btn_Luu.setOnAction(new EventHandler<ActionEvent>() {
@@ -272,40 +295,41 @@ public class CTRL_PhanCong implements Initializable {
         listCongNhan=FXCollections.observableArrayList(ds);
         col_maCNChuaPhanCong.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
         col_tenCNChuaPhanCong.setCellValueFactory(new PropertyValueFactory<>("tenCongNhan"));
-        //col_SelectCNChua.setCellValueFactory(new PropertyValueFactory<>("select"));
         tbl_CNChuaPhanCong.setItems(listCongNhan);
     }
     private void them(int soLuong){
         ObservableList<DTO_CongNhan> selectedItems = tbl_CNChuaPhanCong.getSelectionModel().getSelectedItems();
-
-        //System.out.println(selectedItems);
         for(int i = 0;i<selectedItems.size();i++){
+            String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
+            String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
             DTO_CongNhan cn = new DTO_CongNhan(selectedItems.get(i).getMaCongNhan());
-            DTO_CongDoan cd = new DTO_CongDoan(cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5));
-            DTO_SanPham sp = new DTO_SanPham(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+            DTO_CongDoan cd = new DTO_CongDoan(maCD);
+            DTO_SanPham sp = new DTO_SanPham(maSP);
+            ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(maCD,maSP);
+            int SL=0;
+            for (DTO_CNDuocPhanCong cnDuocPhanCong : ds){
+                SL=SL+cnDuocPhanCong.getSoLuongPhanCong();
+            }
             String ca = cbo_ca.getSelectionModel().getSelectedItem();
-            if(soLuong <= soLuong*selectedItems.size()){
+            ArrayList<DTO_SanPham> dsSP = bus_sanPham.getSPTheoMaSP(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+            int slYC = 0;
+            for (DTO_SanPham sanPham: dsSP){
+                slYC = sanPham.getSoLuongYeuCau();
+            }
+
+            if(soLuong*selectedItems.size() <= slYC-SL){
+
                 DTO_CNDuocPhanCong cnChua = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca),soLuong);
                 bus_cnDuocPhanCong.insertCNDuocPhanCong(cnChua);
             }
             else{
                 Alert wn = new Alert(Alert.AlertType.WARNING, "Dữ liệu không phù hợ", ButtonType.APPLY);
-                wn.setContentText("Vui lòng nhập số lượng phân công sao cho nhỏ hơn hoặc bằng "+ sp.getSoLuongYeuCau());
+                wn.setContentText("Vui lòng nhập số lượng phân công sao cho nhỏ hơn hoặc bằng "+ (slYC-SL)/selectedItems.size());
                 Optional<ButtonType> showWN = wn.showAndWait();
                 return;
             }
 
         }
-        /*for (DTO_CongNhan tb : tbl_CNChuaPhanCong.getItems() ){
-            if(tb.getSelect().isSelected()){
-                DTO_CongNhan cn = new DTO_CongNhan(tb.getMaCongNhan());
-                DTO_CongDoan cd = new DTO_CongDoan(cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5));
-                DTO_SanPham sp = new DTO_SanPham(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
-                String ca = cbo_ca.getSelectionModel().getSelectedItem();
-                DTO_CNDuocPhanCong cnChua = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca));
-                bus_cnDuocPhanCong.insertCNDuocPhanCong(cnChua);
-            }
-        }*/
     }
     private void loadCongNhanDaPhanCong(){
         String maSanPham = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
@@ -321,7 +345,7 @@ public class CTRL_PhanCong implements Initializable {
         listCongNhanDuocPhanCong=FXCollections.observableArrayList(ds);
         col_maCNDaPhanCong.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
         col_tenCNDaPhanCong.setCellValueFactory(new PropertyValueFactory<>("tenCongNhan"));
-        //col_SelectCNDa.setCellValueFactory(new PropertyValueFactory<>("select"));
+        col_soLuongPhanCong.setCellValueFactory(new PropertyValueFactory<>("soLuongPhanCong"));
         tbl_CNDaPhanCong.setItems(listCongNhanDuocPhanCong);
     }
     private void bo(){
@@ -333,11 +357,6 @@ public class CTRL_PhanCong implements Initializable {
             String ca = cbo_ca.getSelectionModel().getSelectedItem();
             bus_cnDuocPhanCong.deleteCNDuocPhanCong(maCN,maCD,maSP,ca);
         }
-        /*for (DTO_CNDuocPhanCong tb : tbl_CNDaPhanCong.getItems() ){
-            if(tb.getSelect().isSelected()){
-
-            }
-        }*/
     }
     private void luuBPC(){
         String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
@@ -357,7 +376,8 @@ public class CTRL_PhanCong implements Initializable {
                         .atZone(ZoneId.systemDefault())
                         .toInstant());
                 int ca = cn.getCa();
-                DTO_BangPhanCong tmp = new DTO_BangPhanCong(congDoan,CongNhan,ngayPC,ca,sanPham);
+                int soLuongPhanCong = cn.getSoLuongPhanCong();
+                DTO_BangPhanCong tmp = new DTO_BangPhanCong(congDoan,CongNhan,ngayPC,ca,sanPham,soLuongPhanCong,false);
                 bus_phanCong.insertBPC(tmp);
             }
         }
@@ -379,9 +399,29 @@ public class CTRL_PhanCong implements Initializable {
         col_maCongDoan.setCellValueFactory(new PropertyValueFactory<>("maCongDoan"));
         col_tenCongDoan.setCellValueFactory(new PropertyValueFactory<>("tenCongDoan"));
         col_maSanPham.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
-        col_soLuongYeuCau.setCellValueFactory(new PropertyValueFactory<>("soLuongSP"));
+        col_soLuongYeuCau.setCellValueFactory(new PropertyValueFactory<>("soLuongPhanCong"));
         col_caLam.setCellValueFactory(new PropertyValueFactory<>("ca"));
         tbl_DSBangPhanCong.setItems(listBPC);
 
+    }
+    private int checkSoLuongPhanCong(){
+        String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
+        String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
+        ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(maCD,maSP);
+        int SL=0;
+        for (DTO_CNDuocPhanCong cn : ds){
+            SL=SL+cn.getSoLuongPhanCong();
+        }
+        ArrayList<DTO_SanPham> dsSP = bus_sanPham.getSPTheoMaSP(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+        int slYC = 0;
+        for (DTO_SanPham sanPham: dsSP){
+            slYC = sanPham.getSoLuongYeuCau();
+        }
+        if(SL>=slYC){
+            return 0;
+        }
+        else {
+            return 1;
+        }
     }
 }

@@ -18,6 +18,13 @@ public class BUS_SanPham {
     public ArrayList<DTO_SanPham> getAllSanPham() throws SQLException, ParseException {
         return dal_sanPham.getDSSanPham();
     }
+    public ArrayList<DTO_SanPham> getSPTheoMaSP(String maSP) {
+        try {
+            return dal_sanPham.getSanPhamTheoMaSanPham(maSP);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void insertSanPham(DTO_SanPham sp) throws SQLException, FileNotFoundException {
         dal_sanPham.insertSanPham(sp);
     }

@@ -69,11 +69,6 @@ public class CTRL_UI_NhanVien implements Initializable{
     @FXML
     private ComboBox<String> cbo_phuong;
 
-    @FXML
-    private ComboBox<String> cbo_tienPhuCap;
-
-    @FXML
-    private ComboBox<String> cbo_tienTrachNhiem;
 
     @FXML
     private ComboBox<String> cbo_tinh;
@@ -102,12 +97,6 @@ public class CTRL_UI_NhanVien implements Initializable{
 
     @FXML
     private TableColumn<DTO_NhanVien, String> col_tenNV;
-    @FXML
-    private TableColumn<DTO_NhanVien, String> col_tienPhuCap;
-
-    @FXML
-    private TableColumn<DTO_NhanVien, String> col_tienTrachNhiem;
-
     @FXML
     private DatePicker dp_ngaySinh;
 
@@ -173,13 +162,9 @@ public class CTRL_UI_NhanVien implements Initializable{
             public void handle(ActionEvent actionEvent) {
                 if(cbo_ChucVu.getValue().toString().equalsIgnoreCase("Nhân viên văn phòng")){
                     cbo_luongCoBan.setValue("5000000");
-                    cbo_tienPhuCap.setValue("1000000");
-                    cbo_tienTrachNhiem.setValue("1500000");
                 }
                 else {
                     cbo_luongCoBan.setValue("15000000");
-                    cbo_tienPhuCap.setValue("10000000");
-                    cbo_tienTrachNhiem.setValue("15000000");
                 }
             }
         });
@@ -320,8 +305,6 @@ public class CTRL_UI_NhanVien implements Initializable{
                     header.createCell(6).setCellValue("Email");
                     header.createCell(7).setCellValue("Địa chỉ");
                     header.createCell(8).setCellValue("Lương cơ bản");
-                    header.createCell(9).setCellValue("Tiền phụ cấp");
-                    header.createCell(10).setCellValue("Tiền trách nhiệm");
                     int index=1;
                     while (rs.next()){
                         XSSFRow row = sh.createRow(index);
@@ -338,8 +321,6 @@ public class CTRL_UI_NhanVien implements Initializable{
                         row.createCell(6).setCellValue(rs.getString("email"));
                         row.createCell(7).setCellValue(rs.getString("diaChi"));
                         row.createCell(8).setCellValue(rs.getString("luongCoBan"));
-                        row.createCell(9).setCellValue(rs.getString("tienPhuCap"));
-                        row.createCell(10).setCellValue(rs.getString("tienTrachNhiem"));
                         index++;
 
                     }
@@ -380,8 +361,6 @@ public class CTRL_UI_NhanVien implements Initializable{
             //String ngay
             String email = txt_Email.getText();
             Double luongCoBan = Double.valueOf(cbo_luongCoBan.getValue());
-            Double tienPhuCap = Double.valueOf(cbo_tienPhuCap.getValue());
-            Double tienTrachNhiem = Double.valueOf(cbo_tienTrachNhiem.getValue());
             String diaChi = txt_duong.getText() +"," + cbo_phuong.getValue()+ ", " +cbo_huyen.getValue() + ", "+cbo_tinh.getValue();
             String maNV = taoMaNV();
             DTO_NhanVien nv = new DTO_NhanVien(maNV,tenNV,ngayVaoLam,phai,ngaySinh,sdt,email,diaChi,luongCoBan);
@@ -438,8 +417,6 @@ public class CTRL_UI_NhanVien implements Initializable{
             col_DiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
             col_email.setCellValueFactory(new PropertyValueFactory<>("email"));
             col_luongCoBan.setCellValueFactory(new PropertyValueFactory<>("luongCoBan"));
-            col_tienPhuCap.setCellValueFactory(new PropertyValueFactory<>("tienPhuCap"));
-            col_tienTrachNhiem.setCellValueFactory(new PropertyValueFactory<>("tienTrachNhiem"));
 
             /*col_soLuongSPYeuCaetCellValueFactory(new PropertyValueFactory<>("soLuongYeuCau"));
             col_ChatLieu.setCellValueFactory(new PropertyValueFactory<>("chatLieu"));*/
@@ -459,8 +436,6 @@ public class CTRL_UI_NhanVien implements Initializable{
         txt_soDienThoai.setDisable(true);
         txt_Email.setDisable(true);
         cbo_luongCoBan.setDisable(true);
-        cbo_tienPhuCap.setDisable(true);
-        cbo_tienTrachNhiem.setDisable(true);
     }
     private void ShowInfo(){
         txt_tenNhanVien.setDisable(false);
@@ -471,8 +446,6 @@ public class CTRL_UI_NhanVien implements Initializable{
         txt_soDienThoai.setDisable(false);
         txt_Email.setDisable(false);
         cbo_luongCoBan.setDisable(false);
-        cbo_tienPhuCap.setDisable(false);
-        cbo_tienTrachNhiem.setDisable(false);
     }
     private void Clear(){
         txt_tenNhanVien.setText("");
@@ -481,8 +454,6 @@ public class CTRL_UI_NhanVien implements Initializable{
         cboGioiTinh.getSelectionModel().clearSelection();
         cbo_ChucVu.getSelectionModel().clearSelection();
         cbo_luongCoBan.getSelectionModel().clearSelection();
-        cbo_tienPhuCap.getSelectionModel().clearSelection();
-        cbo_tienTrachNhiem.getSelectionModel().clearSelection();
         cbo_tinh.getSelectionModel().clearSelection();
         cbo_huyen.getSelectionModel().clearSelection();
         cbo_phuong.getSelectionModel().clearSelection();
@@ -525,4 +496,5 @@ public class CTRL_UI_NhanVien implements Initializable{
         }
         return ma;
     }
+
 }

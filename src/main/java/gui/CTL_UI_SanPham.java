@@ -5,6 +5,7 @@ import bus.BUS_SanPham;
 import db.ConnectDB;
 import dto.DTO_CongNhan;
 import dto.DTO_SanPham;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
@@ -120,7 +121,7 @@ public class CTL_UI_SanPham implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             Cbo_ChatLieu.setItems(listChatLieu);
-            Cbo_ChatLieu.setValue("Chất liệu");
+
             txt_maSP.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent keyEvent) {
@@ -174,7 +175,7 @@ public class CTL_UI_SanPham implements Initializable {
                 public void handle(ActionEvent actionEvent) {
                     Cbo_ChatLieu.setStyle("-fx-border-color: GREEN;");
                     checkFrom=true;
-                    if (Cbo_ChatLieu.getValue().toString().equals("")){
+                    if (Cbo_ChatLieu.getValue() == null){
                         Cbo_ChatLieu.setStyle("-fx-border-color: GREEN;");
                         checkFrom=false;
                     }
@@ -192,6 +193,30 @@ public class CTL_UI_SanPham implements Initializable {
         } catch (Exception e) {
 
         }
+        txt_soCongDoan.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txt_soCongDoan.setText(newValue.replaceAll("[^\\d,]", ""));
+                StringBuilder aus = new StringBuilder();
+                aus.append(txt_soCongDoan.getText());
+                boolean firstPointFound = false;
+                newValue = aus.toString();
+                txt_soCongDoan.setText(newValue);
+            } else {
+                txt_soCongDoan.setText(newValue);
+            }
+        });
+        txt_soLuongSPYeuCau.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txt_soLuongSPYeuCau.setText(newValue.replaceAll("[^\\d,]", ""));
+                StringBuilder aus = new StringBuilder();
+                aus.append(txt_soLuongSPYeuCau.getText());
+                boolean firstPointFound = false;
+                newValue = aus.toString();
+                txt_soLuongSPYeuCau.setText(newValue);
+            } else {
+                txt_soLuongSPYeuCau.setText(newValue);
+            }
+        });
 
 
         handleEvent();
@@ -217,7 +242,21 @@ public class CTL_UI_SanPham implements Initializable {
                     ShowInfo();
 
                 } else if (btn_themMoi.getText().equalsIgnoreCase("Lưu")) {
-                    themSP();
+
+                    if(Cbo_ChatLieu.getValue() == null){
+                        checkFrom = false;
+                        Cbo_ChatLieu.setStyle("-fx-border-color: RED;");
+                    }
+                    if (!checkFrom) {
+                        Alert wn = new Alert(Alert.AlertType.WARNING, "Cảnh báo", ButtonType.APPLY);
+                        wn.setContentText("Vui lòng chỉnh sửa thông tin các trường bị đánh dấu");
+                        Optional<ButtonType> showWN = wn.showAndWait();
+                        return;
+                    }
+                    else {
+                        themSP();
+                    }
+
                 }
             }
         });
@@ -393,15 +432,6 @@ public class CTL_UI_SanPham implements Initializable {
 
     private void themSP(){
         try {
-            if(Cbo_ChatLieu.getValue() == null){
-                checkFrom = false;
-            }
-            if (!checkFrom) {
-                Alert wn = new Alert(Alert.AlertType.WARNING, "Cảnh báo", ButtonType.APPLY);
-                wn.setContentText("Vui lòng chỉnh sửa thông tin các trường bị đánh dấu");
-                Optional<ButtonType> showWN = wn.showAndWait();
-                return;
-            }
 
             String tenSP = txt_tenSP.getText();
             String soCongDoan = txt_soCongDoan.getText();
@@ -412,6 +442,8 @@ public class CTL_UI_SanPham implements Initializable {
             sp.setHinhAnh(imagenToByte(file));
             bus_sanPham.insertSanPham(sp);
             loadTableSP();
+            Clear();
+
             //tbl_SanPham.getSelectionModel().selectLast();
         } catch (Exception e) {
             System.err.println(e);
@@ -483,7 +515,7 @@ public class CTL_UI_SanPham implements Initializable {
         txt_soCongDoan.setText("");
         txt_tenSP.setText("");
         txt_soLuongSPYeuCau.setText("");
-        Cbo_ChatLieu.setValue("");
+        Cbo_ChatLieu.getSelectionModel().clearSelection();
     }
     private String taoMaSP() throws SQLException, ParseException {
         int count = tbl_SanPham.getItems().size();

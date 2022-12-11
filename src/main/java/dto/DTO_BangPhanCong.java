@@ -98,9 +98,6 @@ public class DTO_BangPhanCong {
     public SimpleStringProperty tenCongNhanProperty(){
         return new SimpleStringProperty(getCongNhan().getTenCongNhan());
     }
-    public SimpleStringProperty soLuongSPProperty(){
-        return new SimpleStringProperty(String.valueOf(getSanPham().getSoLuongYeuCau()));
-    }
     public SimpleStringProperty maCongDoanProperty(){
         return new SimpleStringProperty(getCongDoan().getMaCongDoan());
     }

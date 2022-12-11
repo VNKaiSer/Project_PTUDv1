@@ -144,8 +144,9 @@ public class DAL_CNDuocPhanCong {
             while(rs.next()){
                 DTO_CNDuocPhanCong tmp;
                 DTO_CongNhan tmpcongNhan = findCongNhan(rs.getString(1));
+                int soLuongPhanCong = rs.getInt(5);
 
-                tmp = new DTO_CNDuocPhanCong(tmpcongNhan);
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,soLuongPhanCong);
                 ds.add(tmp);
 
             }
@@ -173,8 +174,9 @@ public class DAL_CNDuocPhanCong {
             while(rs.next()){
                 DTO_CNDuocPhanCong tmp;
                 DTO_CongNhan tmpcongNhan = findCongNhan(rs.getString(1));
+                int soL = rs.getInt(5);
 
-                tmp = new DTO_CNDuocPhanCong(tmpcongNhan);
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,soL);
                 ds.add(tmp);
 
             }

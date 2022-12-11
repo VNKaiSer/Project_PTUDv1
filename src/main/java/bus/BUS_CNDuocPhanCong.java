@@ -40,5 +40,12 @@ public class BUS_CNDuocPhanCong {
             throw new RuntimeException(e);
         }
     }
+    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoCongDOanvaSanPham(String maCD,String maSP) {
+        try {
+            return dal_cnDuocPhanCong.getCNTheoCongDoanvaSanPham(maCD,maSP);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

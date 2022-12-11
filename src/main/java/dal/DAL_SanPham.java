@@ -1,6 +1,9 @@
 package dal;
 
 import db.ConnectDB;
+import dto.DTO_BangPhanCong;
+import dto.DTO_CongDoan;
+import dto.DTO_CongNhan;
 import dto.DTO_SanPham;
 
 import java.io.File;
@@ -11,7 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -53,6 +58,41 @@ public class DAL_SanPham {
         // đóng kết nối
         ConnectDB.getConnection().close();
         return dsSanPham;
+    }
+    public ArrayList<DTO_SanPham> getSanPhamTheoMaSanPham(String maSp) throws SQLException {
+        ArrayList<DTO_SanPham> ds = new ArrayList<DTO_SanPham>();
+        ConnectDB.getInstance().connect();
+        try {
+            String sql = "select * from SanPham where maSanPham = ?";
+            PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
+            state.setString(1, maSp);
+            ResultSet rs = state.executeQuery();
+            while(rs.next()){
+                DTO_SanPham tmp;
+                String maSP = rs.getString(1);
+                String tenSP = rs.getString(2);
+                int soCongDoan = rs.getInt(3);
+                int soLuong = rs.getInt(4);
+                String chatLieu = rs.getString(5);
+                boolean trangThai = rs.getBoolean(6);
+                byte [] hinhAnh = rs.getBytes(7);
+
+                tmp = new DTO_SanPham(maSP,tenSP,soCongDoan,soLuong,chatLieu);
+                tmp.setHinhAnh(hinhAnh);
+                tmp.setTrangThai(trangThai);
+                ds.add(tmp);
+            }
+        } catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        finally{
+            try {
+                ConnectDB.getConnection().close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return ds;
     }
     /**
      * Hàm thêm một sản phẩm vào database

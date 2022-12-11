@@ -219,8 +219,10 @@ public class DAL_BangPhanCong {
                 DTO_CongDoan tmpCongDoan = findCongDoan(rs.getString(3));
                 int ca = rs.getInt(4);
                 DTO_SanPham tmpSanPham = findSanPham(rs.getString(5));
+                int soLuong = rs.getInt(6);
 
-                tmp = new DTO_BangPhanCong(tmpCongDoan,tmpCongNhan,ngayPhanCong,ca,tmpSanPham);
+
+                tmp = new DTO_BangPhanCong(tmpCongDoan,tmpCongNhan,ngayPhanCong,ca,tmpSanPham,soLuong,false);
 
                 ds.add(tmp);
 
