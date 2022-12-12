@@ -75,6 +75,7 @@ public class CTRL_MainMenu implements Initializable {
     @FXML
     private MenuButton mnbt_QuanLy;
 
+    private String maNV;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -237,8 +238,9 @@ public class CTRL_MainMenu implements Initializable {
                     secondStage.setScene(scene);
                     secondStage.setTitle("Login");
                     Stage thisStage = (Stage) MenuBack.getScene().getWindow();
-                    thisStage.hide();
-                    secondStage.show();
+                    CTRL_DoiMatKhau ctrl_doiMatKhau = fxmlLoader.getController();
+                    ctrl_doiMatKhau.setMaNhanVien(maNV);
+                    secondStage.showAndWait();
 
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -263,5 +265,11 @@ public class CTRL_MainMenu implements Initializable {
     }
     public void isNhanVien(){
         mnbt_QuanLy.setVisible(false);
+    }
+    public void setMaNV(String maNV){
+        this.maNV = maNV;
+    }
+    public String getMaNhanVien(){
+        return maNV;
     }
 }

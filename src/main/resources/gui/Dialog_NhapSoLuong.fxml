@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<DialogPane prefHeight="128.0" prefWidth="346.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DialogNhapSoLuong">
+<DialogPane prefHeight="128.0" prefWidth="346.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DialogNhapSoLuong">
    <header>
       <Label alignment="CENTER" text="NHẬP SỐ LƯỢNG PHÂN CÔNG" textAlignment="CENTER">
          <font>

@@ -12,16 +12,24 @@ public class DTO_CNDuocPhanCong {
 
     private int ca;
     private int soLuongPhanCong;
+    private Date ngayPhanCong;
    // private CheckBox select;
 
     public DTO_CNDuocPhanCong(DTO_CongNhan congNhan, DTO_CongDoan congDoan,
-                              DTO_SanPham sanPham, int ca, int soLuongPhanCong) {
+                              DTO_SanPham sanPham, int ca, int soLuongPhanCong,Date ngayPhanCong) {
         super();
         this.congNhan = congNhan;
         this.congDoan = congDoan;
         this.sanPham = sanPham;
         this.ca = ca;
         this.soLuongPhanCong = soLuongPhanCong;
+        this.ngayPhanCong = ngayPhanCong;
+    }
+    public DTO_CNDuocPhanCong(DTO_CongNhan congNhan,int soLuongPhanCong,Date ngayPhanCong) {
+        super();
+        this.congNhan = congNhan;
+        this.soLuongPhanCong = soLuongPhanCong;
+        this.ngayPhanCong = ngayPhanCong;
     }
     public DTO_CNDuocPhanCong(DTO_CongNhan congNhan,int soLuongPhanCong) {
         super();
@@ -62,6 +70,12 @@ public class DTO_CNDuocPhanCong {
     }
     public void setSoLuongPhanCong(int SoLuongPhanCong) {
         this.soLuongPhanCong = SoLuongPhanCong;
+    }
+    public Date getNgayPhanCong() {
+        return ngayPhanCong;
+    }
+    public void setNgayPhanCong(Date ngayPhanCong) {
+        this.ngayPhanCong = ngayPhanCong;
     }
     public SimpleStringProperty maCongNhanProperty(){
         return new SimpleStringProperty(getCongNhan().getMaCongNhan());

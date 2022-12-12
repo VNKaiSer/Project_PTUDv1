@@ -1,20 +1,34 @@
 package gui;
 import bus.*;
+import db.ConnectDB;
 import dto.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -88,6 +102,8 @@ public class CTRL_PhanCong implements Initializable {
     @FXML
     private TableColumn<DTO_BangPhanCong, String> col_tenCongNhan;
     @FXML
+    private TableColumn<DTO_BangPhanCong, String> col_tenSanPham;
+    @FXML
     private TableColumn<DTO_CNDuocPhanCong, String> col_soLuongPhanCong;
 
     @FXML
@@ -139,13 +155,36 @@ public class CTRL_PhanCong implements Initializable {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+        //filerTableCongNhanDuocPhanCong();
         handleEvent();
-
-
     }
     public void handleEvent(){
+        dtk_ngayPhanCong.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant());
+                Date ngayHienTai = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String StrNgayPC = sdf.format(ngayPhanCong);
+                String StrNgayHT = sdf.format(ngayHienTai);
+                if(StrNgayPC.equals(StrNgayHT)){
+                    tbl_CNChuaPhanCong.setDisable(false);
+                    tbl_CNDaPhanCong.setDisable(false);
+                    tbl_DSBangPhanCong.setDisable(false);
+                    btn_Luu.setDisable(false);
+                    btn_xuatDS.setDisable(false);
+                }else {
+                    tbl_CNChuaPhanCong.setDisable(true);
+                    tbl_CNDaPhanCong.setDisable(true);
+                    tbl_DSBangPhanCong.setDisable(true);
+                    btn_Luu.setDisable(true);
+                    btn_xuatDS.setDisable(true);
+                }
 
-
+            }
+        });
         cbo_sanPham.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -217,17 +256,7 @@ public class CTRL_PhanCong implements Initializable {
         btn_them.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                TextInputDialog dialog = new TextInputDialog("");
-
-                dialog.setTitle("Phân công số lượng");
-                dialog.setContentText("Số lượng:");
-                dialog.setHeaderText(null);
-
-                Optional<String> result = dialog.showAndWait();
-                result.ifPresent(name -> {
-                        int soLuong = Integer.parseInt(name);
-                        them(soLuong);
-                });
+                them();
                 tbl_CNChuaPhanCong.getItems().clear();
                 tbl_CNDaPhanCong.getItems().clear();
                 loadCongNhanChuaPhanCong();
@@ -263,6 +292,70 @@ public class CTRL_PhanCong implements Initializable {
                 loadBPC();
             }
         });
+        btn_xuatDS.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    ConnectDB.getInstance().connect();
+                    String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
+                    String sql = "select ngayPhanCong,maCongNhan,maCongDoan,ca,maSanPham,soLuongPhanCong from BangPhanCong where maSanPham ='"+maSP+"'";
+                    Statement stm = ConnectDB.getConnection().createStatement();
+                    ResultSet rs = stm.executeQuery(sql);
+
+                    XSSFWorkbook wb = new XSSFWorkbook();
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd");
+                    Date ngay = new Date();
+                    String ngayHienTai = df.format(ngay);
+                    XSSFSheet sh = wb.createSheet("PhanCong_"+ngayHienTai);
+                    XSSFRow header = sh.createRow(0);
+                    header.createCell(0).setCellValue("Ngày phân công");
+                    header.createCell(1).setCellValue("Mã công nhân");
+                    header.createCell(2).setCellValue("Tên công nhân");
+                    header.createCell(3).setCellValue("Mã sản phẩm");
+                    header.createCell(4).setCellValue("Tên sản phẩm");
+                    header.createCell(5).setCellValue("Số lượng phân công");
+                    header.createCell(6).setCellValue("Mã công đoạn");
+                    header.createCell(7).setCellValue("Tên công đoạn");
+                    header.createCell(8).setCellValue("Ca làm");
+                    int index=1;
+                    while (rs.next()){
+                        XSSFRow row = sh.createRow(index);
+                        row.createCell(0).setCellValue(rs.getString("ngayPhanCong"));
+                        row.createCell(1).setCellValue(rs.getString("maCongNhan"));
+                        row.createCell(2).setCellValue(findCongNhan(rs.getString("maCongNhan")));
+                        row.createCell(3).setCellValue(rs.getString("maSanPham"));
+                        row.createCell(4).setCellValue(findSanPham(rs.getString("maSanPham")));
+                        row.createCell(5).setCellValue(rs.getString("maCongDoan"));
+                        row.createCell(6).setCellValue(findCongDoan(rs.getString("maCongDoan")));
+                        row.createCell(7).setCellValue(rs.getString("ca"));
+                        row.createCell(8).setCellValue(rs.getString("soLuongPhanCong"));
+                        index++;
+
+                    }
+                    FileChooser fc = new FileChooser();
+                    FileChooser.ExtensionFilter ef = new FileChooser.ExtensionFilter("Excel Files","*.xlsx","*.xls","*.ods","*.csv");
+                    fc.getExtensionFilters().add(ef);
+                    fc.setInitialFileName("PhanCong_"+ngayHienTai+".xlsx");
+                    File file = fc.showSaveDialog(null);
+                    FileOutputStream fileOut = new FileOutputStream(file);
+                    wb.write(fileOut);
+                    fileOut.close();
+
+                    stm.close();
+                    rs.close();
+                    wb.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
 
     }
     private void loadCBoSanPham() throws SQLException, ParseException {
@@ -291,45 +384,88 @@ public class CTRL_PhanCong implements Initializable {
             maCongDoan = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0, 5);
         }
         String ca = cbo_ca.getSelectionModel().getSelectedItem();
-        ArrayList<DTO_CongNhan> ds = bus_congNhan.getDSCongNhanChuaDuocPhanCong(maSanPham,maCongDoan,ca);
+        Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
+        String strDate = formatter.format(ngayPhanCong);
+        ArrayList<DTO_CongNhan> ds = bus_congNhan.getDSCongNhanChuaDuocPhanCong(maSanPham,maCongDoan,ca,strDate);
         listCongNhan=FXCollections.observableArrayList(ds);
         col_maCNChuaPhanCong.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
         col_tenCNChuaPhanCong.setCellValueFactory(new PropertyValueFactory<>("tenCongNhan"));
         tbl_CNChuaPhanCong.setItems(listCongNhan);
     }
-    private void them(int soLuong){
+    private void them(){
+
         ObservableList<DTO_CongNhan> selectedItems = tbl_CNChuaPhanCong.getSelectionModel().getSelectedItems();
-        for(int i = 0;i<selectedItems.size();i++){
-            String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
-            String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
-            DTO_CongNhan cn = new DTO_CongNhan(selectedItems.get(i).getMaCongNhan());
-            DTO_CongDoan cd = new DTO_CongDoan(maCD);
-            DTO_SanPham sp = new DTO_SanPham(maSP);
-            ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(maCD,maSP);
-            int SL=0;
-            for (DTO_CNDuocPhanCong cnDuocPhanCong : ds){
-                SL=SL+cnDuocPhanCong.getSoLuongPhanCong();
+        if(selectedItems.size()==0){
+            Alert wn = new Alert(Alert.AlertType.WARNING, "Dữ liệu không phù hợ", ButtonType.APPLY);
+            wn.setContentText("Vui lòng chọn 1 hoặc nhiều công nhân trong bảng công nhân chưa được phân công");
+            Optional<ButtonType> showWN = wn.showAndWait();
+            return;
+        }
+        else {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("Dialog_NhapSoLuong.fxml"));
+            DialogPane addDialog = null;
+            try {
+                addDialog = fxmlLoader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            String ca = cbo_ca.getSelectionModel().getSelectedItem();
-            ArrayList<DTO_SanPham> dsSP = bus_sanPham.getSPTheoMaSP(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
-            int slYC = 0;
-            for (DTO_SanPham sanPham: dsSP){
-                slYC = sanPham.getSoLuongYeuCau();
-            }
-
-            if(soLuong*selectedItems.size() <= slYC-SL){
-
-                DTO_CNDuocPhanCong cnChua = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca),soLuong);
-                bus_cnDuocPhanCong.insertCNDuocPhanCong(cnChua);
-            }
-            else{
-                Alert wn = new Alert(Alert.AlertType.WARNING, "Dữ liệu không phù hợ", ButtonType.APPLY);
-                wn.setContentText("Vui lòng nhập số lượng phân công sao cho nhỏ hơn hoặc bằng "+ (slYC-SL)/selectedItems.size());
-                Optional<ButtonType> showWN = wn.showAndWait();
+            DialogNhapSoLuong dialogNhapSoLuong = fxmlLoader.getController();
+            Dialog dialogSLPhanCong = new Dialog<>();
+            dialogSLPhanCong.setDialogPane(addDialog);
+            dialogSLPhanCong.setTitle("Phân công số lượng");
+            Optional<ButtonType> clickedButton = dialogSLPhanCong.showAndWait();
+            int soLuong = 0;
+            if(!clickedButton.isPresent()){
                 return;
+            }
+            else if(clickedButton.get() == ButtonType.OK){
+                soLuong = dialogNhapSoLuong.getSoLuong();
+                ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5),cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+                int SL=0;
+                for (DTO_CNDuocPhanCong cnDuocPhanCong : ds){
+                    SL=SL+cnDuocPhanCong.getSoLuongPhanCong();
+                }
+                String ca = cbo_ca.getSelectionModel().getSelectedItem();
+                ArrayList<DTO_SanPham> dsSP = bus_sanPham.getSPTheoMaSP(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+                int slYC = 0;
+                for (DTO_SanPham sanPham: dsSP){
+                    slYC = sanPham.getSoLuongYeuCau();
+                }
+                ArrayList<DTO_CNDuocPhanCong> dsCN = new ArrayList<>();
+                for(int i = 0;i<selectedItems.size();i++){
+                    String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
+                    String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
+                    DTO_CongNhan cn = new DTO_CongNhan(selectedItems.get(i).getMaCongNhan());
+                    DTO_CongDoan cd = new DTO_CongDoan(maCD);
+                    DTO_SanPham sp = new DTO_SanPham(maSP);
+                    Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                            .atZone(ZoneId.systemDefault())
+                            .toInstant());
+
+                    DTO_CNDuocPhanCong cnPhanCong = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca),soLuong,ngayPhanCong);
+
+                    dsCN.add(cnPhanCong);
+
+                }
+                if(soLuong*selectedItems.size() <= slYC-SL){
+                    for (DTO_CNDuocPhanCong congNhan:dsCN){
+                        bus_cnDuocPhanCong.insertCNDuocPhanCong(congNhan);
+                    }
+                }
+                else{
+                    Alert wn = new Alert(Alert.AlertType.WARNING, "Dữ liệu không phù hợ", ButtonType.APPLY);
+                    wn.setContentText("Vui lòng nhập số lượng phân công sao cho nhỏ hơn hoặc bằng "+ (slYC-SL)/selectedItems.size());
+                    Optional<ButtonType> showWN = wn.showAndWait();
+                    return;
+                }
             }
 
         }
+
     }
     private void loadCongNhanDaPhanCong(){
         String maSanPham = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
@@ -341,7 +477,12 @@ public class CTRL_PhanCong implements Initializable {
             maCongDoan = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0, 5);
         }
         String ca = cbo_ca.getSelectionModel().getSelectedItem();
-        ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCa(maSanPham,maCongDoan,ca);
+        Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
+        String strDate = formatter.format(ngayPhanCong);
+        ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCa(maSanPham,maCongDoan,ca,strDate);
         listCongNhanDuocPhanCong=FXCollections.observableArrayList(ds);
         col_maCNDaPhanCong.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
         col_tenCNDaPhanCong.setCellValueFactory(new PropertyValueFactory<>("tenCongNhan"));
@@ -350,13 +491,22 @@ public class CTRL_PhanCong implements Initializable {
     }
     private void bo(){
         ObservableList<DTO_CNDuocPhanCong> selectedItems = tbl_CNDaPhanCong.getSelectionModel().getSelectedItems();
-        for(int i = 0;i<selectedItems.size();i++){
-            String maCN = selectedItems.get(i).getCongNhan().getMaCongNhan();
-            String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
-            String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
-            String ca = cbo_ca.getSelectionModel().getSelectedItem();
-            bus_cnDuocPhanCong.deleteCNDuocPhanCong(maCN,maCD,maSP,ca);
+        if(selectedItems.size()==0){
+            Alert wn = new Alert(Alert.AlertType.WARNING, "Dữ liệu không phù hợ", ButtonType.APPLY);
+            wn.setContentText("Vui lòng chọn 1 hoặc nhiều công nhân trong bảng công nhân đã được phân công");
+            Optional<ButtonType> showWN = wn.showAndWait();
+            return;
         }
+        else{
+            for(int i = 0;i<selectedItems.size();i++){
+                String maCN = selectedItems.get(i).getCongNhan().getMaCongNhan();
+                String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
+                String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
+                String ca = cbo_ca.getSelectionModel().getSelectedItem();
+                bus_cnDuocPhanCong.deleteCNDuocPhanCong(maCN,maCD,maSP,ca);
+            }
+        }
+
     }
     private void luuBPC(){
         String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
@@ -367,7 +517,12 @@ public class CTRL_PhanCong implements Initializable {
             return;
         }
         else {
-            ArrayList<DTO_CNDuocPhanCong> dsCN = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoSanPham(maSP);
+            Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
+            String strDate = formatter.format(ngayPhanCong);
+            ArrayList<DTO_CNDuocPhanCong> dsCN = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoSanPham(maSP,strDate);
             for (DTO_CNDuocPhanCong cn : dsCN){
                 DTO_CongNhan CongNhan = new DTO_CongNhan(cn.getCongNhan().getMaCongNhan());
                 DTO_CongDoan congDoan = new DTO_CongDoan(cn.getCongDoan().getMaCongDoan());
@@ -399,6 +554,7 @@ public class CTRL_PhanCong implements Initializable {
         col_maCongDoan.setCellValueFactory(new PropertyValueFactory<>("maCongDoan"));
         col_tenCongDoan.setCellValueFactory(new PropertyValueFactory<>("tenCongDoan"));
         col_maSanPham.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
+        col_tenSanPham.setCellValueFactory(new PropertyValueFactory<>("tenSanPham"));
         col_soLuongYeuCau.setCellValueFactory(new PropertyValueFactory<>("soLuongPhanCong"));
         col_caLam.setCellValueFactory(new PropertyValueFactory<>("ca"));
         tbl_DSBangPhanCong.setItems(listBPC);
@@ -424,4 +580,80 @@ public class CTRL_PhanCong implements Initializable {
             return 1;
         }
     }
+    private String findCongDoan(String maCD) throws SQLException, ParseException {
+        ArrayList<DTO_CongDoan> tmp = bus_congDoan.getAllCongDoan();
+        String tenCD="";
+        for (DTO_CongDoan it:
+                tmp) {
+            if (it.getMaCongDoan().equals(maCD)){
+                tenCD = it.getTenCongDoan();
+                return tenCD;
+            }
+        }
+        return tenCD;
+    }
+
+    private String findCongNhan(String maCN) throws SQLException, ParseException {
+        ArrayList<DTO_CongNhan> dsCN = bus_congNhan.getDSCongNhan();
+        String tenCN = "";
+        for (DTO_CongNhan it: dsCN) {
+            if(maCN.equals(it.getMaCongNhan())) {
+                tenCN = it.getTenCongNhan();
+                return tenCN;
+            }
+        }
+        return tenCN;
+    }
+
+    private String findSanPham(String maSP) throws SQLException, ParseException {
+        ArrayList<DTO_SanPham> tmp = bus_sanPham.getAllSanPham();
+        String tenSp = "";
+        for (DTO_SanPham it: tmp) {
+            if (it.getMaSanPham().equals(maSP)){
+                tenSp = it.getTenSanPham();
+                return tenSp;
+            }
+        }
+        return tenSp;
+    }
+    /*private void filerTableCongNhan() {
+        FilteredList<DTO_CongNhan> filteredListCongNhan = new FilteredList<>(listCongNhan, b -> true);
+        txt_timCNChuaDuocPhanCong.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredListCongNhan.setPredicate(dto_congNhan -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (dto_congNhan.getMaCongNhan().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                }
+                else return dto_congNhan.getTenCongNhan().toLowerCase().indexOf(lowerCaseFilter) != -1;
+
+            });
+        });
+        SortedList<DTO_CongNhan> sortedData = new SortedList<>(filteredListCongNhan);
+        sortedData.comparatorProperty().bind(tbl_CNChuaPhanCong.comparatorProperty());
+        tbl_CNChuaPhanCong.setItems(sortedData);
+    }*/
+    /*private void filerTableCongNhanDuocPhanCong() {
+        FilteredList<DTO_CNDuocPhanCong> filteredListCongNhan = new FilteredList<>(listCongNhanDuocPhanCong, b -> true);
+        txt_timCNDaDuocPhanCong.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredListCongNhan.setPredicate(cn -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (cn.getCongNhan().getMaCongNhan().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                }
+                else return cn.getCongNhan().getTenCongNhan().toLowerCase().indexOf(lowerCaseFilter) != -1;
+
+            });
+        });
+        SortedList<DTO_CNDuocPhanCong> sortedData = new SortedList<>(filteredListCongNhan);
+        sortedData.comparatorProperty().bind(tbl_CNDaPhanCong.comparatorProperty());
+        tbl_CNDaPhanCong.setItems(sortedData);
+    }*/
 }

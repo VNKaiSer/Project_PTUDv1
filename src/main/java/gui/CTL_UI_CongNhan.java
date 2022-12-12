@@ -619,7 +619,12 @@ public class CTL_UI_CongNhan implements Initializable {
                         index++;
 
                     }
-                    FileOutputStream fileOut = new FileOutputStream("CongNhan_"+ngayHienTai+".xlsx");
+                    FileChooser fc = new FileChooser();
+                    FileChooser.ExtensionFilter ef = new FileChooser.ExtensionFilter("Excel Files","*.xlsx","*.xls","*.ods","*.csv");
+                    fc.getExtensionFilters().add(ef);
+                    fc.setInitialFileName("CongNhan_"+ngayHienTai+".xlsx");
+                    File file = fc.showSaveDialog(null);
+                    FileOutputStream fileOut = new FileOutputStream(file);
                     wb.write(fileOut);
                     fileOut.close();
 

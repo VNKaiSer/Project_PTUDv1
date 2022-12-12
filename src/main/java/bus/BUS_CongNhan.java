@@ -29,9 +29,9 @@ public class BUS_CongNhan {
     public void updateCongNhan(DTO_CongNhan cn) throws SQLException {
         dal_congNhan.updateCongNhan(cn);
     }
-    public ArrayList<DTO_CongNhan> getDSCongNhanChuaDuocPhanCong(String maSP,String maCD, String ca) {
+    public ArrayList<DTO_CongNhan> getDSCongNhanChuaDuocPhanCong(String maSP,String maCD, String ca,String ngayPC) {
         try {
-            return dal_congNhan.getDSCongNhanChuaDuocPhanCong(maSP,maCD,ca);
+            return dal_congNhan.getDSCongNhanChuaDuocPhanCong(maSP,maCD,ca,ngayPC);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {

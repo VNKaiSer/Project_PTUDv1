@@ -26,16 +26,16 @@ public class BUS_CNDuocPhanCong {
     public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCong() throws SQLException, ParseException {
         return dal_cnDuocPhanCong.getDSCNDuocPhanCong();
     }
-    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoCa(String maSP,String maCD , String ca) {
+    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoCa(String maSP,String maCD , String ca,String ngayPC) {
         try {
-            return dal_cnDuocPhanCong.getCNTheoCa(maSP, maCD, ca);
+            return dal_cnDuocPhanCong.getCNTheoCa(maSP, maCD, ca, ngayPC);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoSanPham(String maSP) {
+    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoSanPham(String maSP,String ngayPC) {
         try {
-            return dal_cnDuocPhanCong.getCNTheoSanPham(maSP);
+            return dal_cnDuocPhanCong.getCNTheoSanPham(maSP,ngayPC);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

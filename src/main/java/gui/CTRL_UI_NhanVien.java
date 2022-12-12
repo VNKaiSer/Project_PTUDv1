@@ -8,6 +8,8 @@ import dto.DTO_NhanVien;
 import dto.DTO_SanPham;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -114,7 +116,8 @@ public class CTRL_UI_NhanVien implements Initializable{
 
     @FXML
     private TextField txt_maNhanVIen;
-
+    @FXML
+    private TextField txt_timNV;
     @FXML
     private TextField txt_soDienThoai;
 
@@ -155,6 +158,7 @@ public class CTRL_UI_NhanVien implements Initializable{
         handleEvent();
         HideInfo();
         loadTableNV();
+        filerTableNhanVien();
     }
     public void handleEvent(){
         cbo_ChucVu.setOnAction(new EventHandler<ActionEvent>() {
@@ -213,14 +217,14 @@ public class CTRL_UI_NhanVien implements Initializable{
                 if(file!=null){
                     try {
                         ConnectDB.getInstance().connect();
-                        String sql = "INSERT INTO NhanVien VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+                        String sql = "INSERT INTO NhanVien VALUES(?,?,?,?,?,?,?,?,?)";
                         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
 
                         FileInputStream fileIn = new FileInputStream(file);
                         XSSFWorkbook wb = new XSSFWorkbook(fileIn);
                         XSSFSheet sh = wb.getSheetAt(0);
                         Row row;
-                        for (int i = 1; i<=sh.getLastRowNum();i++){
+                        for (int i = 1; i<sh.getLastRowNum();i++){
                             row = sh.getRow(i);
                             String namSinh = row.getCell(3).getStringCellValue().substring(0,4);
                             String gioiTinh = "1";
@@ -261,8 +265,6 @@ public class CTRL_UI_NhanVien implements Initializable{
                             ppsm.setString(7, row.getCell(5).getStringCellValue());
                             ppsm.setString(8, row.getCell(6).getStringCellValue());
                             ppsm.setDouble(9, row.getCell(7).getNumericCellValue());
-                            ppsm.setDouble(10, row.getCell(8).getNumericCellValue());
-                            ppsm.setDouble(11, row.getCell(9).getNumericCellValue());
 
                             ppsm.execute();
                             loadTableNV();
@@ -324,7 +326,13 @@ public class CTRL_UI_NhanVien implements Initializable{
                         index++;
 
                     }
-                    FileOutputStream fileOut = new FileOutputStream("NhanVien_"+ngayHienTai+".xlsx");
+                    FileChooser fc = new FileChooser();
+                    FileChooser.ExtensionFilter ef = new FileChooser.ExtensionFilter("Excel Files","*.xlsx","*.xls","*.ods","*.csv");
+                    fc.getExtensionFilters().add(ef);
+                    fc.setInitialFileName("NhanVien_"+ngayHienTai+".xlsx");
+                    File file = fc.showSaveDialog(null);
+
+                    FileOutputStream fileOut = new FileOutputStream(file);
                     wb.write(fileOut);
                     fileOut.close();
 
@@ -496,5 +504,24 @@ public class CTRL_UI_NhanVien implements Initializable{
         }
         return ma;
     }
+    private void filerTableNhanVien() {
+        FilteredList<DTO_NhanVien> filteredListNV = new FilteredList<>(listNhanVien, b -> true);
+        txt_timNV.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredListNV.setPredicate(dtoNhanVien -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
 
+                if (dtoNhanVien.getMaNhanVien().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                }
+                else return dtoNhanVien.getTenNhanVien().toLowerCase().indexOf(lowerCaseFilter) != -1;
+
+            });
+        });
+        SortedList<DTO_NhanVien> sortedData = new SortedList<>(filteredListNV);
+        sortedData.comparatorProperty().bind(tbl_NhanVien.comparatorProperty());
+        tbl_NhanVien.setItems(sortedData);
+    }
 }

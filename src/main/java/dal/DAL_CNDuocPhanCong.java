@@ -47,7 +47,9 @@ public class DAL_CNDuocPhanCong {
             DTO_SanPham tmpSanPham = findSanPham(rs.getString(3));
             int ca = rs.getInt(4);
             int SL = rs.getInt(5);
-            tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca,SL);
+            String datePhanCong = rs.getString(6);
+            Date ngayPhanCong = new SimpleDateFormat("yyyy-MM-dd").parse(datePhanCong);
+            tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca,SL,ngayPhanCong);
             ds.add(tmp);
         }
         // đóng kết nối
@@ -102,13 +104,16 @@ public class DAL_CNDuocPhanCong {
     public void insertCNDuocPhanCong(DTO_CNDuocPhanCong cnDuocPhanCong) throws SQLException {
         // gọi kết nối
         ConnectDB.getInstance().connect();
-        String sql = "INSERT INTO CNDuocPhanCong VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO CNDuocPhanCong VALUES(?,?,?,?,?,?)";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,cnDuocPhanCong.getCongNhan().getMaCongNhan());
         ppsm.setString(2,cnDuocPhanCong.getCongDoan().getMaCongDoan());
         ppsm.setString(3, cnDuocPhanCong.getSanPham().getMaSanPham());
         ppsm.setInt(4,cnDuocPhanCong.getCa());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = formatter.format(cnDuocPhanCong.getNgayPhanCong());
         ppsm.setInt(5,cnDuocPhanCong.getSoLuongPhanCong());
+        ppsm.setString(6,strDate);
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
@@ -131,22 +136,24 @@ public class DAL_CNDuocPhanCong {
         // đóng kết nối
         ConnectDB.getConnection().close();
     }
-    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCa(String maSP, String maCD ,String c) throws SQLException {
+    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCa(String maSP, String maCD ,String c,String ngayPhanCong) throws SQLException {
         ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select * from CNDuocPhanCong where (maSanPham = ? and maCongDoan = ? and ca = ?) ";
+            String sql = "select * from CNDuocPhanCong where (maSanPham = ? and maCongDoan = ? and ca = ? and ngayPhanCong = ?) ";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, maSP);
             state.setString(2, maCD);
             state.setString(3, c);
+            state.setString(4, ngayPhanCong);
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_CNDuocPhanCong tmp;
                 DTO_CongNhan tmpcongNhan = findCongNhan(rs.getString(1));
                 int soLuongPhanCong = rs.getInt(5);
-
-                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,soLuongPhanCong);
+                String datePhanCong = rs.getString(6);
+                Date ngayPC = new SimpleDateFormat("yyyy-MM-dd").parse(datePhanCong);
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,soLuongPhanCong,ngayPC);
                 ds.add(tmp);
 
             }
@@ -192,13 +199,14 @@ public class DAL_CNDuocPhanCong {
         }
         return ds;
     }
-    public ArrayList<DTO_CNDuocPhanCong> getCNTheoSanPham(String maSP) throws SQLException {
+    public ArrayList<DTO_CNDuocPhanCong> getCNTheoSanPham(String maSP,String ngayPC) throws SQLException {
         ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select * from CNDuocPhanCong where maSanPham = ?";
+            String sql = "select * from CNDuocPhanCong where maSanPham = ? and ngayPhanCong = ?";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, maSP);
+            state.setString(2, ngayPC);
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_CNDuocPhanCong tmp;
@@ -207,7 +215,9 @@ public class DAL_CNDuocPhanCong {
                 DTO_SanPham tmpSanPham = findSanPham(rs.getString(3));
                 int ca = rs.getInt(4);
                 int sl = rs.getInt(5);
-                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca,sl);
+                String datePhanCong = rs.getString(6);
+                Date ngayPhanCong = new SimpleDateFormat("yyyy-MM-dd").parse(datePhanCong);
+                tmp = new DTO_CNDuocPhanCong(tmpcongNhan,tmpCongDoan,tmpSanPham,ca,sl,ngayPhanCong);
                 ds.add(tmp);
 
             }
