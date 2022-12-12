@@ -114,6 +114,7 @@
                 <TableColumn fx:id="col_maCongNhan" prefWidth="75.0" text="Mã công nhân" />
                 <TableColumn fx:id="col_tenCongNhan" prefWidth="75.0" text="Tên công nhân" />
                   <TableColumn fx:id="col_maSanPham" prefWidth="75.0" text="Mã sản phẩm" />
+                  <TableColumn fx:id="col_tenSanPham" prefWidth="75.0" text="Tên Sản phẩm" />
                   <TableColumn fx:id="col_soLuongYeuCau" prefWidth="75.0" text="Số lượng phân công" />
                   <TableColumn fx:id="col_caLam" prefWidth="75.0" text=" Ca làm" />
                   <TableColumn fx:id="col_maCongDoan" prefWidth="75.0" text="Mã công đoạn" />

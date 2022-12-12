@@ -8,6 +8,7 @@ import dto.DTO_NhanVien;
 import dto.DTO_TBW_ChamCongNhanVien;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -244,6 +245,5 @@ public class CTRL_UI_ChamCongNV implements Initializable {
         }
         return list;
     }
-
 
 }

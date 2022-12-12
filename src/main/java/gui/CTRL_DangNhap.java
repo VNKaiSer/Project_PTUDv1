@@ -60,6 +60,7 @@ public class CTRL_DangNhap implements Initializable {
                             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
                             CTRL_MainMenu ctrlMainMenu = fxmlLoader.getController();
                             ctrlMainMenu.setName(nguoiDangNhap);
+                            ctrlMainMenu.setMaNV(txtUser.getText());
                             if (tk == 1) ctrlMainMenu.isQuanLy();
                             else if (tk == 2) ctrlMainMenu.isNhanVien();
                             stage.show();

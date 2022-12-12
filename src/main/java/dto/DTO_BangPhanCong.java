@@ -110,6 +110,9 @@ public class DTO_BangPhanCong {
     public SimpleStringProperty ngayPhanCongProperty(){
         return new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy").format(ngayPhanCong));
     }
+    public SimpleStringProperty tenSanPhamProperty(){
+        return new SimpleStringProperty(getSanPham().getTenSanPham());
+    }
     public SimpleStringProperty caLamProperty(){
         String caLam;
         if (ca == 1)

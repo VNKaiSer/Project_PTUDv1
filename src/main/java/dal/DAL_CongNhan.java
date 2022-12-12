@@ -52,7 +52,7 @@ public class DAL_CongNhan {
             String email = rs.getString(7);
             String diaChi = rs.getString(8);
             String trinhDo = rs.getString(9);
-            tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLam, true, sdt, ngaySinh, email, diaChi, trinhDo);
+            tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLam, phai, sdt, ngaySinh, email, diaChi, trinhDo);
             dsCongNhan.add(tmp);
         }
         // đóng kết nối 
@@ -133,17 +133,18 @@ public class DAL_CongNhan {
      * Hàm get danh sách công nhân chưa được phân công
      * @return Arraylist<DTO_CongNhan>
      */
-    public ArrayList<DTO_CongNhan> getDSCongNhanChuaDuocPhanCong(String maSP, String maCD, String ca) throws SQLException, ParseException {
+    public ArrayList<DTO_CongNhan> getDSCongNhanChuaDuocPhanCong(String maSP, String maCD, String ca,String ngayPC) throws SQLException, ParseException {
         ArrayList<DTO_CongNhan> ds = new ArrayList<DTO_CongNhan>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select *from CongNhan where maCongNhan not in(select maCongNhan from CNDuocPhanCong where (maSanPham = ? and maCongDoan = ? and ca = ?) or maCongDoan not in(?) or maSanPham not in (?)  )";
+            String sql = "select *from CongNhan where maCongNhan not in(select maCongNhan from CNDuocPhanCong where ngayPhanCong = ? and ((maSanPham = ? and maCongDoan = ? and ca = ? ) or maCongDoan not in(?) or maSanPham not in (?)  ))";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
-            state.setString(1, maSP);
-            state.setString(2, maCD);
-            state.setString(3, ca);
-            state.setString(4, maCD);
-            state.setString(5, maSP);
+            state.setString(1, ngayPC);
+            state.setString(2, maSP);
+            state.setString(3, maCD);
+            state.setString(4, ca);
+            state.setString(5, maCD);
+            state.setString(6, maSP);
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_CongNhan tmp;

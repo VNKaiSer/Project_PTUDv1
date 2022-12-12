@@ -38,4 +38,8 @@ public class DialogNhapSoLuong implements Initializable {
         });
 
     }
+    public int getSoLuong(){
+        int soLuong = Integer.parseInt(txtSoLuong.getText());
+        return soLuong;
+    }
 }

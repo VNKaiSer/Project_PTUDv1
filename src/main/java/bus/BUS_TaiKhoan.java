@@ -1,6 +1,8 @@
 package bus;
 
 import dal.DAL_TaiKhoan;
+import dto.DTO_CongNhan;
+import dto.DTO_TaiKhoan;
 
 import java.sql.SQLException;
 
@@ -19,5 +21,12 @@ public class BUS_TaiKhoan {
      */
     public String getTenNguoiDangNhan(String ma) throws SQLException {
         return  dal_taiKhoan.getName(ma);
+    }
+    public void updateTaiKhoan(DTO_TaiKhoan tk){
+        try {
+            dal_taiKhoan.updateTaiKhoan(tk);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
