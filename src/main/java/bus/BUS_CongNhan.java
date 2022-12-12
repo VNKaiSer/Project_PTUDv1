@@ -6,6 +6,7 @@ import dto.DTO_CongNhan;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class BUS_CongNhan {
     private DAL_CongNhan dal_congNhan;
@@ -38,7 +39,7 @@ public class BUS_CongNhan {
         }
     }
 
-    public ArrayList<DTO_CongNhan> getDSCongNhanDuocPhanCong(String date) {
+    public HashSet<DTO_CongNhan> getDSCongNhanDuocPhanCong(String date) {
         try {
             return dal_congNhan.getDSCongNhanDuocPhanCong(date);
         } catch (SQLException e) {

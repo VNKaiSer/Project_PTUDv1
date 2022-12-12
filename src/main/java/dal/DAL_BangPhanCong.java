@@ -272,23 +272,41 @@ public class DAL_BangPhanCong {
         return flag;
     }
 
-    public int laySoLuongSanPham(String maCN, String date) throws SQLException {
+    public int laySoLuongSanPham(String maCN, String date, int ca) throws SQLException {
         int soLuong = 0;
-        String sql = "{?= call laySoLuongPhanCong(?,?)}";
+        String sql = "{?= call laySoLuongPhanCong(?,?, ?)}";
         ConnectDB.getInstance().connect();
         CallableStatement cstm = ConnectDB.getConnection().prepareCall(sql);
         cstm.setString(2, maCN);
         cstm.setString(3, date);
+        cstm.setInt(4, ca);
         cstm.registerOutParameter(1, Types.INTEGER);
         cstm.execute();
         soLuong = cstm.getInt(1);
         return  soLuong;
     }
 
-    public ArrayList<DTO_BangPhanCong> getDSCongNhanTheoCa(){
-        String sql = "SELECT * FROM BangPhanCong\n" +
-                "WHERE ca = ? and ngayPhanCong = ?";
-        return null;
+    /**
+     * Hàm lấy mã công nhân làm trong một ca để tạo phiếu lương
+     * @param date
+     * @param ca
+     * @return
+     * @throws SQLException
+     */
+    public ArrayList<String> getCongNhanTheoCa(String date, int ca) throws SQLException {
+        String sql = "SELECT * FROM BangPhanCong  \n" +
+                "WHERE ca = ? and ngayPhanCong = ? ";
+        ArrayList<String> listMaCN = new ArrayList<>();
+
+        ConnectDB.getInstance().connect();
+        PreparedStatement cstm = ConnectDB.getConnection().prepareCall(sql);
+        cstm.setString(2, date);
+        cstm.setInt(1, ca);
+        ResultSet rs = cstm.executeQuery();
+        while (rs.next()){
+            listMaCN.add(rs.getString(2));
+        }
+        return listMaCN;
     }
 
 }

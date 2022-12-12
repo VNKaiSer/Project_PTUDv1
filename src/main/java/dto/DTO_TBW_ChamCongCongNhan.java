@@ -16,13 +16,15 @@ public class DTO_TBW_ChamCongCongNhan {
     private TextField soLuongSanPhamLamDuoc;
     private TextField ghiChu;
     private int soSanPhamDuocPhanCong;
+    private int soLuongNumber;
 
-    public DTO_TBW_ChamCongCongNhan(String maCongNhan, String tenCongNhan, ComboBox<String> hienDien, TextField soLuongSanPhamLamDuoc, TextField ghiChuv) {
+    public DTO_TBW_ChamCongCongNhan(String maCongNhan, String tenCongNhan, ComboBox<String> hienDien, TextField soLuongSanPhamLamDuoc, TextField ghiChuv, int soSanPhamDuocPhanCong) {
         this.maCongNhan = new SimpleStringProperty(maCongNhan);
         this.tenCongNhan = new SimpleStringProperty(tenCongNhan);
         this.hienDien = hienDien;
         this.soLuongSanPhamLamDuoc = soLuongSanPhamLamDuoc;
         this.ghiChu = ghiChuv;
+        this.soSanPhamDuocPhanCong = soSanPhamDuocPhanCong;
         setConstain();
     }
 
@@ -58,6 +60,8 @@ public class DTO_TBW_ChamCongCongNhan {
         this.hienDien = hienDien;
     }
 
+
+
     public TextField getSoLuongSanPhamLamDuoc() {
         return soLuongSanPhamLamDuoc;
     }
@@ -83,6 +87,7 @@ public class DTO_TBW_ChamCongCongNhan {
     }
 
     private void setConstain(){
+
         soLuongSanPhamLamDuoc.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (!newValue.matches("\\d*")) {
                 soLuongSanPhamLamDuoc.setText(newValue.replaceAll("[^\\d,]", ""));
@@ -104,7 +109,7 @@ public class DTO_TBW_ChamCongCongNhan {
             {
                 if (!newPropertyValue)
                 {
-                    if (Integer.parseInt(soLuongSanPhamLamDuoc.getText()) > soSanPhamDuocPhanCong){
+                    if (Integer.parseInt(soLuongSanPhamLamDuoc.getText()) > soSanPhamDuocPhanCong + 5){
                         Alert a = new Alert(Alert.AlertType.ERROR, "Số sản phẩm quá lớn.\n Lượng sản phẩm của nhân viên phải từ [0,"+(soSanPhamDuocPhanCong+5)+"]", ButtonType.CANCEL);
                         a.showAndWait();
                         soLuongSanPhamLamDuoc.requestFocus();
@@ -115,7 +120,8 @@ public class DTO_TBW_ChamCongCongNhan {
 
             }
         });
-        soLuongSanPhamLamDuoc.setText(0+"");
+
+        soLuongSanPhamLamDuoc.setText(soSanPhamDuocPhanCong+"");
         ghiChu.setText("");
     }
 }

@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  *
@@ -168,14 +169,14 @@ public class DAL_CongNhan {
         return ds;
     }
 
-    public ArrayList<DTO_CongNhan> getDSCongNhanDuocPhanCong(String date) throws SQLException, ParseException {
+    public HashSet<DTO_CongNhan> getDSCongNhanDuocPhanCong(String date) throws SQLException, ParseException {
         String sql =  "SELECT        CongNhan.*\n" +
                 "FROM            CongNhan INNER JOIN\n" +
                 "                         BangPhanCong ON CongNhan.maCongNhan = BangPhanCong.maCongNhan\n" +
                 "WHERE ngayPhanCong = ?";
         ConnectDB.getInstance().connect();
         //scrip sql
-        ArrayList<DTO_CongNhan> dsCongNhan = new ArrayList<>();
+        HashSet<DTO_CongNhan> dsCongNhan = new HashSet<>();
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1, date);
         ResultSet rs = ppsm.executeQuery();

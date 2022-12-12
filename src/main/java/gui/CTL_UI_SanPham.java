@@ -408,24 +408,24 @@ public class CTL_UI_SanPham implements Initializable {
         tbl_SanPham.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getResource("Info_SanPham.fxml"));
-                DialogPane addDialog = null;
-                try {
-                    addDialog = fxmlLoader.load();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Dialog hienThi = new Dialog<>();
-                hienThi.setDialogPane(addDialog);
-                hienThi.setTitle("Thông Tin Sản Phẩm");
-                CTL_GUI_DialogInforSP dialogInforSP = fxmlLoader.getController();
-                try {
-                    dialogInforSP.setData(tbl_SanPham.getSelectionModel().getSelectedItem());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Optional<ButtonType> clickedButton = hienThi.showAndWait();
+//                FXMLLoader fxmlLoader = new FXMLLoader();
+//                fxmlLoader.setLocation(getClass().getResource("Info_SanPham.fxml"));
+//                DialogPane addDialog = null;
+//                try {
+//                    addDialog = fxmlLoader.load();
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                Dialog hienThi = new Dialog<>();
+//                hienThi.setDialogPane(addDialog);
+//                hienThi.setTitle("Thông Tin Sản Phẩm");
+//                CTL_GUI_DialogInforSP dialogInforSP = fxmlLoader.getController();
+//                try {
+//                    dialogInforSP.setData(tbl_SanPham.getSelectionModel().getSelectedItem());
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                Optional<ButtonType> clickedButton = hienThi.showAndWait();
             }
         });
     }
