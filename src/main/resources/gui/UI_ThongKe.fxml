@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="734.0" prefWidth="1300.0" style="-fx-background-color: #f2ecec;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_UIThongKe">
+<AnchorPane prefHeight="680.0" prefWidth="1180.0" style="-fx-background-color: #f2ecec;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_UIThongKe">
    <children>
       <ComboBox layoutX="108.0" layoutY="26.0" prefWidth="150.0" />
       <Label layoutX="25.0" layoutY="26.0" text="Thời gian">
@@ -18,20 +18,20 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="lineChart" layoutX="31.0" layoutY="70.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="419.0" prefWidth="571.0" style="-fx-border-color: black; -fx-background-color: white;" />
-      <AnchorPane layoutX="628.0" layoutY="70.0" prefHeight="419.0" prefWidth="647.0" style="-fx-border-color: black; -fx-background-color: white;" />
-      <AnchorPane layoutX="31.0" layoutY="507.0" prefHeight="206.0" prefWidth="571.0" style="-fx-background-color: white; -fx-border-color: black;">
+      <AnchorPane fx:id="lineChart" layoutX="31.0" layoutY="70.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="275.0" prefWidth="571.0" style="-fx-border-color: black; -fx-background-color: white;" />
+      <AnchorPane layoutX="628.0" layoutY="70.0" prefHeight="275.0" prefWidth="647.0" style="-fx-border-color: black; -fx-background-color: white;" />
+      <AnchorPane layoutX="31.0" layoutY="368.0" prefHeight="294.0" prefWidth="571.0" style="-fx-background-color: white; -fx-border-color: black;">
          <children>
-            <Label layoutX="157.0" layoutY="25.0" prefHeight="25.0" prefWidth="135.0" text="TOP NĂNG XUẤT" textFill="#0d70cd">
+            <Label layoutX="202.0" layoutY="14.0" prefHeight="25.0" prefWidth="135.0" text="TOP NĂNG XUẤT" textFill="#0d70cd">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="628.0" layoutY="507.0" prefHeight="206.0" prefWidth="647.0" style="-fx-background-color: white; -fx-border-color: black;">
+      <AnchorPane layoutX="628.0" layoutY="368.0" prefHeight="294.0" prefWidth="647.0" style="-fx-background-color: white; -fx-border-color: black;">
          <children>
-            <Label layoutX="157.0" layoutY="25.0" prefHeight="25.0" prefWidth="135.0" text="TOP NĂNG XUẤT" textFill="#0d70cd">
+            <Label layoutX="250.0" layoutY="14.0" prefHeight="25.0" prefWidth="135.0" text="TOP NĂNG XUẤT" textFill="#0d70cd">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

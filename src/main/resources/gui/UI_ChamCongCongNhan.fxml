@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -15,19 +16,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_UI_ChamCongCN">
+<AnchorPane prefHeight="680.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_UI_ChamCongCN">
    <children>
       <BorderPane layoutX="69.0" layoutY="-8.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <Pane prefHeight="600.0" prefWidth="999.0" stylesheets="@../css/ChiaCongDoan.css" BorderPane.alignment="CENTER">
+            <Pane prefHeight="680.0" prefWidth="1179.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tblBCCCN" focusTraversable="false" layoutX="9.0" layoutY="170.0" prefHeight="420.0" prefWidth="984.0">
+                  <TableView fx:id="tblBCCCN" focusTraversable="false" layoutX="26.0" layoutY="170.0" prefHeight="496.0" prefWidth="1131.0">
                     <columns>
-                      <TableColumn fx:id="maCongNhanCol" editable="false" prefWidth="75.0" text="Mã công nhân" />
-                      <TableColumn fx:id="hoTenCol" editable="false" prefWidth="75.0" text="Họ và tên" />
-                        <TableColumn fx:id="hienDienCol" prefWidth="75.0" text="Hiện diện" />
-                        <TableColumn fx:id="soLuongCol" prefWidth="75.0" text="Số lượng" />
-                        <TableColumn fx:id="ghiChuCol" prefWidth="75.0" text="Ghi chú" />
+                      <TableColumn fx:id="maCongNhanCol" editable="false" prefWidth="273.0" resizable="false" text="Mã công nhân" />
+                      <TableColumn fx:id="hoTenCol" editable="false" prefWidth="304.0" resizable="false" text="Họ và tên" />
+                        <TableColumn fx:id="hienDienCol" minWidth="0.0" prefWidth="89.0" resizable="false" text="Hiện diện" />
+                        <TableColumn fx:id="soLuongCol" prefWidth="91.0" resizable="false" text="Số lượng" />
+                        <TableColumn fx:id="ghiChuCol" prefWidth="373.0" resizable="false" text="Ghi chú" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -35,20 +36,20 @@
                   </TableView>
                   <Label alignment="CENTER" layoutX="-1.0" prefHeight="59.0" prefWidth="388.0" text="DANH SÁCH CHẤM CÔNG CÔNG NHÂN" textFill="#0c4ea2">
                      <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtTimCongNhan" layoutX="419.0" layoutY="122.0" prefHeight="34.0" prefWidth="557.0" promptText="Nhập tên công nhân cần tìm...">
+                  <TextField fx:id="txtTimCongNhan" layoutX="471.0" layoutY="125.0" prefHeight="35.0" prefWidth="676.0" promptText="Nhập tên công nhân cần tìm...">
                      <font>
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </TextField>
-                  <ImageView fitHeight="24.0" fitWidth="30.0" layoutX="943.0" layoutY="127.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="24.0" fitWidth="30.0" layoutX="1114.0" layoutY="130.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/loupe.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="btnLuu" layoutX="387.0" layoutY="13.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #0c4ea2; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: #0C4EA2; -fx-border-radius: 5;" text="Lưu">
+                  <Button fx:id="btnLuu" layoutX="387.0" layoutY="13.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" text="Lưu">
                      <graphic>
                         <ImageView fitHeight="18.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -56,13 +57,22 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Label layoutX="419.0" layoutY="85.0" text="Ngày chấm công:" />
-                  <Label layoutX="43.0" layoutY="82.0" text="Mã ca làm:" />
-                  <DatePicker fx:id="txtNgayChamCong" layoutX="525.0" layoutY="76.0" prefHeight="30.0" prefWidth="200.0" />
-                  <ComboBox fx:id="cboMaCaLam" layoutX="136.0" layoutY="79.0" prefHeight="30.0" prefWidth="199.0" />
-                  <ComboBox fx:id="cboTenCaLam" disable="true" layoutX="136.0" layoutY="123.0" prefHeight="30.0" prefWidth="199.0" />
-                  <Label layoutX="43.0" layoutY="130.0" text="Ca làm" />
-                  <Button fx:id="btnIn" layoutX="490.0" layoutY="13.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" style="-fx-background-color: #0c4ea2; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: #0C4EA2; -fx-border-radius: 5;" text="In">
+                  <Label layoutX="471.0" layoutY="87.0" text="Ngày chấm công:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Label layoutX="57.0" layoutY="87.0" text="Mã ca làm:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <DatePicker fx:id="txtNgayChamCong" layoutX="594.0" layoutY="78.0" prefHeight="35.0" prefWidth="200.0" />
+                  <ComboBox fx:id="cboMaCaLam" layoutX="150.0" layoutY="77.0" prefHeight="35.0" prefWidth="199.0" />
+                  <ComboBox fx:id="cboTenCaLam" disable="true" layoutX="150.0" layoutY="121.0" prefHeight="35.0" prefWidth="199.0" />
+                  <Label layoutX="57.0" layoutY="135.0" text="Ca làm">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+                  <Button fx:id="btnIn" layoutX="490.0" layoutY="13.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="90.0" text="In">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -75,6 +85,10 @@
                <padding>
                   <Insets right="10.0" />
                </padding>
+               <stylesheets>
+                  <URL value="@../css/ChiaCongDoan.css" />
+                  <URL value="@../css/button.css" />
+               </stylesheets>
             </Pane>
          </left>
       </BorderPane>

@@ -25,7 +25,12 @@ public class DTO_CongDoan {
 	public DTO_CongDoan(String maCongDoan) {
 		this.maCongDoan = maCongDoan;
 	}
+	public DTO_CongDoan(String tenCongDoan,
+						double donGiaCongDoan) {
 
+		this.tenCongDoan = tenCongDoan;
+		this.donGiaCongDoan = donGiaCongDoan;
+	}
 	public DTO_CongDoan(String maCongDoan, String tenCongDoan,
 						double donGiaCongDoan) {
 

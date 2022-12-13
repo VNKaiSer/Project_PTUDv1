@@ -219,7 +219,7 @@ public class CTRL_MainMenu implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    loadScene("UI_SanPham_FXML.fxml");
+                    loadScene("SanPham_v2.fxml");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

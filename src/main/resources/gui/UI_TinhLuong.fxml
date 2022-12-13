@@ -13,110 +13,110 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_TinhLuong">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_TinhLuong">
    <children>
-      <BorderPane prefHeight="650.0" prefWidth="1000.0">
+      <BorderPane prefHeight="650.0" prefWidth="1180.0">
          <top>
             <VBox alignment="CENTER_LEFT" prefHeight="213.0" prefWidth="1001.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane prefHeight="70.0" prefWidth="1001.0">
+                  <AnchorPane prefHeight="70.0" prefWidth="1001.0" stylesheets="@../css/btn_wtb.css">
                      <children>
-                        <Label layoutX="14.0" layoutY="11.0" text="TÍNH LƯƠNG" textFill="#0c4ea2">
+                        <Label layoutX="14.0" layoutY="7.0" text="TÍNH LƯƠNG" textFill="#0c4ea2">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Button layoutX="258.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #fff; -fx-border-color: #d7d7d7; -fx-border-radius: 5;" text="Xuất danh sách" />
-                        <Button layoutX="378.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" style="-fx-background-color: #fff; -fx-border-color: #d7d7d7; -fx-border-radius: 5;" text="In danh sách" />
+                        <Button layoutX="162.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Xuất danh sách" />
+                        <Button layoutX="282.0" layoutY="8.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="In danh sách" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="984.0">
                      <children>
-                        <AnchorPane layoutX="8.0" layoutY="4.0" prefHeight="162.0" prefWidth="986.0" style="-fx-border-color: #8DBDFF;">
+                        <AnchorPane layoutX="8.0" layoutY="4.0" prefHeight="162.0" prefWidth="1154.0" style="-fx-border-color: #8DBDFF;">
                            <children>
-                              <Label layoutX="38.0" layoutY="15.0" text="Mã số:">
+                              <Label layoutX="52.0" layoutY="15.0" text="Mã số:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="38.0" layoutY="55.0" text="Họ tên:">
+                              <Label layoutX="52.0" layoutY="55.0" text="Họ tên:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="38.0" layoutY="92.0" text="Chức vụ:">
+                              <Label layoutX="52.0" layoutY="92.0" text="Chức vụ:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtMaNhanVien" disable="true" layoutX="125.0" layoutY="11.0" prefHeight="30.0" prefWidth="180.0" />
-                              <TextField fx:id="txtHoTen" disable="true" layoutX="125.0" layoutY="48.0" prefHeight="30.0" prefWidth="180.0" />
-                              <Label fx:id="lblLuongCoBan" layoutX="348.0" layoutY="14.0" text="Lương cơ bản:">
+                              <TextField fx:id="txtMaNhanVien" disable="true" layoutX="139.0" layoutY="11.0" prefHeight="30.0" prefWidth="210.0" />
+                              <TextField fx:id="txtHoTen" disable="true" layoutX="139.0" layoutY="48.0" prefHeight="30.0" prefWidth="210.0" />
+                              <Label fx:id="lblLuongCoBan" layoutX="406.0" layoutY="14.0" text="Lương cơ bản:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="348.0" layoutY="54.0" text="Tiền phụ cấp:">
+                              <Label layoutX="406.0" layoutY="54.0" text="Tiền phụ cấp:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="339.0" layoutY="91.0" text="Tiền trách nhiệm:">
+                              <Label layoutX="405.0" layoutY="91.0" text="Tiền trách nhiệm:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtLuongCoBan" disable="true" layoutX="444.0" layoutY="10.0" prefHeight="30.0" prefWidth="180.0" />
-                              <TextField fx:id="txtTienTroCap" disable="true" layoutX="444.0" layoutY="47.0" prefHeight="30.0" prefWidth="180.0" />
-                              <TextField fx:id="txtTienTrachNhiem" disable="true" layoutX="444.0" layoutY="84.0" prefHeight="30.0" prefWidth="180.0" />
-                              <Label layoutX="664.0" layoutY="15.0" text="Số ngày công thực tế:">
+                              <TextField fx:id="txtLuongCoBan" disable="true" layoutX="507.0" layoutY="10.0" prefHeight="30.0" prefWidth="210.0" />
+                              <TextField fx:id="txtTienTroCap" disable="true" layoutX="507.0" layoutY="47.0" prefHeight="30.0" prefWidth="210.0" />
+                              <TextField fx:id="txtTienTrachNhiem" disable="true" layoutX="507.0" layoutY="84.0" prefHeight="30.0" prefWidth="210.0" />
+                              <Label layoutX="769.0" layoutY="15.0" text="Số ngày công thực tế:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="664.0" layoutY="94.0" text="Tổng lương:" textFill="#0c4ea2">
+                              <Label layoutX="769.0" layoutY="94.0" text="Tổng lương:" textFill="#0c4ea2">
                                  <font>
-                                    <Font name="System Bold Italic" size="13.0" />
+                                    <Font name="System Bold Italic" size="14.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="664.0" layoutY="131.0" text="Thực nhận:" textFill="#0c4ea2">
+                              <Label layoutX="769.0" layoutY="131.0" text="Thực nhận:" textFill="#0c4ea2">
                                  <font>
-                                    <Font name="System Bold Italic" size="13.0" />
+                                    <Font name="System Bold Italic" size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtSoNgayCong" disable="true" layoutX="810.0" layoutY="11.0" prefHeight="30.0" prefWidth="120.0" />
-                              <TextField fx:id="txtTongLuong" disable="true" layoutX="751.0" layoutY="87.0" prefHeight="30.0" prefWidth="180.0" />
-                              <TextField fx:id="txtThucNhan" disable="true" layoutX="751.0" layoutY="124.0" prefHeight="30.0" prefWidth="180.0" />
-                              <Label layoutX="935.0" layoutY="95.0" text="(VND)">
-                                 <font>
-                                    <Font name="System Italic" size="10.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="934.0" layoutY="133.0" text="(VND)">
+                              <TextField fx:id="txtSoNgayCong" disable="true" layoutX="928.0" layoutY="11.0" prefHeight="30.0" prefWidth="150.0" />
+                              <TextField fx:id="txtTongLuong" disable="true" layoutX="866.0" layoutY="87.0" prefHeight="30.0" prefWidth="210.0" />
+                              <TextField fx:id="txtThucNhan" disable="true" layoutX="866.0" layoutY="124.0" prefHeight="30.0" prefWidth="210.0" />
+                              <Label layoutX="1084.0" layoutY="95.0" text="(VND)">
                                  <font>
                                     <Font name="System Italic" size="10.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="cboChucVu" disable="true" layoutX="125.0" layoutY="86.0" prefHeight="30.0" prefWidth="180.0" />
-                              <Label layoutX="348.0" layoutY="129.0" text="Tiền phạt:">
+                              <Label layoutX="1083.0" layoutY="133.0" text="(VND)">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Italic" size="10.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtTienPhat" disable="true" layoutX="444.0" layoutY="122.0" prefHeight="30.0" prefWidth="180.0" />
-                              <Label layoutX="38.0" layoutY="131.0" text="Thuế TNCN:">
+                              <ComboBox fx:id="cboChucVu" disable="true" layoutX="139.0" layoutY="86.0" prefHeight="30.0" prefWidth="210.0" />
+                              <Label layoutX="405.0" layoutY="129.0" text="Tiền phạt:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtThue" disable="true" layoutX="124.0" layoutY="124.0" prefHeight="30.0" prefWidth="180.0" />
-                              <Label layoutX="664.0" layoutY="52.0" text="Lương tạm ứng:">
+                              <TextField fx:id="txtTienPhat" disable="true" layoutX="507.0" layoutY="122.0" prefHeight="30.0" prefWidth="210.0" />
+                              <Label layoutX="52.0" layoutY="131.0" text="Thuế TNCN:">
                                  <font>
-                                    <Font name="System Bold" size="12.0" />
+                                    <Font name="System Bold" size="13.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtLuongTamUng" disable="true" layoutX="810.0" layoutY="48.0" prefHeight="30.0" prefWidth="120.0" />
-                              <Label layoutX="935.0" layoutY="56.0" text="(VND)">
+                              <TextField fx:id="txtThue" disable="true" layoutX="138.0" layoutY="124.0" prefHeight="30.0" prefWidth="210.0" />
+                              <Label layoutX="769.0" layoutY="52.0" text="Lương tạm ứng:">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtLuongTamUng" disable="true" layoutX="928.0" layoutY="48.0" prefHeight="30.0" prefWidth="150.0" />
+                              <Label layoutX="1084.0" layoutY="56.0" text="(VND)">
                                  <font>
                                     <Font name="System Italic" size="10.0" />
                                  </font>
@@ -175,26 +175,26 @@
          <center>
             <VBox prefHeight="415.0" prefWidth="858.0" BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane prefHeight="127.0" prefWidth="858.0">
+                  <AnchorPane prefHeight="127.0" prefWidth="858.0" stylesheets="@../css/button.css">
                      <children>
-                        <Label layoutX="14.0" layoutY="14.0" text="DANH SÁCH TÍNH LƯƠNG THÁNG">
+                        <Label alignment="CENTER" layoutX="14.0" layoutY="6.0" prefHeight="28.0" prefWidth="274.0" text="DANH SÁCH TÍNH LƯƠNG THÁNG">
                            <font>
-                              <Font name="System Bold" size="14.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtTim" disable="true" layoutX="565.0" layoutY="4.0" prefHeight="30.0" prefWidth="284.0" promptText="Tìm kiếm...">
+                        <TextField fx:id="txtTim" disable="true" layoutX="632.0" layoutY="4.0" prefHeight="30.0" prefWidth="361.0" promptText="Tìm kiếm...">
                            <font>
                               <Font name="System Italic" size="12.0" />
                            </font>
                         </TextField>
-                        <Button fx:id="btnInPhieu" layoutX="403.0" layoutY="4.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="85.0" style="-fx-background-color: #0c4ea2; -fx-text-fill: #fff; -fx-font-weight: bold;" text="In Phiếu">
+                        <Button fx:id="btnInPhieu" layoutX="315.0" layoutY="5.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="111.0" text="In Phiếu">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Button>
                      </children>
                   </AnchorPane>
-                  <TableView fx:id="tblTinhLuong" prefHeight="477.0" prefWidth="827.0">
+                  <TableView fx:id="tblTinhLuong" prefHeight="477.0" prefWidth="827.0" stylesheets="@../css/ChiaCongDoan.css">
                      <columns>
                         <TableColumn fx:id="hoTenCol" prefWidth="75.0" text="Họ tên" />
                         <TableColumn fx:id="chucVuCol" prefWidth="75.0" text="Chức vụ" />

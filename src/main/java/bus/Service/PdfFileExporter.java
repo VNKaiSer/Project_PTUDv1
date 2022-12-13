@@ -97,7 +97,7 @@ public class PdfFileExporter {
                     cell = new PdfPCell(new Phrase("Ngày vào làm: " + new SimpleDateFormat("dd/MM/yyyy").format(nv.getNhanVien().getNgayVaoLam()), FontNomal));
                     cell.setColspan(2);
                     t.addCell(cell);
-                    cell = new PdfPCell(new Phrase("Ca: Sáng - May", FontNomal));
+                    cell = new PdfPCell(new Phrase("Nhân Viên Hành Chính ", FontNomal));
                     cell.setColspan(2);
                     t.addCell(cell);
 
@@ -202,7 +202,7 @@ public class PdfFileExporter {
                     cell = new PdfPCell(new Phrase("Ngày vào làm: " + new SimpleDateFormat("dd/MM/yyyy").format(nv.getCongNhan().getNgayVaoLam()), FontNomal));
                     cell.setColspan(2);
                     t.addCell(cell);
-                    cell = new PdfPCell(new Phrase("Ca: Sáng - May", FontNomal));
+                    cell = new PdfPCell(new Phrase("Ca: "+ ((DTO_PhieuLuongCongNhan) pl).getCongDoanLam().getTenCongDoan(), FontNomal));
                     cell.setColspan(2);
                     t.addCell(cell);
 
@@ -262,7 +262,7 @@ public class PdfFileExporter {
                     t.addCell(cell);
                     cell = new PdfPCell(new Phrase("Thuế: ", FontNomal));
                     t.addCell(cell);
-                    cell = new PdfPCell(new Phrase(df.format(nv.getThue() * nv.getTongLuong()) + "", FontNomal));
+                    cell = new PdfPCell(new Phrase(df.format(nv.getThue()) + "", FontNomal));
                     t.addCell(cell);
 
                     //

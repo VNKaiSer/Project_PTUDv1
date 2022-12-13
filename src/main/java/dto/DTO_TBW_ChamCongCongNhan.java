@@ -4,6 +4,8 @@ import bus.BUS_PhanCong;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -98,6 +100,19 @@ public class DTO_TBW_ChamCongCongNhan {
                 soLuongSanPhamLamDuoc.setText(newValue);
             } else {
                 soLuongSanPhamLamDuoc.setText(newValue);
+            }
+        });
+
+        hienDien.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (hienDien.getSelectionModel().getSelectedIndex() == 0 || hienDien.getSelectionModel().getSelectedIndex() == 2){
+                    soLuongSanPhamLamDuoc.setText("0");
+                    soLuongSanPhamLamDuoc.setDisable(true);
+                } else {
+                    soLuongSanPhamLamDuoc.setText(soSanPhamDuocPhanCong+"");
+                    soLuongSanPhamLamDuoc.setDisable(false);
+                }
             }
         });
 

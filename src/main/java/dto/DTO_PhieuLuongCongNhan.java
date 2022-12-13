@@ -8,17 +8,20 @@ public class DTO_PhieuLuongCongNhan extends DTO_PhieuLuongCaNhan{
 	private int tongSoSanPham;
 	private DTO_CongNhan congNhan;
 
+	private DTO_CongDoan congDoanLam;
+
 	public DTO_PhieuLuongCongNhan(int tongSoSanPham, DTO_CongNhan congNhan) {
 		this.tongSoSanPham = tongSoSanPham;
 		this.congNhan = congNhan;
 	}
 
-	public DTO_PhieuLuongCongNhan(String maPhieuLuongNV, int soNgayCong, int nam, int thang, double tienThuong, double tienPhat, float thue, double tienTrachNhiem, double tienPhuCap, double tamUng, double tongLuong, double thucNhan, int tongSoSanPham, DTO_CongNhan congNhan) {
+	public DTO_PhieuLuongCongNhan(String maPhieuLuongNV, int soNgayCong, int nam, int thang, double tienThuong, double tienPhat, float thue, double tienTrachNhiem, double tienPhuCap, double tamUng, double tongLuong, double thucNhan, int tongSoSanPham, DTO_CongNhan congNhan, DTO_CongDoan cd) {
 		super(maPhieuLuongNV, soNgayCong, nam, thang, tienThuong, tienPhat, thue, tienTrachNhiem, tienPhuCap, tamUng, tongLuong, thucNhan);
-		tinhTongLuong();
-		thucLanh();
 		this.tongSoSanPham = tongSoSanPham;
 		this.congNhan = congNhan;
+		this.congDoanLam = cd;
+		tinhTongLuong();
+		thucLanh();
 	}
 
 	public DTO_PhieuLuongCongNhan() {
@@ -55,16 +58,31 @@ public class DTO_PhieuLuongCongNhan extends DTO_PhieuLuongCaNhan{
 		return "DTO_PhieuLuongCongNhan{" +
 				"tongSoSanPham=" + tongSoSanPham +
 				", congNhan=" + congNhan +
+				", congDoanLam=" + congDoanLam +
 				'}';
 	}
 
 	@Override
 	public void tinhTongLuong() {
-
+		tongLuong = tongSoSanPham * congDoanLam.getDonGiaCongDoan() * 1.0;
 	}
 
 	@Override
 	public void thucLanh() {
+		if (soNgayCong >= 26){
+			tienThuong = 200000;
+			tienTrachNhiem = 300000;
+		}
 
+		thue = (float) (tongLuong * 0.08);
+		thucNhan = tongLuong - thue - tamUng + tienThuong - tienPhat;
+	}
+
+	public DTO_CongDoan getCongDoanLam() {
+		return congDoanLam;
+	}
+
+	public void setCongDoanLam(DTO_CongDoan congDoanLam) {
+		this.congDoanLam = congDoanLam;
 	}
 }

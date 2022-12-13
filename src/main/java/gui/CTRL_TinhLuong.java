@@ -143,7 +143,6 @@ public class CTRL_TinhLuong implements Initializable {
             bus_tinhLuong = new BUS_TinhLuong();
             // cboThang.getValue()), Integer.parseInt(cboNam.getValue())
             ArrayList<DTO_PhieuLuongCaNhan> dsPL = bus_tinhLuong.getDSPL(Integer.parseInt(cboThang.getValue()), Integer.parseInt(cboNam.getValue()));
-            //System.out.println(dsPL);
             tblTinhLuong.setItems(FXCollections.observableArrayList(dsPL));
         } catch (SQLException | ParseException e) {
             throw new RuntimeException(e);

@@ -12,34 +12,48 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1000.0" stylesheets="@../css/ChiaCongDoan.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_ChiaCongDoan">
+<AnchorPane prefHeight="680.0" prefWidth="1180.0" style="-fx-background-color: white;" stylesheets="@../css/ChiaCongDoan.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_ChiaCongDoan">
    <children>
-      <BorderPane prefHeight="350.0" prefWidth="536.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="420.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="380.0" prefWidth="669.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="511.0" AnchorPane.topAnchor="0.0">
          <top>
-            <Pane prefHeight="90.0" prefWidth="580.0" stylesheets="@../css/ChiaCongDoan.css" BorderPane.alignment="CENTER">
+            <Pane prefHeight="135.0" prefWidth="669.0" stylesheets="@../css/ChiaCongDoan.css" BorderPane.alignment="CENTER">
                <children>
-                  <Label layoutX="13.0" layoutY="12.0" prefHeight="32.0" prefWidth="81.0" text="Mã sản phẩm:" />
-                  <Label layoutX="279.0" layoutY="15.0" prefHeight="26.0" prefWidth="88.0" text="Tên sản phẩm:" />
-                  <TextField fx:id="txtMaSanPham" disable="true" editable="false" layoutX="95.0" layoutY="11.0" prefHeight="33.0" prefWidth="162.0" />
-                  <TextField fx:id="txtTenSanPham" disable="true" editable="false" focusTraversable="false" layoutX="368.0" layoutY="11.0" prefHeight="34.0" prefWidth="180.0" />
-                  <TextField fx:id="txtTimSanPham" layoutX="279.0" layoutY="51.0" prefHeight="34.0" prefWidth="269.0" promptText="Nhập sản phẩm cần tìm...">
+                  <Label layoutX="43.0" layoutY="55.0" prefHeight="32.0" prefWidth="102.0" text="Mã sản phẩm:">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
+                  <Label layoutX="330.0" layoutY="58.0" prefHeight="26.0" prefWidth="97.0" text="Tên sản phẩm:">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
+                  <TextField fx:id="txtMaSanPham" disable="true" editable="false" layoutX="159.0" layoutY="54.0" prefHeight="33.0" prefWidth="150.0" />
+                  <TextField fx:id="txtTenSanPham" disable="true" editable="false" focusTraversable="false" layoutX="431.0" layoutY="54.0" prefHeight="34.0" prefWidth="205.0" />
+                  <TextField fx:id="txtTimSanPham" layoutX="330.0" layoutY="94.0" prefHeight="34.0" prefWidth="307.0" promptText="Nhập sản phẩm cần tìm...">
                      <font>
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </TextField>
                   <Pane layoutX="14.0" layoutY="140.0" prefHeight="36.0" prefWidth="43.0" />
-                  <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="520.0" layoutY="61.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="609.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/loupe.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="14.0" layoutY="59.0" text="Số lượng yêu cầu:" />
-                  <TextField fx:id="txtSoLuong" disable="true" layoutX="151.0" layoutY="53.0" prefHeight="29.0" prefWidth="105.0" />
+                  <Label layoutX="43.0" layoutY="102.0" text="Số lượng yêu cầu:">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Label>
+                  <TextField fx:id="txtSoLuong" disable="true" layoutX="158.0" layoutY="97.0" prefHeight="29.0" prefWidth="150.0" />
+                  <Label layoutX="39.0" layoutY="10.0" text="CHIA CÔNG ĐOẠN" textFill="#0c4ea2">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
          </top>
          <center>
-            <TableView fx:id="tblSanPham" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="tblSanPham" prefHeight="193.0" prefWidth="669.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="maSanPhamCol" prefWidth="75.0" text="Mã sản phẩm" />
                 <TableColumn fx:id="tenSanPhamCol" prefWidth="75.0" text="Tên sản phẩm" />
@@ -52,24 +66,30 @@
             </TableView>
          </center>
       </BorderPane>
-      <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="500.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="686.0" layoutY="10.0" prefHeight="380.0" prefWidth="494.0" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="686.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <Pane prefHeight="136.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
                   <Pane layoutX="2.0" prefHeight="90.0" prefWidth="400.0">
                      <children>
-                        <Label layoutX="15.0" layoutY="16.0" text="Mã công đoạn:" />
-                        <Label layoutX="14.0" layoutY="52.0" text="Tên công đoạn:" />
-                        <TextField fx:id="txtMaCongDoan" disable="true" editable="false" focusTraversable="false" layoutX="109.0" layoutY="10.0" prefHeight="29.0" prefWidth="270.0" />
-                        <TextField fx:id="txtTenCongDoan" disable="true" editable="false" focusTraversable="false" layoutX="109.0" layoutY="45.0" prefHeight="31.0" prefWidth="270.0" />
+                        <Label layoutX="79.0" layoutY="16.0" text="Mã công đoạn:">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <Label layoutX="78.0" layoutY="52.0" text="Tên công đoạn:">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <TextField fx:id="txtMaCongDoan" disable="true" editable="false" focusTraversable="false" layoutX="177.0" layoutY="10.0" prefHeight="29.0" prefWidth="270.0" />
+                        <TextField fx:id="txtTenCongDoan" disable="true" editable="false" focusTraversable="false" layoutX="177.0" layoutY="45.0" prefHeight="31.0" prefWidth="270.0" />
                      </children>
                   </Pane>
-                  <TextField fx:id="txtTimCongDoan" layoutX="152.0" layoutY="94.0" prefHeight="28.0" prefWidth="234.0" promptText="Nhập công đoạn cần tìm...">
+                  <TextField fx:id="txtTimCongDoan" layoutX="216.0" layoutY="84.0" prefHeight="28.0" prefWidth="234.0" promptText="Nhập công đoạn cần tìm...">
                      <font>
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </TextField>
-                  <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="359.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="21.0" layoutX="423.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/loupe.png" />
                      </image>
@@ -77,8 +97,8 @@
                </children>
             </Pane>
          </top>
-         <center>
-            <TableView fx:id="tblCongDoan" prefHeight="214.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <bottom>
+            <TableView fx:id="tblCongDoan" prefHeight="250.0" prefWidth="494.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="maCongDoanCol" prefWidth="75.0" text="Mã công đoạn" />
                 <TableColumn fx:id="tenCongDoanCol" prefWidth="75.0" text="Tên công đoạn" />
@@ -88,11 +108,67 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-         </center>
+         </bottom>
       </BorderPane>
-      <BorderPane layoutX="96.0" layoutY="436.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="350.0">
-         <center>
-            <TableView fx:id="tblPCCD" prefHeight="240.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+      <BorderPane layoutX="96.0" layoutY="382.0" prefHeight="298.0" prefWidth="1180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="382.0">
+         <top>
+            <Pane prefHeight="66.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="1.0" layoutY="2.0" prefHeight="57.0" prefWidth="1180.0" stylesheets="@../css/button.css">
+                     <children>
+                        <Button fx:id="btnThem" layoutX="105.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Thêm ">
+                           <graphic>
+                              <ImageView fitHeight="32.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/add.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="13.0" />
+                           </font></Button>
+                        <Button fx:id="btnDatLai" layoutX="219.0" layoutY="13.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Đặt lại">
+                           <graphic>
+                              <ImageView fitHeight="32.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/Reset_white.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="13.0" />
+                           </font></Button>
+                        <Button fx:id="btnXoa" layoutX="335.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Xóa">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/delete_White.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="13.0" />
+                           </font></Button>
+                        <Button fx:id="btnLuu" layoutX="450.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Lưu">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/save-file_white.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font size="13.0" />
+                           </font></Button>
+                        <Button fx:id="btnThemCD" layoutX="741.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Thêm công đoạn" />
+                        <Button fx:id="btnSuaGia" layoutX="872.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Sửa giá " />
+                        <Button fx:id="btnXoaCD" layoutX="1002.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Xóa công đoạn" />
+                     </children>
+                  </Pane>
+               </children></Pane>
+         </top>
+         <left>
+            <TableView fx:id="tblPCCD" prefHeight="238.0" prefWidth="1179.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="maSanPhamPCDCol" prefWidth="75.0" text="Mã sản phẩm" />
                 <TableColumn fx:id="tenSanPhamPCDCol" prefWidth="75.0" text="Tên sản phẩm" />
@@ -105,44 +181,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-         </center>
-         <top>
-            <Pane prefHeight="66.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Pane layoutX="1.0" layoutY="2.0" prefHeight="57.0" prefWidth="1000.0" stylesheets="@../css/button.css">
-                     <children>
-                        <Button fx:id="btnThem" layoutX="28.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Thêm " />
-                        <Button fx:id="btnDatLai" layoutX="142.0" layoutY="13.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Đặt lại">
-                           <graphic>
-                              <ImageView fitHeight="32.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/Reset_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button fx:id="btnXoa" layoutX="258.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Xóa">
-                           <graphic>
-                              <ImageView fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/delete_White.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button fx:id="btnLuu" layoutX="373.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Lưu">
-                           <graphic>
-                              <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/save-file_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button fx:id="btnThemCD" layoutX="614.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Thêm CĐ" />
-                        <Button fx:id="btnSuaGia" layoutX="738.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Sửa giá " />
-                        <Button fx:id="btnXoaCD" layoutX="855.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Xóa CĐ" />
-                     </children>
-                  </Pane>
-               </children></Pane>
-         </top>
+         </left>
       </BorderPane>
    </children>
 </AnchorPane>

@@ -14,18 +14,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="100.0" stylesheets="@../css/mainMenu.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_MainMenu">
+<AnchorPane prefHeight="750.0" prefWidth="1380.0" stylesheets="@../css/mainMenu.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTRL_MainMenu">
    <children>
-      <BorderPane prefHeight="650.0" prefWidth="1200.0">
+      <BorderPane prefHeight="750.0" prefWidth="1380.0">
          <center>
             <BorderPane fx:id="pn_Feature" prefHeight="580.0" prefWidth="1023.0" BorderPane.alignment="CENTER" />
          </center>
          <top>
             <AnchorPane prefHeight="70.0" prefWidth="1200.0" style="-fx-background-color: #0C4EA2;" BorderPane.alignment="CENTER">
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="1191.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="Menu" alignment="CENTER" prefHeight="40.0" prefWidth="44.0" textFill="WHITE">
+                        <Label fx:id="Menu" alignment="CENTER" prefHeight="40.0" prefWidth="33.0" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
@@ -40,9 +40,9 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <TextField focusTraversable="false" prefHeight="35.0" prefWidth="330.0" promptText="Tìm kiếm..." />
-                        <ImageView fitHeight="39.0" fitWidth="411.0" pickOnBounds="true" preserveRatio="true" />
-                        <MenuButton fx:id="lblName" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" prefHeight="52.0" prefWidth="208.0" scaleShape="false" style="-fx-background-color: #0C4EA2;" text="Châu Bích Tuyền" textFill="WHITE">
+                        <TextField focusTraversable="false" prefHeight="35.0" prefWidth="320.0" promptText="Tìm kiếm..." />
+                        <ImageView fitHeight="39.0" fitWidth="610.0" pickOnBounds="true" preserveRatio="true" />
+                        <MenuButton fx:id="lblName" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" prefHeight="52.0" prefWidth="239.0" scaleShape="false" style="-fx-background-color: #0C4EA2;" text="Châu Bích Tuyền" textFill="WHITE">
                           <items>
                             <MenuItem fx:id="mni_doiMatKhau" mnemonicParsing="false" text="ĐỔI MẬT KHẨU" />
                             <MenuItem fx:id="mni_DangXuat" mnemonicParsing="false" text="ĐĂNG XUẤT" />

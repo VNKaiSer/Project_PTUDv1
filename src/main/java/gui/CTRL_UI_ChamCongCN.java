@@ -3,8 +3,9 @@ package gui;
 import bus.BUS_ChamCongCN;
 import bus.BUS_CongNhan;
 import bus.BUS_PhanCong;
-import bus.BUS_TinhLuong;
-import dto.*;
+import dto.DTO_BCCCongNhan;
+import dto.DTO_CongNhan;
+import dto.DTO_TBW_ChamCongCongNhan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -25,40 +28,31 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CTRL_UI_ChamCongCN implements Initializable {
+    private final int COMAT = 1;
+    private final int PHEP = 2;
+    private final int VANG = 0;
     @FXML
     private Button btnIn;
-
     @FXML
     private Button btnLuu;
-
     @FXML
     private ComboBox<String> cboMaCaLam;
-
     @FXML
     private ComboBox<String> cboTenCaLam;
-
     @FXML
     private TableColumn<?, ?> hienDienCol;
-
     @FXML
     private TableColumn<?, ?> hoTenCol;
-
     @FXML
     private TableColumn<?, ?> maCaLamCol;
-
     @FXML
     private TableColumn<?, ?> maCongNhanCol;
-
-
     @FXML
     private TableColumn<?, ?> soLuongCol;
-
     @FXML
     private TableColumn<?, ?> tenCongDoan;
-
     @FXML
     private DatePicker txtNgayChamCong;
-
     @FXML
     private TextField txtTimCongNhan;
     @FXML
@@ -66,46 +60,33 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     @FXML
     private TableView<DTO_TBW_ChamCongCongNhan> tblBCCCN;
     private BUS_CongNhan bus_congNhan;
-
     private boolean nowCC = true;
-
     private ArrayList<DTO_BCCCongNhan> dsBCCDaCham;
     private ArrayList<DTO_BCCCongNhan> dsBCCHienTai;
-
     private Dialog dialog;
-
-    private  BUS_ChamCongCN bus_chamCongCN;
-
-    private boolean [] chotCa;
-
-    private final int COMAT = 1;
-    private final int PHEP = 2;
-    private final int VANG = 0;
+    private BUS_ChamCongCN bus_chamCongCN;
+    private boolean[] chotCa;
     private ArrayList<DTO_CongNhan> dsBanDau;
     private HashMap<String, Integer> dicCongNhanSoLuong;
 
 
     /**
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param url            The location used to resolve relative paths for the root object, or
+     *                       {@code null} if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or {@code null} if
+     *                       the root object was not localized.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        chotCa = new boolean[] {false,false,false};
+        chotCa = new boolean[]{false, false, false};
         btnLuu.setDisable(true);
         handleChamSanPham();
         // khởi tạo các bus và các danh sách
-        cboMaCaLam.setItems(FXCollections.observableArrayList("Tất cả","1","2","3"));
+        cboMaCaLam.setItems(FXCollections.observableArrayList("Tất cả", "1", "2", "3"));
         cboMaCaLam.setValue("Tất cả");
         cboTenCaLam.setValue("Tất cả");
         tblBCCCN.setDisable(true);
-        cboTenCaLam.setItems(FXCollections.observableArrayList("Tất cả","Sáng","Chiều","Tối"));
+        cboTenCaLam.setItems(FXCollections.observableArrayList("Tất cả", "Sáng", "Chiều", "Tối"));
         bus_congNhan = new BUS_CongNhan();
         try {
             bus_chamCongCN = new BUS_ChamCongCN();
@@ -141,19 +122,18 @@ public class CTRL_UI_ChamCongCN implements Initializable {
         // đọc dữ liệu vào hash map
 
 
-
         // băt sự kiện trên các componet
         txtNgayChamCong.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // ngày chấm công lơn hơn ngày hiện tại
                 Date ngayCC = Date.from(txtNgayChamCong.getValue().atStartOfDay()
-                            .atZone(ZoneId.systemDefault())
-                            .toInstant());
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant());
                 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                if (df.format(ngayCC).equals(df.format(new Date()))){
+                if (df.format(ngayCC).equals(df.format(new Date()))) {
                     // đã chấm cho hôm nay rồi
-                    if (!nowCC){
+                    if (!nowCC) {
                         try {
                             loadDanhSachChamCongDaCham();
                         } catch (SQLException e) {
@@ -179,8 +159,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
                     er.setContentText("Ngày chấm công phải bé hơn ngày hiện tại");
                     Optional<ButtonType> a = er.showAndWait();
                     txtNgayChamCong.setValue(ngayHienTai);
-                }
-                else if (ngayCC.before(new Date())){
+                } else if (ngayCC.before(new Date())) {
                     try {
                         loadDanhSachChamCongDaCham();
                     } catch (SQLException e) {
@@ -192,35 +171,62 @@ public class CTRL_UI_ChamCongCN implements Initializable {
                 }
             }
         });
+//        txtNgayChamCong.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//
+//            }
+//        });
 
         cboMaCaLam.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(cboMaCaLam.getSelectionModel().getSelectedIndex() == 0){
+                if (chotCa[0] == true && cboMaCaLam.getSelectionModel().getSelectedIndex() == 1){
+                    tblBCCCN.setDisable(true);
+                    btnLuu.setDisable(true);
                     return;
                 }
 
-                if(!chotCa[0] && cboMaCaLam.getSelectionModel().getSelectedIndex() != 1){
-                    Alert a3 = new Alert(Alert.AlertType.ERROR, "Chưa được chấm công cho ca này",ButtonType.OK);
+                if (chotCa[1] == true && cboMaCaLam.getSelectionModel().getSelectedIndex() == 2){
+                    tblBCCCN.setDisable(true);
+                    btnLuu.setDisable(true);
+                    return;
+                }
+
+                if (chotCa[2] == true && cboMaCaLam.getSelectionModel().getSelectedIndex() == 3){
+                    tblBCCCN.setDisable(true);
+                    btnLuu.setDisable(true);
+                    return;
+                }
+                if (cboMaCaLam.getSelectionModel().getSelectedIndex() == 0) {
+                    try {
+                        tblBCCCN.setItems(coverDaCham(FXCollections.observableArrayList(bus_chamCongCN.getDSBCCNTheoNgay(DateTimeFormatter.ofPattern("yyyy-MM-dd").format(txtNgayChamCong.getValue())))));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return;
+                }
+
+                if (!chotCa[0] && cboMaCaLam.getSelectionModel().getSelectedIndex() != 1) {
+                    Alert a3 = new Alert(Alert.AlertType.ERROR, "Chưa được chấm công cho ca này", ButtonType.OK);
                     a3.showAndWait();
                     cboMaCaLam.setValue("1");
                     return;
                 }
 
-                if(!chotCa[1] && cboMaCaLam.getSelectionModel().getSelectedIndex() ==3){
-                    Alert a3 = new Alert(Alert.AlertType.ERROR, "Chưa được chấm công cho ca này",ButtonType.OK);
+                if (!chotCa[1] && cboMaCaLam.getSelectionModel().getSelectedIndex() == 3) {
+                    Alert a3 = new Alert(Alert.AlertType.ERROR, "Chưa được chấm công cho ca này", ButtonType.OK);
                     a3.showAndWait();
                     cboMaCaLam.setValue("2");
                     return;
                 }
 
                 cboTenCaLam.getSelectionModel().select(cboMaCaLam.getSelectionModel().getSelectedIndex());
-                if (cboMaCaLam.getSelectionModel().getSelectedIndex() == 0){
-                    btnLuu.setDisable(true);
-                } else {
-                    btnLuu.setDisable(false);
-                }
-
+//                btnLuu.setDisable(cboMaCaLam.getSelectionModel().getSelectedIndex() == 0);
+                tblBCCCN.setDisable(false);
+                btnLuu.setDisable(false);
                 if (cboMaCaLam.getSelectionModel().getSelectedIndex() == 0) {
                     try {
                         tblBCCCN.setDisable(true);
@@ -230,8 +236,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
-                }
-                else {
+                } else {
                     try {
                         tblBCCCN.setDisable(false);
                         layDanhSachCongNhanTheoCa();
@@ -246,56 +251,39 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    if (cboMaCaLam.getSelectionModel().getSelectedIndex() == 3){
+                    if (cboMaCaLam.getSelectionModel().getSelectedIndex() == 3) {
                         capNhatSanPhamCuaNhanVien();
-                        Alert a4 = new Alert(Alert.AlertType.INFORMATION, "Hoàn thành chấm công bạn có chắc muốn lưu không",ButtonType.YES, ButtonType.NO);
+                        Alert a4 = new Alert(Alert.AlertType.INFORMATION, "Hoàn thành chấm công bạn có chắc muốn lưu không", ButtonType.YES, ButtonType.NO);
                         Optional<ButtonType> rs = a4.showAndWait();
                         if (rs.get() == ButtonType.YES) {
                             insertToDataBase();
                             Alert a3 = new Alert(Alert.AlertType.INFORMATION, "Chấm công thành công", ButtonType.OK);
                             a3.showAndWait();
                             tblBCCCN.setDisable(true);
-                            return;
                         }
                     } else {
-                    Alert a = new Alert(Alert.AlertType.WARNING,"Mỗi ca chỉ được chấm công một lần! Bạn có chắc chắn muốn lưu không?", ButtonType.NO,ButtonType.YES);
-                    Optional<ButtonType> bt = a.showAndWait();
-                    // nếu nhấn vào nút yes
-                    if (bt.get() == ButtonType.YES){
-                        int getCaCham = cboMaCaLam.getSelectionModel().getSelectedIndex();
-                        // nếu đã chấm công rồi
-                        if (chotCa[getCaCham - 1] == true){
-                            Alert a2 = new Alert(Alert.AlertType.ERROR,"Ca này bạn đã chấm công rồi");
-                            a.showAndWait();
-                            return;
-                        } else {
-                            capNhatSanPhamCuaNhanVien();
-                            chotCa[getCaCham - 1] = true;
-//                            if (chotCa[0]&& chotCa[1]&& chotCa[2]){
-//                                Alert a4 = new Alert(Alert.AlertType.INFORMATION, "Hoàn thành chấm công bạn có chắc muốn lưu không",ButtonType.YES, ButtonType.NO);
-//                                Optional<ButtonType> rs = a4.showAndWait();
-//                                if (rs.get() == ButtonType.YES){
-//                                    insertToDataBase();
-//                                    Alert a3 = new Alert(Alert.AlertType.INFORMATION, "Chấm công thành công",ButtonType.OK);
-//                                    a3.showAndWait();
-//                                    return;
-//                                } else {
-//                                    return;
-//                                }
-//                            }
-                            return;
+                        Alert a = new Alert(Alert.AlertType.WARNING, "Mỗi ca chỉ được chấm công một lần! Bạn có chắc chắn muốn lưu không?", ButtonType.NO, ButtonType.YES);
+                        Optional<ButtonType> bt = a.showAndWait();
+                        // nếu nhấn vào nút yes
+                        if (bt.get() == ButtonType.YES) {
+                            int getCaCham = cboMaCaLam.getSelectionModel().getSelectedIndex();
+                            // nếu đã chấm công rồi
+                            if (chotCa[getCaCham - 1]) {
+                                Alert a2 = new Alert(Alert.AlertType.ERROR, "Ca này bạn đã chấm công rồi");
+                                a.showAndWait();
+                            } else {
+                                capNhatSanPhamCuaNhanVien();
+                                tblBCCCN.setDisable(true);
+                                btnLuu.setDisable(true);
+                                chotCa[getCaCham - 1] = true;
+                            }
                         }
-                    }
-
-
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
             }
         });
-
-
 
 
 
@@ -310,8 +298,10 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     private void loadDanhSachChamCongHomNay() throws SQLException, ParseException {
         // check đã chấm công hôm nay hay chưa
         ArrayList<DTO_BCCCongNhan> checkTMP = bus_chamCongCN.getDSBCCNTheoNgay(txtNgayChamCong.getValue().toString());
-        if (!checkTMP.isEmpty()){
+        if (!checkTMP.isEmpty()) {
             loadDanhSachChamCongDaCham();
+            chotCa[0] = true; chotCa[1] = true; chotCa[2] = true;
+            btnLuu.setVisible(false);
             return;
         }
         dsBCCHienTai = new ArrayList<>();
@@ -321,7 +311,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
         for (int i = 0; i < numNhanVien; i++) {
             String maBCC = "";
             int soLuong = 0;
-            dsBCCHienTai.add(new DTO_BCCCongNhan(list.get(i), 1,0, new Date(), maBCC, ""));
+            dsBCCHienTai.add(new DTO_BCCCongNhan(list.get(i), 1, 0, new Date(), maBCC, ""));
         }
         tblBCCCN.setItems(cover(FXCollections.observableArrayList(dsBCCHienTai)));
     }
@@ -333,10 +323,11 @@ public class CTRL_UI_ChamCongCN implements Initializable {
 
     /**
      * Tạo phiếu lương và lưu vào database
+     *
      * @throws SQLException
      */
     void insertToDataBase() throws SQLException {
-        cboMaCaLam.setValue("Tất cả");
+
         // Tạo phiếu lương cho nhân viên
         Set<String> keySet = dicCongNhanSoLuong.keySet();
         dsBCCHienTai = new ArrayList<>();
@@ -350,28 +341,45 @@ public class CTRL_UI_ChamCongCN implements Initializable {
             Date ngayCC = Date.from(txtNgayChamCong.getValue().atStartOfDay()
                     .atZone(ZoneId.systemDefault())
                     .toInstant());
-           DTO_BCCCongNhan tmp = new DTO_BCCCongNhan(tmp_CN, hienDien, dicCongNhanSoLuong.get(key),ngayCC, taoMaBCC(tmp_CN.getMaCongNhan()), "");
+            DTO_BCCCongNhan tmp = new DTO_BCCCongNhan(tmp_CN, hienDien, dicCongNhanSoLuong.get(key), ngayCC, taoMaBCC(tmp_CN.getMaCongNhan()), "");
             dsBCCHienTai.add(tmp);
         }
         bus_chamCongCN.insertBCCNVToDatabase(dsBCCHienTai);
+        cboMaCaLam.setValue("Tất cả");
     }
 
-    private String taoMaBCC(String maNV){
+    private String taoMaBCC(String maNV) {
         String date = new SimpleDateFormat("ddMMyyyy").format(new Date());
-        return "CCCN"+date +maNV;
+        return "CCCN" + date + maNV;
     }
 
     private ObservableList<DTO_TBW_ChamCongCongNhan> cover(ObservableList<DTO_BCCCongNhan> bcc) throws SQLException {
         ObservableList<DTO_TBW_ChamCongCongNhan> list = FXCollections.observableArrayList();
-        for (DTO_BCCCongNhan it:
+        for (DTO_BCCCongNhan it :
                 bcc) {
             ComboBox<String> cbo = new ComboBox<>();
             TextField t = new TextField(it.getGhiChu());
             TextField t1 = new TextField(String.valueOf(it.getSoLuongSanPhamLamDuoc()));
-            cbo.setItems(FXCollections.observableArrayList("Vắng","Có mặt","Phép"));
+            cbo.setItems(FXCollections.observableArrayList("Vắng", "Có mặt", "Phép"));
             cbo.getSelectionModel().select(it.getHienDien());
 
-            DTO_TBW_ChamCongCongNhan tmp = new DTO_TBW_ChamCongCongNhan(it.getCongNhan().getMaCongNhan(), it.getCongNhan().getTenCongNhan(), cbo, t, t1,new BUS_PhanCong().getSoLuongPC(it.getCongNhan().getMaCongNhan(), txtNgayChamCong.getValue().toString(), cboMaCaLam.getSelectionModel().getSelectedIndex()));
+            DTO_TBW_ChamCongCongNhan tmp = new DTO_TBW_ChamCongCongNhan(it.getCongNhan().getMaCongNhan(), it.getCongNhan().getTenCongNhan(), cbo, t, t1, new BUS_PhanCong().getSoLuongPC(it.getCongNhan().getMaCongNhan(), txtNgayChamCong.getValue().toString(), cboMaCaLam.getSelectionModel().getSelectedIndex()));
+            list.add(tmp);
+        }
+        return list;
+    }
+
+    private ObservableList<DTO_TBW_ChamCongCongNhan> coverDaCham(ObservableList<DTO_BCCCongNhan> bcc) throws SQLException {
+        ObservableList<DTO_TBW_ChamCongCongNhan> list = FXCollections.observableArrayList();
+        for (DTO_BCCCongNhan it :
+                bcc) {
+            ComboBox<String> cbo = new ComboBox<>();
+            TextField t = new TextField(it.getGhiChu());
+            TextField t1 = new TextField(String.valueOf(it.getSoLuongSanPhamLamDuoc()));
+            cbo.setItems(FXCollections.observableArrayList("Vắng", "Có mặt", "Phép"));
+            cbo.getSelectionModel().select(it.getHienDien());
+
+            DTO_TBW_ChamCongCongNhan tmp = new DTO_TBW_ChamCongCongNhan(it.getCongNhan().getMaCongNhan(), it.getCongNhan().getTenCongNhan(), cbo, t, t1, it.getSoLuongSanPhamLamDuoc());
             list.add(tmp);
         }
         return list;
@@ -387,9 +395,9 @@ public class CTRL_UI_ChamCongCN implements Initializable {
 
         ArrayList<DTO_TBW_ChamCongCongNhan> modelCNByCa = new ArrayList<>();
 
-        for (String it: maNhanVienTheoCa) {
-            for (DTO_TBW_ChamCongCongNhan cn:
-                 tmp) {
+        for (String it : maNhanVienTheoCa) {
+            for (DTO_TBW_ChamCongCongNhan cn :
+                    tmp) {
                 if (cn.getMaCongNhan().equals(it))
                     modelCNByCa.add(cn);
             }
@@ -401,28 +409,27 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     /**
      * Hàm khởi tạo map lưu số lượng sản phẩm của công nhân
      */
-    public void handleChamSanPham(){
+    public void handleChamSanPham() {
         dicCongNhanSoLuong = new HashMap<>();
-        for (DTO_TBW_ChamCongCongNhan it:
-             tblBCCCN.getItems()) {
+        for (DTO_TBW_ChamCongCongNhan it :
+                tblBCCCN.getItems()) {
             dicCongNhanSoLuong.put(it.getMaCongNhan(), 0);
         }
     }
 
-    public void capNhatSanPhamCuaNhanVien(){
+    public void capNhatSanPhamCuaNhanVien() {
         int i = 0;
 
-        for (DTO_TBW_ChamCongCongNhan it:
+        for (DTO_TBW_ChamCongCongNhan it :
                 tblBCCCN.getItems()) {
             dicCongNhanSoLuong.merge(it.getMaCongNhan(), Integer.parseInt(it.getSoLuongSanPhamLamDuoc().getText()), Integer::sum);
         }
     }
 
-    private DTO_CongNhan findCongNhan(String maCN){
-        System.out.println(dsBanDau);
-        for (DTO_CongNhan it:
-             dsBanDau) {
-            if (maCN.equals(it.getMaCongNhan())){
+    private DTO_CongNhan findCongNhan(String maCN) {
+        for (DTO_CongNhan it :
+                dsBanDau) {
+            if (maCN.equals(it.getMaCongNhan())) {
                 return it;
             }
         }

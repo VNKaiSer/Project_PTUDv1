@@ -2,7 +2,7 @@
 /*
 VBOX MENU
 */
-.menu-button {
+/*.menu-button {
     -fx-background-color:  #3C7DD9;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -14,4 +14,56 @@ VBOX MENU
 .menu-button .menu-item{
     -fx-pref-width: 200px;
     -fx-pref-height: 40px;
+}
+
+.button {
+    -fx-background-color:  #3C7DD9;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-pref-width: 200px;
+    -fx-text-fill: white;
+    -fx-text-align: left;
+
+}
+*/
+
+/*new*/
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 40px;
+}
+
+.label:hover{
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 40px;
+
+    -fx-text-fill: #0c4ea2;
+    -fx-background-color: #ffffff;
+}
+
+.button {
+    -fx-background-color: #ffffff;
+
+    -fx-border-right-color: #0c4ea2;
+    -fx-font-weight: bold;
+
+    -fx-pref-width: 200px;
+    -fx-text-fill: #0c4ea2;
+    -fx-text-align: left;
+
+}
+
+.button:hover{
+    -fx-background-color: #0c4ea2;
+    -fx-border-right-color: #ffffff;
+    -fx-font-weight: bold;
+    -fx-pref-width: 200px;
+    -fx-text-fill: white;
+    -fx-text-align: left;
+    -fx-font-size: 14px;
 }

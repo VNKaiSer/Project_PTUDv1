@@ -79,7 +79,8 @@ public class DAL_PhieuLuong {
             double tongLuong = rs.getDouble(10);
             double thucNhan = rs.getDouble(11);
             DTO_CongNhan congNhan = findCongNhan(rs.getString(14));
-            DTO_PhieuLuongCongNhan tmp = new DTO_PhieuLuongCongNhan(maPL, soNgayCong, nam, thang, tienThuong, tienPhat, thue, tienTrachNhiem, tienPhuCap, tamUng, tongLuong, thucNhan, luongCoBan, congNhan);
+            DTO_CongDoan cd = new DTO_CongDoan(rs.getString(18), rs.getDouble(17));
+            DTO_PhieuLuongCongNhan tmp = new DTO_PhieuLuongCongNhan(maPL, soNgayCong, nam, thang, tienThuong, tienPhat, thue, tienTrachNhiem, tienPhuCap, tamUng, tongLuong, thucNhan, luongCoBan, congNhan, cd);
             dsPL.add(tmp);
         }
 
