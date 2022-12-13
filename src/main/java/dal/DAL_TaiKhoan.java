@@ -94,7 +94,24 @@ public class DAL_TaiKhoan {
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1, name);
         ResultSet rs = ppsm.executeQuery();
+        if (rs.next())
+            return rs.getString(1);
+        else
+            return "";
+
+    }
+
+    public String getSDT(String name) throws SQLException {
+        String sql = "SELECT        SDT\n" +
+                     "FROM          NhanVien\n" +
+                     "WHERE maNhanVien = ?";
+        ConnectDB.getInstance().connect();
+        PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
+        ppsm.setString(1, name);
+        ResultSet rs = ppsm.executeQuery();
         rs.next();
         return rs.getString(1);
     }
+
+
 }

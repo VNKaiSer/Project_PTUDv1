@@ -32,8 +32,10 @@ public class CTRL_DoiMatKhau implements Initializable {
     private String maNV;
     private BUS_TaiKhoan bus_taiKhoan = new BUS_TaiKhoan();
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         btnQuayLaiDangNhap.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -52,6 +54,7 @@ public class CTRL_DoiMatKhau implements Initializable {
                 }
             }
         });
+
         btn_XacNhan.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

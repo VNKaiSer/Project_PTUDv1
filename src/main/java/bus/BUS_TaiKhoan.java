@@ -22,6 +22,9 @@ public class BUS_TaiKhoan {
     public String getTenNguoiDangNhan(String ma) throws SQLException {
         return  dal_taiKhoan.getName(ma);
     }
+    public String getSDT(String ma) throws SQLException {
+        return  dal_taiKhoan.getSDT(ma);
+    }
     public void updateTaiKhoan(DTO_TaiKhoan tk){
         try {
             dal_taiKhoan.updateTaiKhoan(tk);

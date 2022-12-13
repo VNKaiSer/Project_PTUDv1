@@ -40,11 +40,43 @@ public class CTRL_DangNhap implements Initializable {
 
     private String nguoiDangNhap;
     private int tk;
+    @FXML
+    private Button btnQuenPass;
+
+    @FXML
+    private Label lblLogin;
+    @FXML
+    private Button btnCheck;
+
+    @FXML
+    private TextField btnMatKhauMoi;
+
+    @FXML
+    private Button btnQuayLaiDangNhap;
+
+    @FXML
+    private Button btn_XacNhan;
+
+    @FXML
+    private Label lblChangPS;
+
+    @FXML
+    private TextField txtMaNhanVien;
+
+    @FXML
+    private TextField txtOTP;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         txtPassShow.setVisible(false);
+        btnQuenPass.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
         btnDangNhap.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -85,6 +117,25 @@ public class CTRL_DangNhap implements Initializable {
                 txtPass.setText((txtPassShow.getText()));
                 txtPass.setVisible(true);
                 txtPassShow.setVisible(false);
+            }
+        });
+
+        btnQuenPass.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("UI_RestPassWord.fxml"));
+                try {
+                    Scene scene = new Scene(fxmlLoader.load());
+                    Stage secondStage = new Stage();
+                    secondStage.setScene(scene);
+                    secondStage.setTitle("Login");
+                    Stage thisStage = (Stage) lblLogin.getScene().getWindow();
+                    thisStage.hide();
+                    secondStage.show();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

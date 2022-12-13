@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
@@ -25,7 +26,7 @@
                   <Font name="System Italic" size="12.0" />
                </font>
             </TextField>
-            <Button layoutX="398.0" layoutY="207.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" style="-fx-background-color: none; -fx-border-color: none;" text="Quên mật khẩu?" textFill="#5159c9">
+            <Button fx:id="btnQuenPass" layoutX="398.0" layoutY="207.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" style="-fx-background-color: none; -fx-border-color: none;" text="Quên mật khẩu?" textFill="#5159c9">
                <font>
                   <Font name="System Bold Italic" size="12.0" />
                </font>
@@ -45,6 +46,7 @@
                   <Font name="System Italic" size="12.0" />
                </font>
             </TextField>
+            <Label fx:id="lblLogin" layoutX="299.0" layoutY="43.0" />
          </children>
       </Pane>
    </children>
