@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -76,6 +77,36 @@ public class CTRL_MainMenu implements Initializable {
     private MenuButton mnbt_QuanLy;
 
     private String maNV;
+
+    @FXML
+    private Label lblChamCongCN;
+
+    @FXML
+    private Label lblChamCongNV;
+
+    @FXML
+    private Label lblChiaCongDoan;
+
+    @FXML
+    private Label lblPhanCong;
+
+    @FXML
+    private Label lblQuanLyCN;
+
+    @FXML
+    private Label lblQuanLySanPham;
+
+    @FXML
+    private Label lblThongKe;
+
+    @FXML
+    private Label lblTinhLuong;
+    @FXML
+    private Label lblQuanLyNV;
+    @FXML
+    private Label lblCumQuanLy;
+    int click = 0;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -117,20 +148,21 @@ public class CTRL_MainMenu implements Initializable {
             });
         });
 
+
         acctionChoi();
     }
 
     private void acctionChoi(){
-        mni_themCongNhan.setOnAction(new EventHandler<ActionEvent>() {
+        lblQuanLyCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 pn_Feature.setCenter(cn);
             }
         });
 
-        mni_chiaCongDoan.setOnAction(new EventHandler<ActionEvent>() {
+        lblChiaCongDoan.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("UI_ChiaCongDoan.fxml");
                 } catch (IOException e) {
@@ -139,9 +171,9 @@ public class CTRL_MainMenu implements Initializable {
             }
         });
 
-        mni_ChamCong.setOnAction(new EventHandler<ActionEvent>() {
+        lblChamCongNV.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("UI_ChamCongNhanVien.fxml");
                 } catch (IOException e) {
@@ -149,10 +181,9 @@ public class CTRL_MainMenu implements Initializable {
                 }
             }
         });
-
-        mni_themNhanVien.setOnAction(new EventHandler<ActionEvent>() {
+        lblQuanLyNV.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("UI_NhanVien_FX_Ver3.fxml");
                 } catch (IOException e) {
@@ -182,9 +213,9 @@ public class CTRL_MainMenu implements Initializable {
             }
         });
 
-        mni_PhanCong.setOnAction(new EventHandler<ActionEvent>() {
+        lblPhanCong.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("UI_PhanCong.fxml");
                 } catch (IOException e) {
@@ -193,9 +224,9 @@ public class CTRL_MainMenu implements Initializable {
             }
         });
 
-        mni_CCNV.setOnAction(new EventHandler<ActionEvent>() {
+        lblChamCongCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("UI_ChamCongCongNhan.fxml");
                 } catch (IOException e) {
@@ -204,9 +235,9 @@ public class CTRL_MainMenu implements Initializable {
             }
         });
 
-        mni_TinhLuong.setOnAction(new EventHandler<ActionEvent>() {
+        lblTinhLuong.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("UI_TinhLuong.fxml");
                 } catch (IOException e) {
@@ -215,9 +246,9 @@ public class CTRL_MainMenu implements Initializable {
             }
         });
 
-        mni_SanPham.setOnAction(new EventHandler<ActionEvent>() {
+        lblQuanLySanPham.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
+            public void handle(MouseEvent actionEvent) {
                 try {
                     loadScene("SanPham_v2.fxml");
                 } catch (IOException e) {

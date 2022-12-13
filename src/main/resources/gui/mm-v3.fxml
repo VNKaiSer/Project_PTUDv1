@@ -109,56 +109,7 @@
                <children>
                   <VBox prefHeight="680.0" prefWidth="190.0" style="-fx-background-color: #0c4ea2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <MenuButton fx:id="mnbt_QuanLy" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="60.0" prefWidth="200.0" scaleShape="false" text="QUẢN LÝ" textFill="WHITE">
-                          <items>
-                            <MenuItem fx:id="mni_themCongNhan" mnemonicParsing="false" text="QUẢN LÝ CN" />
-                            <MenuItem fx:id="mni_themNhanVien" mnemonicParsing="false" text="QUẢN LÝ NV" />
-                              <MenuItem fx:id="mni_ChamCong" mnemonicParsing="false" text="CHẤM CÔNG NV" />
-                              <MenuItem fx:id="mni_CCNV" mnemonicParsing="false" text="CHẤM CÔNG CN" />
-                              <MenuItem fx:id="mni_TinhLuong" mnemonicParsing="false" text="TÍNH LƯƠNG" />
-                          </items>
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/Menu_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </MenuButton>
-                        <MenuButton fx:id="mnbt_nhanVien" layoutX="10.0" layoutY="50.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="NHÂN VIÊN" textFill="WHITE">
-                           <items>
-                              <MenuItem fx:id="mni_SanPham" mnemonicParsing="false" text="QUẢN LÝ SẢN PHẨM" />
-                              <MenuItem fx:id="mni_chiaCongDoan" mnemonicParsing="false" text="CHIA CÔNG ĐOẠN" />
-                              <MenuItem fx:id="mni_PhanCong" mnemonicParsing="false" text="PHÂN CÔNG" />
-                              <MenuItem mnemonicParsing="false" text="THỐNG KÊ" />
-                              <MenuItem mnemonicParsing="false" text="BÁO CÁO" />
-                           </items>
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/Menu_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </MenuButton>
-                        <MenuButton layoutX="10.0" layoutY="90.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="HELP" textFill="WHITE">
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/loupe_white.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></MenuButton>
-                        <Label prefHeight="42.0" prefWidth="190.0" style="-fx-background-color: #14014a;" text="Quản lý" textFill="WHITE">
+                        <Label fx:id="lblCumQuanLy" prefHeight="42.0" prefWidth="190.0" style="-fx-background-color: #14014a;" text="QUẢN LÝ" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -172,34 +123,49 @@
                         </Label>
                         <VBox alignment="CENTER_LEFT" prefHeight="192.0" prefWidth="190.0" stylesheets="@../css/mainMenu.css">
                            <children>
-                              <Label layoutX="10.0" layoutY="214.0" text="Quản lý công nhân">
+                              <Label fx:id="lblQuanLyCN" layoutX="10.0" layoutY="214.0" text="Quản lý công nhân">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label layoutX="10.0" layoutY="223.0" text="Quản lý nhân viên">
+                              <Label fx:id="lblQuanLyNV" layoutX="10.0" layoutY="223.0" text="Quản lý nhân viên">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label layoutX="10.0" layoutY="231.0" text="Chấm công công nhân">
+                              <Label fx:id="lblChamCongCN" layoutX="10.0" layoutY="231.0" text="Chấm công công nhân">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label layoutX="10.0" layoutY="240.0" text="Chấm công nhân viên">
+                              <Label fx:id="lblChamCongNV" layoutX="10.0" layoutY="240.0" text="Chấm công nhân viên">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label layoutX="10.0" layoutY="248.0" text="Tính lương">
+                              <Label fx:id="lblTinhLuong" layoutX="10.0" layoutY="248.0" text="Tính lương">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
                            </children>
                         </VBox>
-                        <Label prefHeight="35.0" prefWidth="190.0" style="-fx-background-color: #14014a;" text="Nhân viên" textFill="WHITE">
+                        <Label prefHeight="35.0" prefWidth="190.0" style="-fx-background-color: #14014a;" text="NHÂN VIÊN" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -213,29 +179,41 @@
                         </Label>
                         <VBox prefHeight="167.0" prefWidth="190.0" stylesheets="@../css/mainMenu.css">
                            <children>
-                              <Label text="Quản lý sản phẩm">
+                              <Label fx:id="lblQuanLySanPham" text="Quản lý sản phẩm">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label text="Chia công đoạn">
+                              <Label fx:id="lblChiaCongDoan" text="Chia công đoạn">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label text="Phân công">
+                              <Label fx:id="lblPhanCong" text="Phân công">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
-                              <Label text="Thống kê">
+                              <Label fx:id="lblThongKe" text="Thống kê">
                                  <graphic>
                                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
                               </Label>
                            </children>
                         </VBox>
-                        <Label prefHeight="42.0" prefWidth="190.0" style="-fx-background-color: #14014a;" text="Hỗ trợ" textFill="WHITE">
+                        <Label prefHeight="42.0" prefWidth="190.0" style="-fx-background-color: #14014a;" text="HỖ TRỢ" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
