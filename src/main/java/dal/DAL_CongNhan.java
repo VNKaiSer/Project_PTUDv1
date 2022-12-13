@@ -111,7 +111,7 @@ public class DAL_CongNhan {
     public void updateCongNhan(DTO_CongNhan congNhan) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql = "UPDATE CongNhan " +
-                     "SET tenCongNhan = ?, ngayVaoLam = ?, phai = ?, [ ngaySinh ] = ?, SDT = ?, email = ?, diaChi = ?, trinhDo = ? " +
+                     "SET tenCongNhan = ?, ngayVaoLam = ?, phai = ?, ngaySinh = ?, SDT = ?, email = ?, diaChi = ?, trinhDo = ? " +
                      "WHERE maCongNhan = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,congNhan.getTenCongNhan());

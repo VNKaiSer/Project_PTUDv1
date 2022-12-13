@@ -35,7 +35,13 @@ public class BUS_NhanVien {
     public void deleteNhanVien(String maNV) throws SQLException {
         dal_nhanVien.deleteNhanVien(maNV);
     }
-
+    public void updateNhanVien(DTO_NhanVien nv){
+        try {
+            dal_nhanVien.updateNhanVien(nv);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

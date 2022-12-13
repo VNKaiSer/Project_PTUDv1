@@ -138,7 +138,7 @@ public class DAL_SanPham {
     public void updateSanPham(DTO_SanPham sanPham) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql ="UPDATE SanPham " +
-                "SET tenSanPham = ?, soCongDoan = ?, soLuong = ?, chatLieu = ? " +
+                "SET tenSanPham = ?, soCongDoan = ?, soLuong = ?, chatLieu = ?, hinhAnh = ? " +
                 "WHERE maSanPham = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,sanPham.getTenSanPham());
@@ -146,6 +146,7 @@ public class DAL_SanPham {
         ppsm.setInt(3, sanPham.getSoLuongYeuCau());
         ppsm.setString(4, sanPham.getChatLieu());
         ppsm.setString(5,sanPham.getMaSanPham());
+        ppsm.setBytes(6,sanPham.getHinhAnh());
 
         ppsm.execute();
         // đóng kết nối

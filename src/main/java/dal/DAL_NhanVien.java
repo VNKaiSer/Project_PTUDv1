@@ -103,7 +103,7 @@ public class DAL_NhanVien {
     public void updateNhanVien(DTO_NhanVien nhanVien) throws SQLException {
         ConnectDB.getInstance().connect();
         String sql = "UPDATE NhanVien " +
-                "SET tenNhanVien = ?, ngayVaoLam = ?, phai = ?, [ ngaySinh ] = ?, SDT = ?, email = ?, diaChi = ?, luongCoBan = ?" +
+                "SET tenNhanVien = ?, ngayVaoLam = ?, phai = ?, ngaySinh = ?, SDT = ?, email = ?, diaChi = ?, luongCoBan = ?" +
                 "\nWHERE maNhanVien = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,nhanVien.getTenNhanVien());
@@ -116,7 +116,7 @@ public class DAL_NhanVien {
         ppsm.setString(6, nhanVien.getEmail());
         ppsm.setString(7,nhanVien.getDiaChi());
         ppsm.setDouble(8,nhanVien.getLuongCoBan());
-        ppsm.setString(11,nhanVien.getMaNhanVien());
+        ppsm.setString(9,nhanVien.getMaNhanVien());
         ppsm.execute();
         // đóng kết nối
         ConnectDB.getConnection().close();
