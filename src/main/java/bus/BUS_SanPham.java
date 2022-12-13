@@ -15,8 +15,14 @@ public class BUS_SanPham {
         dal_sanPham = new DAL_SanPham();
     }
 
-    public ArrayList<DTO_SanPham> getAllSanPham() throws SQLException, ParseException {
-        return dal_sanPham.getDSSanPham();
+    public ArrayList<DTO_SanPham> getAllSanPham( ){
+        try {
+            return dal_sanPham.getDSSanPham();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
     public ArrayList<DTO_SanPham> getSPTheoMaSP(String maSP) {
         try {
@@ -30,5 +36,12 @@ public class BUS_SanPham {
     }
     public void deleteSanPham(String maSP) throws SQLException {
         dal_sanPham.deleteSanPham(maSP);
+    }
+    public void updateSP(DTO_SanPham sp){
+        try {
+            dal_sanPham.updateSanPham(sp);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

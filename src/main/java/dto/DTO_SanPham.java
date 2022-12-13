@@ -38,6 +38,16 @@ public class DTO_SanPham {
 		this.soLuongYeuCau = soLuongYeuCau;
 		this.chatLieu = chatLieu;
 	}
+	public DTO_SanPham(String maSanPham, String tenSanPham, int soCongDoan,
+					   int soLuongYeuCau,String chatLieu,byte[] hinhAnh) {
+		super();
+		this.maSanPham = maSanPham;
+		this.tenSanPham = tenSanPham;
+		this.soCongDoan = soCongDoan;
+		this.soLuongYeuCau = soLuongYeuCau;
+		this.chatLieu = chatLieu;
+		this.hinhAnh = hinhAnh;
+	}
 
 	public DTO_SanPham(String maSanPham, String tenSanPham, int soCongDoan,
 			int soLuongYeuCau, ArrayList<DTO_CongDoan> dsCongDoan) {

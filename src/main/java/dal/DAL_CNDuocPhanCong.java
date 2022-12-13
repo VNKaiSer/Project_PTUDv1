@@ -110,7 +110,7 @@ public class DAL_CNDuocPhanCong {
         ppsm.setString(2,cnDuocPhanCong.getCongDoan().getMaCongDoan());
         ppsm.setString(3, cnDuocPhanCong.getSanPham().getMaSanPham());
         ppsm.setInt(4,cnDuocPhanCong.getCa());
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(cnDuocPhanCong.getNgayPhanCong());
         ppsm.setInt(5,cnDuocPhanCong.getSoLuongPhanCong());
         ppsm.setString(6,strDate);
@@ -173,7 +173,7 @@ public class DAL_CNDuocPhanCong {
         ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select * from CNDuocPhanCong where maCongDoan = ? and maSanPham = ?";
+            String sql = "select * from CNDuocPhanCong where maCongDoan = ? and maSanPham = ? ";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, maCD);
             state.setString(2, maSP);

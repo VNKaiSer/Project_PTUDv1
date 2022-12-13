@@ -387,7 +387,7 @@ public class CTRL_PhanCong implements Initializable {
         Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(ngayPhanCong);
         ArrayList<DTO_CongNhan> ds = bus_congNhan.getDSCongNhanChuaDuocPhanCong(maSanPham,maCongDoan,ca,strDate);
         listCongNhan=FXCollections.observableArrayList(ds);
@@ -480,7 +480,7 @@ public class CTRL_PhanCong implements Initializable {
         Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = formatter.format(ngayPhanCong);
         ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCa(maSanPham,maCongDoan,ca,strDate);
         listCongNhanDuocPhanCong=FXCollections.observableArrayList(ds);

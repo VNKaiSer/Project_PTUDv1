@@ -155,30 +155,23 @@ public class CTRL_ChiaCongDoan implements Initializable {
      * Phương thức load dữ liệu lên bảng sản phẩm
      */
     private void loadSanPham() {
-        try {
+        ArrayList<DTO_SanPham> listSanPham = bus_sanPham.getAllSanPham();
+        maSanPhamCol.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
+        tenSanPhamCol.setCellValueFactory(new PropertyValueFactory<>("tenSanPham"));
+        soCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("soCongDoan"));
+        soLuongCol.setCellValueFactory(new PropertyValueFactory<>("soLuongYeuCau"));
 
-            ArrayList<DTO_SanPham> listSanPham = bus_sanPham.getAllSanPham();
-            maSanPhamCol.setCellValueFactory(new PropertyValueFactory<>("maSanPham"));
-            tenSanPhamCol.setCellValueFactory(new PropertyValueFactory<>("tenSanPham"));
-            soCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("soCongDoan"));
-            soLuongCol.setCellValueFactory(new PropertyValueFactory<>("soLuongYeuCau"));
-
-            modelSanPham = FXCollections.observableArrayList();
+        modelSanPham = FXCollections.observableArrayList();
 
 
-            for (DTO_SanPham it :
-                    listSanPham) {
-                if (!it.isTrangThai())
-                    modelSanPham.add(it);
-            }
-
-            tblSanPham.setItems(modelSanPham);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        for (DTO_SanPham it :
+                listSanPham) {
+            if (!it.isTrangThai())
+                modelSanPham.add(it);
         }
+
+        tblSanPham.setItems(modelSanPham);
+
     }
 
     /***

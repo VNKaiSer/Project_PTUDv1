@@ -1,39 +1,30 @@
 package gui;
 
-import bus.BUS_CongNhan;
 import bus.BUS_SanPham;
 import db.ConnectDB;
-import dto.DTO_CongNhan;
 import dto.DTO_SanPham;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelFormat;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
@@ -110,6 +101,7 @@ public class CTL_UI_SanPham implements Initializable {
     private BUS_SanPham bus_sanPham = new BUS_SanPham();
     @FXML
     private ImageView imgv_anhSp;
+    private DTO_SanPham sanPhamClick;
     @FXML
     private Button btnAnh;
 
@@ -117,6 +109,7 @@ public class CTL_UI_SanPham implements Initializable {
     private Label lblAnh;
 
     private File file;
+    private ArrayList listSP= new ArrayList();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -225,6 +218,18 @@ public class CTL_UI_SanPham implements Initializable {
     }
 
     public void handleEvent() {
+        tbl_SanPham.addEventHandler(MouseEvent.MOUSE_CLICKED,(e)->{
+            listSP = bus_sanPham.getAllSanPham();
+            sanPhamClick = tbl_SanPham.getSelectionModel().getSelectedItem();
+            txt_maSP.setText(sanPhamClick.getMaSanPham());
+            txt_tenSP.setText(sanPhamClick.getTenSanPham());
+            txt_soLuongSPYeuCau.setText(sanPhamClick.getSoLuongYeuCau() + "");
+            txt_soCongDoan.setText(sanPhamClick.getSoCongDoan()+"");
+            Cbo_ChatLieu.setValue(sanPhamClick.getChatLieu());
+            InputStream is = new ByteArrayInputStream(sanPhamClick.getHinhAnh());
+            Image image = new Image(is);
+            imgv_anhSp.setImage(image);
+        });
         btn_themMoi.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -275,6 +280,16 @@ public class CTL_UI_SanPham implements Initializable {
 
             }
         });
+        /*btn_Sua.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    SuaSP();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });*/
         btn_DatLai.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -480,6 +495,24 @@ public class CTL_UI_SanPham implements Initializable {
             loadTableSP();
         }
     }
+    /*private void SuaSP() throws IOException {
+        if(btn_Sua.getText().equalsIgnoreCase("Sửa")){
+            btn_Sua.setText("Lưu");
+            ShowInfo();
+        }
+        else {
+            String maSP = txt_maSP.getText();
+            String tenSP = txt_tenSP.getText();
+            int sl = Integer.parseInt(txt_soLuongSPYeuCau.getText());
+            String chatLieu = Cbo_ChatLieu.getSelectionModel().getSelectedItem();
+            int soCD = Integer.parseInt(txt_soCongDoan.getText());
+            DTO_SanPham sp = new DTO_SanPham(maSP,tenSP,soCD,sl,chatLieu);
+            sp.setHinhAnh(imagenToByte(file));
+            bus_sanPham.updateSP(sp);
+            HideInfo();
+            btn_Sua.setText("Sửa");
+        }
+    }*/
     private void loadTableSP(){
 
         try {
@@ -556,17 +589,12 @@ public class CTL_UI_SanPham implements Initializable {
             imgv_anhSp.setImage(image);
         }
     }
+
     private byte[] imagenToByte(File f) throws IOException {
         Image img = imgv_anhSp.getImage();
         BufferedImage image = ImageIO.read(f);
-
-        // create the object of ByteArrayOutputStream class
         ByteArrayOutputStream outStreamObj = new ByteArrayOutputStream();
-
-        // write the image into the object of ByteArrayOutputStream class
         ImageIO.write(image, "jpg", outStreamObj);
-
-        // create the byte array from image
         byte [] byteArray = outStreamObj.toByteArray();
 
 
