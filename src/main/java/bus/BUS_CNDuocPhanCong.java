@@ -40,9 +40,9 @@ public class BUS_CNDuocPhanCong {
             throw new RuntimeException(e);
         }
     }
-    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoCongDOanvaSanPham(String maCD,String maSP) {
+    public ArrayList<DTO_CNDuocPhanCong> getDSCNDuocPhanCongTheoCongDOanvaSanPham(String maCD,String maSP,String ngayPC) {
         try {
-            return dal_cnDuocPhanCong.getCNTheoCongDoanvaSanPham(maCD,maSP);
+            return dal_cnDuocPhanCong.getCNTheoCongDoanvaSanPham(maCD,maSP,ngayPC);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

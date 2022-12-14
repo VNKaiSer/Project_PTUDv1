@@ -14,8 +14,14 @@ public class BUS_CongNhan {
         dal_congNhan = new DAL_CongNhan();
     }
 
-    public ArrayList<DTO_CongNhan> getDSCongNhan() throws SQLException, ParseException {
-        return dal_congNhan.getDSCongNhan();
+    public ArrayList<DTO_CongNhan> getDSCongNhan(){
+        try {
+            return dal_congNhan.getDSCongNhan();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public  void insertCongNhan(DTO_CongNhan cn) throws SQLException {

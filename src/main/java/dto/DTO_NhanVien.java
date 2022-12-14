@@ -111,6 +111,9 @@ public class DTO_NhanVien {
     public  SimpleStringProperty ngaySinhProperty(){
         return new SimpleStringProperty(new SimpleDateFormat("dd-MM-yyyy").format(ngaySinh));
     }
+    public  SimpleStringProperty luongCoBanProperty(){
+        return new SimpleStringProperty(String.format("%1$,.0fVND", luongCoBan));
+    }
     @Override
     public int hashCode() {
         final int prime = 31;

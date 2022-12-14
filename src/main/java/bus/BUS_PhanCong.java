@@ -40,9 +40,9 @@ public class BUS_PhanCong {
     public  void deleteBPC(String ngayPhanCong) throws SQLException {
         dal_bangPhanCong.deleteBangPhanCong(ngayPhanCong);
     }
-    public int checkPhanCong(String ma){
+    public int checkPhanCong(String ma,String ngay){
         try {
-            return dal_bangPhanCong.checkPhanCong(ma);
+            return dal_bangPhanCong.checkPhanCong(ma,ngay);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

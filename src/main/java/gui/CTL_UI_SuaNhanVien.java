@@ -402,7 +402,7 @@ public class CTL_UI_SuaNhanVien implements Initializable {
 
         cboGioiTinh.setValue(cn.isPhai() ? "Nam" : "Nữ");
         cboGioiTinh.setStyle("-fx-border-color: GREEN;");
-        txt_luongCoBan.setText(cn.getLuongCoBan()+"");
+        txt_luongCoBan.setText(String.format("%1$.0f", cn.getLuongCoBan()));
         txt_luongCoBan.setStyle("-fx-border-color: GREEN;");
 
         cboTinh.setValue(diaChi[3]);

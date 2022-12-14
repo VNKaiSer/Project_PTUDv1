@@ -362,7 +362,12 @@ public class CTRL_PhanCong implements Initializable {
         cbo_sanPham.getItems().clear();
         ArrayList<DTO_SanPham> ds = bus_sanPham.getAllSanPham();
         for (DTO_SanPham sp : ds){
-            cbo_sanPham.getItems().addAll(sp.getMaSanPham()+"-"+sp.getTenSanPham());
+            if(bus_chiTietCongDoan.getDSCongDoanTheoSP(sp.getMaSanPham()).isEmpty()||sp.isTrangThai()==true){
+                continue;
+            }
+            else {
+                cbo_sanPham.getItems().addAll(sp.getMaSanPham()+"-"+sp.getTenSanPham());
+            }
         }
 
     }
@@ -424,7 +429,12 @@ public class CTRL_PhanCong implements Initializable {
             }
             else if(clickedButton.get() == ButtonType.OK){
                 soLuong = dialogNhapSoLuong.getSoLuong();
-                ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5),cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+                Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant());
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = formatter.format(ngayPhanCong);
+                ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5),cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6),strDate);
                 int SL=0;
                 for (DTO_CNDuocPhanCong cnDuocPhanCong : ds){
                     SL=SL+cnDuocPhanCong.getSoLuongPhanCong();
@@ -442,9 +452,6 @@ public class CTRL_PhanCong implements Initializable {
                     DTO_CongNhan cn = new DTO_CongNhan(selectedItems.get(i).getMaCongNhan());
                     DTO_CongDoan cd = new DTO_CongDoan(maCD);
                     DTO_SanPham sp = new DTO_SanPham(maSP);
-                    Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
-                            .atZone(ZoneId.systemDefault())
-                            .toInstant());
 
                     DTO_CNDuocPhanCong cnPhanCong = new DTO_CNDuocPhanCong(cn,cd,sp,Integer.parseInt(ca),soLuong,ngayPhanCong);
 
@@ -509,19 +516,20 @@ public class CTRL_PhanCong implements Initializable {
 
     }
     private void luuBPC(){
+        Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = formatter.format(ngayPhanCong);
         String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
-        if(bus_phanCong.checkPhanCong(maSP)==1){
+        if(bus_phanCong.checkPhanCong(maSP,strDate)==1){
             Alert wn = new Alert(Alert.AlertType.WARNING, "Cảnh báo", ButtonType.APPLY);
             wn.setContentText("Vui lòng phân công đầy đủ các công đoạn trong sản phẩm có mã: "+maSP);
             Optional<ButtonType> showWN = wn.showAndWait();
             return;
         }
         else {
-            Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
-                    .atZone(ZoneId.systemDefault())
-                    .toInstant());
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
-            String strDate = formatter.format(ngayPhanCong);
+
             ArrayList<DTO_CNDuocPhanCong> dsCN = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoSanPham(maSP,strDate);
             for (DTO_CNDuocPhanCong cn : dsCN){
                 DTO_CongNhan CongNhan = new DTO_CongNhan(cn.getCongNhan().getMaCongNhan());
@@ -563,7 +571,12 @@ public class CTRL_PhanCong implements Initializable {
     private int checkSoLuongPhanCong(){
         String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
         String maCD = cbo_congDoan.getSelectionModel().getSelectedItem().substring(0,5);
-        ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(maCD,maSP);
+        Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate = formatter.format(ngayPhanCong);
+        ArrayList<DTO_CNDuocPhanCong> ds = bus_cnDuocPhanCong.getDSCNDuocPhanCongTheoCongDOanvaSanPham(maCD,maSP,strDate);
         int SL=0;
         for (DTO_CNDuocPhanCong cn : ds){
             SL=SL+cn.getSoLuongPhanCong();

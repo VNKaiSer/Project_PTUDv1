@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="680.0" prefWidth="1180.0" stylesheets="@../css/button.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_UI_SanPham">
+<AnchorPane prefHeight="680.0" prefWidth="1180.0" stylesheets="@../css/button.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.CTL_UI_SanPham">
    <children>
       <BorderPane layoutX="408.0" layoutY="170.0" prefHeight="497.0" prefWidth="757.0">
          <center>
@@ -92,7 +92,7 @@
             <ComboBox fx:id="Cbo_ChatLieu" layoutX="137.0" layoutY="523.0" prefHeight="33.0" prefWidth="250.0" promptText="Chất liệu" />
             <TextField fx:id="txt_soCongDoan" alignment="CENTER" layoutX="139.0" layoutY="433.0" prefHeight="34.0" prefWidth="250.0" style="-fx-border-color: #d7d7d7;" />
             <TextField fx:id="txt_soLuongSPYeuCau" layoutX="229.0" layoutY="477.0" prefHeight="34.0" prefWidth="158.0" style="-fx-border-color: #d7d7d7;" />
-            <Label fx:id="lblAnh" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="63.0" layoutY="24.0" prefHeight="239.0" prefWidth="277.0" style="-fx-border-color: black;" text="Ảnh" textAlignment="JUSTIFY" textOverrun="CENTER_WORD_ELLIPSIS">
+            <Label fx:id="lblAnh" alignment="TOP_CENTER" contentDisplay="TOP" layoutX="63.0" layoutY="24.0" prefHeight="239.0" prefWidth="228.0" style="-fx-border-color: black;" text="Ảnh" textAlignment="JUSTIFY" textOverrun="CENTER_WORD_ELLIPSIS">
                <font>
                   <Font size="15.0" />
                </font>
