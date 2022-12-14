@@ -102,18 +102,27 @@ public class CTL_UIThongKe implements Initializable {
                     if (index == 0) {
                         if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 0)
                             ThongKeTopNhanVienTheoNgay(date);
+                        else if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 1){
+                            ThongKeSanPhamNgay(date);
+                        }
                         thongKeTheoNgayTuan();
                         Hide();
                         thongKeDiLam(0);
                     } else if (index == 1) {
                         if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 0)
                             ThongKeTopNhanVienTheoTuan(date);
+                        else if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 1){
+                            ThongKeSanPhamTheoTuan(date);
+                        }
                         thongKeTheoNgayTuan();
                         Hide();
                         thongKeDiLam(1);
                     } else if (index == 2) {
                         if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 0)
                             ThongKeTopNhanVienTheoThang(date);
+                        else if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 1){
+                            ThongKeSanPhamTheoThang(date);
+                        }
                         Hide();
                         thongKeDiLam(2);
                     } else if (index == 3) {
@@ -142,8 +151,8 @@ public class CTL_UIThongKe implements Initializable {
 
 
                 int c = dicThongKe.get(1) == null ? 0 : dicThongKe.get(1);
-                int v = dicThongKe.get(0) == null ? 0 : dicThongKe.get(2);
-                int p = dicThongKe.get(2) == null ? 0 : dicThongKe.get(3);
+                int v = dicThongKe.get(0) == null ? 0 : dicThongKe.get(0);
+                int p = dicThongKe.get(2) == null ? 0 : dicThongKe.get(2);
 
                 lblCongNhanDiLam.setText(c + "");
                 lblCongNhanPhep.setText(p + "");
@@ -153,6 +162,12 @@ public class CTL_UIThongKe implements Initializable {
                 if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 0){
                     try {
                         ThongKeTopNhanVienTheoKhoang(formatter.format(dateDau.getValue()), formatter.format(dateCuoi.getValue()));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else if (cboLoaiTK.getSelectionModel().getSelectedIndex() == 1) {
+                    try {
+                        ThongKeSanPhamTheoKhoang(formatter.format(dateDau.getValue()), formatter.format(dateCuoi.getValue()));
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -217,28 +232,56 @@ public class CTL_UIThongKe implements Initializable {
 
     private void ThongKeTopNhanVienTheoNgay(String date) throws SQLException {
         HashMap<String, Integer> data = new BUS_ThongKe().getTopCongNhan(date);
-        chart.getChildren().add(createLineChart(data));
+        chart.getChildren().clear();
+        chart.getChildren().add(createBarChart(data));
     }
 
     private void ThongKeTopNhanVienTheoTuan(String date) throws SQLException {
         HashMap<String, Integer> data = new BUS_ThongKe().getTopCongNhanTuan(date);
-        chart.getChildren().add(createLineChart(data));
+        chart.getChildren().clear();
+        chart.getChildren().add(createBarChart(data));
     }
 
     private void ThongKeTopNhanVienTheoThang(String date) throws SQLException {
         HashMap<String, Integer> data = new BUS_ThongKe().getTopCongNhanThang(date);
-        chart.getChildren().add(createLineChart(data));
+        chart.getChildren().clear();
+        chart.getChildren().add(createBarChart(data));
     }
 
     private void ThongKeTopNhanVienTheoKhoang(String date, String date2) throws SQLException {
         HashMap<String, Integer> data = new BUS_ThongKe().getTopCongNhanKhoang(date,date2);
-        chart.getChildren().add(createLineChart(data));
+        chart.getChildren().clear();
+        chart.getChildren().add(createBarChart(data));
+    }
+
+    private void ThongKeSanPhamNgay(String date) throws SQLException {
+        HashMap<Integer, Integer> data = new BUS_ThongKe().getSanPhamTheoNgay(date);
+        chart.getChildren().clear();
+        chart.getChildren().add(createPieChart(data));
+    }
+
+    private void ThongKeSanPhamTheoTuan(String date) throws SQLException {
+        HashMap<Integer, Integer> data = new BUS_ThongKe().getSanPhamTheoTuan(date);
+        chart.getChildren().clear();
+        chart.getChildren().add(createPieChart(data));
+    }
+
+    private void ThongKeSanPhamTheoThang(String date) throws SQLException {
+        HashMap<Integer, Integer> data = new BUS_ThongKe().getSanPhamTheoThang(date);
+        chart.getChildren().clear();
+        chart.getChildren().add(createPieChart(data));
+    }
+
+    private void ThongKeSanPhamTheoKhoang(String date, String date2) throws SQLException {
+        HashMap<Integer, Integer> data = new BUS_ThongKe().getSanPhamKhoang(date,date2);
+        chart.getChildren().clear();
+        chart.getChildren().add(createPieChart(data));
     }
 
 
 
 
-    public BarChart createLineChart(HashMap<String, Integer> hashMap) {
+    public BarChart createBarChart(HashMap<String, Integer> hashMap) {
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Tên nhân viên");
 
@@ -258,42 +301,18 @@ public class CTL_UIThongKe implements Initializable {
         return chart;
     }
 
-    public BarChart createBarChart() {
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Region");
 
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Area (km²)");
-
-        XYChart.Series dataSeries = new XYChart.Series();
-        dataSeries.setName("Region");
-        dataSeries.getData().add(new XYChart.Data("Africa", 30370000));
-        dataSeries.getData().add(new XYChart.Data("Antarctica", 14000000));
-        dataSeries.getData().add(new XYChart.Data("Asia", 44579000));
-        dataSeries.getData().add(new XYChart.Data("Europe", 10180000));
-        dataSeries.getData().add(new XYChart.Data("North America", 24709000));
-        dataSeries.getData().add(new XYChart.Data("Australia", 8600000));
-        dataSeries.getData().add(new XYChart.Data("South America", 17840000));
-
-        BarChart chart = new BarChart(xAxis, yAxis);
-        chart.getData().add(dataSeries);
-        chart.setTitle("The chart summarizes the area of each continent.");
-        return chart;
-    }
-
-    public PieChart createChart() {
+    public PieChart createPieChart(HashMap<Integer, Integer> hashMap) {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        data.addAll(new PieChart.Data("Africa", 30370000),
-                new PieChart.Data("Antarctica", 14000000),
-                new PieChart.Data("Asia", 44579000),
-                new PieChart.Data("Europe", 10180000),
-                new PieChart.Data("North America", 24709000),
-                new PieChart.Data("Australia", 8600000),
-                new PieChart.Data("South America", 17840000));
+
+        data.addAll(new PieChart.Data("Sáng", hashMap.get(1)),
+                new PieChart.Data("Chiều", hashMap.get(2)),
+                new PieChart.Data("Tối", hashMap.get(3))
+        );
 
         PieChart chart = new PieChart();
         chart.setData(data);
-        chart.setTitle("The chart summarizes the area of each continent.");
+        chart.setTitle("BIỂU ĐỒ SẢN PHẨM THEO CA");
         chart.setClockwise(true);
         chart.setLabelLineLength(30);
         chart.setLabelsVisible(true);
@@ -304,28 +323,40 @@ public class CTL_UIThongKe implements Initializable {
         return chart;
     }
 
-    public PieChart createPieChart() {
-        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        data.addAll(new PieChart.Data("Africa", 30370000),
-                new PieChart.Data("Antarctica", 14000000),
-                new PieChart.Data("Asia", 44579000),
-                new PieChart.Data("Europe", 10180000),
-                new PieChart.Data("North America", 24709000),
-                new PieChart.Data("Australia", 8600000),
-                new PieChart.Data("South America", 17840000));
+//    public BarChart doubleBarChar() {
+//        CategoryAxis xAxis = new CategoryAxis();
+//        xAxis.setLabel("Region");
+//
+//        NumberAxis yAxis = new NumberAxis();
+//        yAxis.setLabel("Area (km²)");
+//
+//        XYChart.Series dataSeries1 = new XYChart.Series();
+//        dataSeries1.setName("2010");
+//        dataSeries1.getData().add(new XYChart.Data("Africa", 20123000));
+//        dataSeries1.getData().add(new XYChart.Data("Antarctica", 10230000));
+//        dataSeries1.getData().add(new XYChart.Data("Asia", 32170000));
+//        dataSeries1.getData().add(new XYChart.Data("Europe", 1000010));
+//        dataSeries1.getData().add(new XYChart.Data("North America", 14702000));
+//        dataSeries1.getData().add(new XYChart.Data("Australia", 8000100));
+//        dataSeries1.getData().add(new XYChart.Data("South America", 12840000));
+//
+//        XYChart.Series dataSeries2 = new XYChart.Series();
+//        dataSeries2.setName("2020");
+//        dataSeries2.getData().add(new XYChart.Data("Africa", 30370000));
+//        dataSeries2.getData().add(new XYChart.Data("Antarctica", 14000000));
+//        dataSeries2.getData().add(new XYChart.Data("Asia", 44579000));
+//        dataSeries2.getData().add(new XYChart.Data("Europe", 10180000));
+//        dataSeries2.getData().add(new XYChart.Data("North America", 24709000));
+//        dataSeries2.getData().add(new XYChart.Data("Australia", 8600000));
+//        dataSeries2.getData().add(new XYChart.Data("South America", 17840000));
+//
+//        BarChart chart = new BarChart(xAxis, yAxis);
+//        chart.getData().addAll(dataSeries1, dataSeries2);
+//        chart.setTitle("The chart summarizes the area of each continent.");
+//        return chart;
+//    }
 
-        PieChart chart = new PieChart();
-        chart.setData(data);
-        chart.setTitle("The chart summarizes the area of each continent.");
-        chart.setClockwise(true);
-        chart.setLabelLineLength(30);
-        chart.setLabelsVisible(true);
-        chart.setLegendVisible(true);
-        chart.setStartAngle(50);
-        chart.setLegendSide(Side.RIGHT);
 
-        return chart;
-    }
 
 
 }

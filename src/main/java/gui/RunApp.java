@@ -1,5 +1,6 @@
 package gui;
 
+import gui.splashscreen.SplashScreen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,16 +15,29 @@ public class RunApp extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
-        FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("UI_ThongKe.fxml"));
+    public void start(Stage stage) throws InterruptedException {
+        FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("UI_DangNhap.fxml"));
         Scene scene = null;
-        try {
+        CTRL_DangNhap ctrlDangNhap;
+        do {
+            try {
             scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            stage.setScene(scene);
+            stage.show();
+            ctrlDangNhap = fxmlLoader.getController();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }while (ctrlDangNhap.getTk() != -1 && ctrlDangNhap.getTk() != -1);
 
-        stage.setScene(scene);
-        stage.show();
+        StartApp t1 = new StartApp(stage);
+        SplashScreen r = new SplashScreen(null, true);
+        Thread t2 = new Thread(r);
+        t1.start();
+        t1.join();
+        t2.start();
+
+
+
     }
 }

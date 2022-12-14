@@ -42,4 +42,21 @@ public class BUS_ThongKe {
     public HashMap<String, Integer> getTopCongNhanKhoang(String date, String date2) throws SQLException {
         return dal_thongKe.getTopCongNhanTheoKhoang(date, date2);
     }
+
+    public HashMap<Integer, Integer> getSanPhamTheoNgay(String date) throws SQLException {
+        return  dal_thongKe.getSanPhamTheoNgay(date);
+    }
+
+
+    public HashMap<Integer, Integer> getSanPhamTheoTuan(String date) throws SQLException {
+        return dal_thongKe.getSanPhamTheoTuan(date);
+    }
+
+    public HashMap<Integer, Integer> getSanPhamTheoThang(String date) throws SQLException {
+        return dal_thongKe.getSanTheoThang(date);
+    }
+
+    public HashMap<Integer, Integer> getSanPhamKhoang(String date, String date2) throws SQLException {
+        return dal_thongKe.getSanPhamTheoKhoang(date, date2);
+    }
 }

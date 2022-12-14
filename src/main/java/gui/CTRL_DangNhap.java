@@ -99,7 +99,6 @@ public class CTRL_DangNhap implements Initializable {
                             if (tk == 1) ctrlMainMenu.isQuanLy();
                             else if (tk == 2) ctrlMainMenu.isNhanVien();
                             new main().start(new Stage());
-                            //stage.show();
                         } catch (IOException e) {
                             Logger logger = Logger.getLogger(getClass().getName());
                             logger.log(Level.SEVERE, "Failed to create new Window.", e);

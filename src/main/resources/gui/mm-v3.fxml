@@ -68,7 +68,7 @@
                         </Pane>
                         <TextField focusTraversable="false" prefHeight="35.0" prefWidth="303.0" promptText="Tìm kiếm..." />
                         <ImageView fitHeight="39.0" fitWidth="583.0" pickOnBounds="true" preserveRatio="true" />
-                        <MenuButton fx:id="lblName" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" prefHeight="52.0" prefWidth="239.0" scaleShape="false" style="-fx-background-color: #0C4EA2;" text="Châu Bích Tuyền" textFill="WHITE">
+                        <MenuButton fx:id="lblName" cacheShape="false" centerShape="false" focusTraversable="false" mnemonicParsing="false" prefHeight="52.0" prefWidth="239.0" scaleShape="false" style="-fx-background-color: #0C4EA2;" text="ADMIN" textFill="WHITE">
                           <items>
                             <MenuItem fx:id="mni_doiMatKhau" mnemonicParsing="false" text="ĐỔI MẬT KHẨU" />
                             <MenuItem fx:id="mni_DangXuat" mnemonicParsing="false" text="ĐĂNG XUẤT" />

@@ -302,11 +302,19 @@ public class CTRL_MainMenu implements Initializable {
     }
 
     public void isQuanLy() {
-        mnbt_nhanVien.setVisible(false);
+        lblQuanLyCN.setDisable(true);
+        lblChamCongCN.setDisable(true);
+        lblChamCongNV.setDisable(true);
+        lblChamCongNV.setDisable(true);
+        lblTinhLuong.setDisable(true);
+
     }
 
     public void isNhanVien() {
-        mnbt_QuanLy.setVisible(false);
+        lblQuanLySanPham.setDisable(true);
+        lblChiaCongDoan.setDisable(true);
+        lblPhanCong.setDisable(true);
+        //lblThongKe.setDisable(true);
     }
 
     public void setMaNV(String maNV) {

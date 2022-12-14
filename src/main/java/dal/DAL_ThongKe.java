@@ -160,8 +160,8 @@ public class DAL_ThongKe {
         return dic;
     }
 
-    public HashMap<String, Integer> getSanPhamTheoNgay(String date) throws SQLException {
-        HashMap<String, Integer> dic = new HashMap<>();
+    public HashMap<Integer, Integer> getSanPhamTheoNgay(String date) throws SQLException {
+        HashMap<Integer, Integer> dic = new HashMap<>();
         String sql = "SELECT   ca, sum(soSanPhamLamDuoc)\n" +
                 "FROM     BangChamCongCN inner join BangPhanCong on BangChamCongCN.maCongNhan = BangPhanCong.maCongNhan\n" +
                 "WHERE    ngayChamCong = ?\n" +
@@ -171,13 +171,13 @@ public class DAL_ThongKe {
         ppsm.setString(1, date);
         ResultSet rs = ppsm.executeQuery();
         while (rs.next()){
-            dic.put(rs.getString(1),rs.getInt(2));
+            dic.put(rs.getInt(1),rs.getInt(2));
         }
         return dic;
     }
 
-    public HashMap<String, Integer> getSanPhamTheoTuan(String date) throws SQLException {
-        HashMap<String, Integer> dic = new HashMap<>();
+    public HashMap<Integer, Integer> getSanPhamTheoTuan(String date) throws SQLException {
+        HashMap<Integer, Integer> dic = new HashMap<>();
         String sql = "DECLARE @tuan int\n" +
                 "SET @tuan = DATEPART(WEEK, ?)\n" +
                 "SELECT   ca, sum(soSanPhamLamDuoc)\n" +
@@ -190,13 +190,13 @@ public class DAL_ThongKe {
         ppsm.setString(1, date);
         ResultSet rs = ppsm.executeQuery();
         while (rs.next()){
-            dic.put(rs.getString(1),rs.getInt(2));
+            dic.put(rs.getInt(1),rs.getInt(2));
         }
         return dic;
     }
 
-    public HashMap<String, Integer> getSanTheoThang(String date) throws SQLException {
-        HashMap<String, Integer> dic = new HashMap<>();
+    public HashMap<Integer, Integer> getSanTheoThang(String date) throws SQLException {
+        HashMap<Integer, Integer> dic = new HashMap<>();
         String sql = "DECLARE @tuan int\n" +
                 "SET @tuan = DATEPART(MONTH, ?)\n" +
                 "SELECT   ca, sum(soSanPhamLamDuoc)\n" +
@@ -209,13 +209,13 @@ public class DAL_ThongKe {
         ppsm.setString(1, date);
         ResultSet rs = ppsm.executeQuery();
         while (rs.next()){
-            dic.put(rs.getString(1),rs.getInt(2));
+            dic.put(rs.getInt(1),rs.getInt(2));
         }
         return dic;
     }
 
-    public HashMap<String, Integer> getSanPhamTheoKhoang(String date, String date2) throws SQLException {
-        HashMap<String, Integer> dic = new HashMap<>();
+    public HashMap<Integer, Integer> getSanPhamTheoKhoang(String date, String date2) throws SQLException {
+        HashMap<Integer, Integer> dic = new HashMap<>();
         String sql = "SELECT TOP(5)  CongNhan.tenCongNhan, sum(BangChamCongCN.soSanPhamLamDuoc)\n" +
                 "FROM     BangChamCongCN inner join BangPhanCong on BangChamCongCN.maCongNhan = BangPhanCong.maCongNhan inner join CongNhan on BangPhanCong.maCongNhan = CongNhan.maCongNhan\n" +
                 "WHERE    ngayChamCong between ? and ?\n" +
@@ -228,7 +228,7 @@ public class DAL_ThongKe {
         ppsm.setString(2, date2);
         ResultSet rs = ppsm.executeQuery();
         while (rs.next()){
-            dic.put(rs.getString(1),rs.getInt(2));
+            dic.put(rs.getInt(1),rs.getInt(2));
         }
         return dic;
     }
