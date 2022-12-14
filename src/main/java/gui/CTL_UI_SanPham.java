@@ -96,7 +96,7 @@ public class CTL_UI_SanPham implements Initializable {
     @FXML
     private TextField txt_tenSP;
     private boolean checkFrom = false;
-    ObservableList<String> listChatLieu = FXCollections.observableArrayList("Nỉ", "Kaki","Cotton","Kate","Da","Jean","Demin","PE(Nylon)","Chiffon","Vải Lanh");
+    ObservableList<String> listChatLieu = FXCollections.observableArrayList("Nỉ", "Kaki","Cotton","Kate","Da","Jean","Demin","PE(Nylon)","Chiffon","Vải Lanh","Khác");
     private ObservableList<DTO_SanPham> listSanPham;
     private BUS_SanPham bus_sanPham = new BUS_SanPham();
     @FXML
@@ -114,7 +114,6 @@ public class CTL_UI_SanPham implements Initializable {
     private boolean checkSua = true;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        checkInfo();
         btnAnh.setDisable(true);
         try {
             Cbo_ChatLieu.setItems(listChatLieu);
@@ -125,7 +124,7 @@ public class CTL_UI_SanPham implements Initializable {
                     txt_maSP.setStyle("-fx-border-color: GREEN;");
                     checkFrom=true;
                     if (txt_maSP.getText().equals("")){
-                        txt_maSP.setStyle("-fx-border-color: RED;");
+                        txt_maSP.setStyle("-fx-border-color: GREEN;");
                         checkFrom=false;
                     }
                 }
@@ -137,7 +136,7 @@ public class CTL_UI_SanPham implements Initializable {
                     txt_tenSP.setStyle("-fx-border-color: GREEN;");
                     checkFrom=true;
                     if (txt_tenSP.getText().equals("")){
-                        txt_tenSP.setStyle("-fx-border-color: RED;");
+                        txt_tenSP.setStyle("-fx-border-color: GREEN;");
                         checkFrom=false;
                     }
                 }
@@ -149,7 +148,7 @@ public class CTL_UI_SanPham implements Initializable {
                     txt_soCongDoan.setStyle("-fx-border-color: GREEN;");
                     checkFrom=true;
                     if (txt_soCongDoan.getText().equals("")){
-                        txt_soCongDoan.setStyle("-fx-border-color: RED;");
+                        txt_soCongDoan.setStyle("-fx-border-color: GREEN;");
                         checkFrom=false;
                     }
                 }
@@ -161,7 +160,7 @@ public class CTL_UI_SanPham implements Initializable {
                     txt_soLuongSPYeuCau.setStyle("-fx-border-color: GREEN;");
                     checkFrom=true;
                     if (txt_soLuongSPYeuCau.getText().equals("")){
-                        txt_soLuongSPYeuCau.setStyle("-fx-border-color: RED;");
+                        txt_soLuongSPYeuCau.setStyle("-fx-border-color: GREEN;");
                         checkFrom=false;
                     }
                 }
@@ -173,7 +172,7 @@ public class CTL_UI_SanPham implements Initializable {
                     Cbo_ChatLieu.setStyle("-fx-border-color: GREEN;");
                     checkFrom=true;
                     if (Cbo_ChatLieu.getValue() == null){
-                        Cbo_ChatLieu.setStyle("-fx-border-color: RED;");
+                        Cbo_ChatLieu.setStyle("-fx-border-color: GREEN;");
                         checkFrom=false;
                     }
                 }
@@ -240,23 +239,29 @@ public class CTL_UI_SanPham implements Initializable {
             @Override
             public void handle(ActionEvent actionEvent) {
                 btnAnh.setDisable(false);
+                imgv_anhSp.setImage(null);
                 if(btn_themMoi.getText().equalsIgnoreCase("Thêm")){
                     btn_themMoi.setText("Lưu");
                     btn_Xoa.setText("Hủy");
                     btn_Sua.setDisable(true);
-                    Clear();
-                    txt_maSP.setText(taoMaSP());
+                    try {
+                        txt_maSP.setText(taoMaSP());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     ShowInfo();
+
                 } else if (btn_themMoi.getText().equalsIgnoreCase("Lưu")) {
-                    checkInfo();
+
                     if(Cbo_ChatLieu.getValue() == null){
                         checkFrom = false;
                         Cbo_ChatLieu.setStyle("-fx-border-color: RED;");
                     }
-                    checkHinhAnh();
                     if (!checkFrom) {
                         Alert wn = new Alert(Alert.AlertType.WARNING, "Cảnh báo", ButtonType.APPLY);
-                        wn.setContentText("Vui lòng chỉnh sửa thông tin các trường bị đánh dấu hoặc thêm hình ảnh cho sản phẩm");
+                        wn.setContentText("Vui lòng chỉnh sửa thông tin các trường bị đánh dấu");
                         Optional<ButtonType> showWN = wn.showAndWait();
                         return;
                     }
@@ -279,7 +284,6 @@ public class CTL_UI_SanPham implements Initializable {
                     btn_themMoi.setDisable(false);
                     tbl_SanPham.setDisable(false);
                     HideInfo();
-                    btnAnh.setDisable(true);
                 } else if (btn_Xoa.getText().equalsIgnoreCase("Xóa")) {
                     xoaSP();
                 }
@@ -468,14 +472,12 @@ public class CTL_UI_SanPham implements Initializable {
             String soCongDoan = txt_soCongDoan.getText();
             String soLuongSPYeuCau = txt_soLuongSPYeuCau.getText();
             String chatLieu = Cbo_ChatLieu.getValue().toString();
-            String maSP =  txt_maSP.getText();
+            String maSP =  taoMaSP();
             DTO_SanPham sp = new DTO_SanPham(maSP,tenSP,Integer.parseInt(soCongDoan),Integer.parseInt(soLuongSPYeuCau),chatLieu);
             sp.setHinhAnh(imagenToByte(file));
             bus_sanPham.insertSanPham(sp);
             loadTableSP();
             Clear();
-            txt_maSP.setText(taoMaSP());
-            checkInfo();
 
             //tbl_SanPham.getSelectionModel().selectLast();
         } catch (Exception e) {
@@ -530,7 +532,7 @@ public class CTL_UI_SanPham implements Initializable {
             String chatLieu = Cbo_ChatLieu.getSelectionModel().getSelectedItem();
             int soCD = Integer.parseInt(txt_soCongDoan.getText());
             DTO_SanPham sp = new DTO_SanPham(maSP,tenSP,soCD,sl,chatLieu);
-            sp.setHinhAnh(sanPhamClick.getHinhAnh());
+            sp.setHinhAnh(imagenToByte(file));
             bus_sanPham.updateSP(sp);
             HideInfo();
             btn_Sua.setText("Sửa");
@@ -540,12 +542,11 @@ public class CTL_UI_SanPham implements Initializable {
             btnAnh.setDisable(true);
             btn_themMoi.setDisable(false);
             tbl_SanPham.setDisable(false);
-            loadTableSP();
 
         }
     }
     private void loadTableSP(){
-        tbl_SanPham.getItems().clear();
+
         try {
             ArrayList<DTO_SanPham> ds = bus_sanPham.getAllSanPham();
             listSanPham = FXCollections.observableArrayList(ds);
@@ -580,10 +581,8 @@ public class CTL_UI_SanPham implements Initializable {
         txt_tenSP.setText("");
         txt_soLuongSPYeuCau.setText("");
         Cbo_ChatLieu.getSelectionModel().clearSelection();
-        imgv_anhSp.setImage(null);
-        checkInfo();
     }
-    private String taoMaSP() {
+    private String taoMaSP() throws SQLException, ParseException {
         int count = tbl_SanPham.getItems().size();
         String ma = "";
         if(count==0){
@@ -624,7 +623,7 @@ public class CTL_UI_SanPham implements Initializable {
     }
 
     private byte[] imagenToByte(File f) throws IOException {
-//        Image img = imgv_anhSp.getImage();
+        Image img = imgv_anhSp.getImage();
         BufferedImage image = ImageIO.read(f);
         ByteArrayOutputStream outStreamObj = new ByteArrayOutputStream();
         ImageIO.write(image, "jpg", outStreamObj);
@@ -633,46 +632,6 @@ public class CTL_UI_SanPham implements Initializable {
 
         return byteArray;
     }
-    private void checkInfo(){
-        if(txt_maSP.getText().equals("")){
-            txt_maSP.setStyle("-fx-border-color: RED;");
-        }
-        else {
-            txt_maSP.setStyle("-fx-border-color: GREEN;");
-        }
-        if(txt_tenSP.getText().equals("")){
-            txt_tenSP.setStyle("-fx-border-color: RED;");
-        }
-        else {
-            txt_tenSP.setStyle("-fx-border-color: GREEN;");
-        }
-        if(txt_soCongDoan.getText().equals("")){
-            txt_soCongDoan.setStyle("-fx-border-color: RED;");
-        }
-        else {
-            txt_soCongDoan.setStyle("-fx-border-color: GREEN;");
-        }
-        if(txt_soLuongSPYeuCau.getText().equals("")){
-            txt_soLuongSPYeuCau.setStyle("-fx-border-color: RED;");
-        }
-        else {
-            txt_soLuongSPYeuCau.setStyle("-fx-border-color: GREEN;");
-        }
-        if(Cbo_ChatLieu.getValue()==null){
-            Cbo_ChatLieu.setStyle("-fx-border-color: RED;");
-        }
-        else {
-            Cbo_ChatLieu.setStyle("-fx-border-color: GREEN;");
-        }
 
-    }
-    private void checkHinhAnh(){
-        if(imgv_anhSp.getImage()==null){
-            checkFrom=false;
-        }
-        else {
-            checkFrom=true;
-        }
-    }
 
 }
