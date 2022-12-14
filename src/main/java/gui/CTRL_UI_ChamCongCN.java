@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class CTRL_UI_ChamCongCN implements Initializable {
@@ -349,7 +350,8 @@ public class CTRL_UI_ChamCongCN implements Initializable {
     }
 
     private String taoMaBCC(String maNV) {
-        String date = new SimpleDateFormat("ddMMyyyy").format(new Date());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String date = formatter.format(txtNgayChamCong.getValue());
         return "CCCN" + date + maNV;
     }
 

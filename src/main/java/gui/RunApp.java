@@ -15,7 +15,7 @@ public class RunApp extends Application {
 
     @Override
     public void start(Stage stage) {
-        FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("UI_ThongKe.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("mm-v3.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load());

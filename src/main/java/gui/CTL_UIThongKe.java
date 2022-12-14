@@ -142,8 +142,8 @@ public class CTL_UIThongKe implements Initializable {
 
 
                 int c = dicThongKe.get(1) == null ? 0 : dicThongKe.get(1);
-                int v = dicThongKe.get(0) == null ? 0 : dicThongKe.get(2);
-                int p = dicThongKe.get(2) == null ? 0 : dicThongKe.get(3);
+                int v = dicThongKe.get(0) == null ? 0 : dicThongKe.get(0);
+                int p = dicThongKe.get(2) == null ? 0 : dicThongKe.get(2);
 
                 lblCongNhanDiLam.setText(c + "");
                 lblCongNhanPhep.setText(p + "");
