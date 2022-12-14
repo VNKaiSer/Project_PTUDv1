@@ -18,7 +18,14 @@
    <children>
       <BorderPane prefHeight="750.0" prefWidth="1380.0">
          <center>
-            <BorderPane fx:id="pn_Feature" prefHeight="580.0" prefWidth="1023.0" BorderPane.alignment="CENTER" />
+            <BorderPane fx:id="pn_Feature" prefHeight="580.0" prefWidth="1023.0" BorderPane.alignment="CENTER">
+               <center>
+                  <ImageView fitHeight="669.0" fitWidth="1182.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../img/banner.png" />
+                     </image>
+                  </ImageView>
+               </center></BorderPane>
          </center>
          <top>
             <AnchorPane prefHeight="70.0" prefWidth="1200.0" style="-fx-background-color: #0C4EA2;" BorderPane.alignment="CENTER">

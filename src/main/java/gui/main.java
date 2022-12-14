@@ -1,5 +1,6 @@
 package gui;
 
+import gui.splashscreen.SplashScreen;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,11 +15,13 @@ public class main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("mm-v3.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage stage) throws IOException, InterruptedException {
+        StartApp t1 = new StartApp(stage);
+        SplashScreen r = new SplashScreen(null, true);
+        Thread t2 = new Thread(r);
+        t1.start();
+        t1.join();
+        t2.start();
     }
 
 }
