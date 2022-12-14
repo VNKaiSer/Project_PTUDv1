@@ -1,5 +1,6 @@
 package gui;
 
+import bus.BUS_PhanCong;
 import bus.BUS_SanPham;
 import db.ConnectDB;
 import dto.DTO_SanPham;
@@ -15,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelFormat;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
@@ -231,6 +233,13 @@ public class CTL_UI_SanPham implements Initializable {
             txt_soLuongSPYeuCau.setText(sanPhamClick.getSoLuongYeuCau() + "");
             txt_soCongDoan.setText(sanPhamClick.getSoCongDoan()+"");
             Cbo_ChatLieu.setValue(sanPhamClick.getChatLieu());
+            BUS_PhanCong bus_phanCong = new BUS_PhanCong();
+            if(bus_phanCong.getSoCD(sanPhamClick.getMaSanPham())!=0){
+                btn_Sua.setDisable(true);
+            }
+            else {
+                btn_Sua.setDisable(false);
+            }
             InputStream is = new ByteArrayInputStream(sanPhamClick.getHinhAnh());
             Image image = new Image(is);
             imgv_anhSp.setImage(image);
@@ -366,6 +375,12 @@ public class CTL_UI_SanPham implements Initializable {
                             ppsm.setInt(4, (int) row.getCell(2).getNumericCellValue());
                             ppsm.setString(5, row.getCell(3).getStringCellValue());
                             ppsm.setBoolean(6, false);
+                            Image img = new Image(new FileInputStream("AnhRong.png") );
+                            int w = (int)img.getWidth();
+                            int h = (int)img.getHeight();
+                            byte[] buf = new byte[w * h * 4];
+                            img.getPixelReader().getPixels(0, 0, w, h, PixelFormat.getByteBgraInstance(), buf, 0, w * 4);
+                            ppsm.setBytes(7,buf);
                             ppsm.execute();
                             loadTableSP();
                         }
@@ -422,7 +437,12 @@ public class CTL_UI_SanPham implements Initializable {
                         index++;
 
                     }
-                    FileOutputStream fileOut = new FileOutputStream("Product_"+ngayHienTai+".xlsx");
+                    FileChooser fc = new FileChooser();
+                    FileChooser.ExtensionFilter ef = new FileChooser.ExtensionFilter("Excel Files","*.xlsx","*.xls","*.ods","*.csv");
+                    fc.getExtensionFilters().add(ef);
+                    fc.setInitialFileName("SanPham_"+ngayHienTai+".xlsx");
+                    File file = fc.showSaveDialog(null);
+                    FileOutputStream fileOut = new FileOutputStream(file);
                     wb.write(fileOut);
                     fileOut.close();
 
