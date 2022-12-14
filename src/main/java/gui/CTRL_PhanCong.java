@@ -539,6 +539,7 @@ public class CTRL_PhanCong implements Initializable {
                 int soLuongPhanCong = cn.getSoLuongPhanCong();
                 DTO_BangPhanCong tmp = new DTO_BangPhanCong(congDoan,CongNhan,ngayPC,ca,sanPham,soLuongPhanCong,false);
                 bus_phanCong.insertBPC(tmp);
+                btn_Luu.setDisable(true);
             }
         }
 
@@ -552,6 +553,12 @@ public class CTRL_PhanCong implements Initializable {
         String ngay = df.format(ngayPC);
         String maSanPham = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);
         ArrayList<DTO_BangPhanCong> ds = bus_phanCong.getDSBPCtheoNgayPhanCong(ngay,maSanPham);
+        if(ds.isEmpty()){
+            btn_Luu.setDisable(false);
+        }
+        else {
+            btn_Luu.setDisable(true);
+        }
         listBPC = FXCollections.observableArrayList(ds);
         col_ngayPhanCong.setCellValueFactory(new PropertyValueFactory<>("ngayPhanCong"));
         col_maCongNhan.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
@@ -578,11 +585,7 @@ public class CTRL_PhanCong implements Initializable {
         for (DTO_CNDuocPhanCong cn : ds){
             SL=SL+cn.getSoLuongPhanCong();
         }
-        ArrayList<DTO_SanPham> dsSP = bus_sanPham.getSPTheoMaSP(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
-        int slYC = 0;
-        for (DTO_SanPham sanPham: dsSP){
-            slYC = sanPham.getSoLuongYeuCau();
-        }
+        int slYC = (bus_phanCong.getSoLuong(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6)))/ bus_phanCong.getSoCD(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
         if(SL>=slYC){
             return 0;
         }

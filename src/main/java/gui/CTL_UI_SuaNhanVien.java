@@ -387,6 +387,7 @@ public class CTL_UI_SuaNhanVien implements Initializable {
         String diaChi [] = dc.split(",");
         this.dc = dc;
         txtMaNV.setDisable(true);
+
         txtMaNV.setText(cn.getMaNhanVien());
         txtMaNV.setStyle("-fx-border-color: GREEN;");
         txtHoTen.setText(cn.getTenNhanVien());
