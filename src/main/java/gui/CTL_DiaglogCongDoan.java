@@ -4,6 +4,8 @@ import dto.DTO_CongDoan;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -12,12 +14,13 @@ import java.util.ResourceBundle;
 public class CTL_DiaglogCongDoan implements Initializable {
     private boolean choice;
     private DTO_CongDoan cd;
-    // Hello tú :vv
     @FXML
     private TextField txtCongDoan;
 
     @FXML
     private TextField txtDonGia;
+
+    private boolean check;
 
     /**
      * 1 là thêm 0 là sửa
@@ -40,9 +43,21 @@ public class CTL_DiaglogCongDoan implements Initializable {
         if (!choice){
             cd.setDonGiaCongDoan(Double.parseDouble(txtDonGia.getText()));
         } else {
-            cd = new DTO_CongDoan("",txtCongDoan.getText(), Double.parseDouble(txtDonGia.getText()));
+            if(txtCongDoan.getText().equals("")||txtDonGia.getText().equals("")){
+                Alert a = new Alert(Alert.AlertType.WARNING, "Vui lòng nhập đầy đủ thông tin", ButtonType.OK);
+                a.showAndWait();
+                check = false;
+            }
+            else {
+                cd = new DTO_CongDoan("",txtCongDoan.getText(), Double.parseDouble(txtDonGia.getText()));
+                check = true;
+            }
         }
         return this.cd;
+    }
+
+    public  boolean getCheck(){
+        return check;
     }
 
 
