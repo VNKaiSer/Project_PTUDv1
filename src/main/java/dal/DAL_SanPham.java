@@ -145,8 +145,8 @@ public class DAL_SanPham {
         ppsm.setInt(2, sanPham.getSoCongDoan());
         ppsm.setInt(3, sanPham.getSoLuongYeuCau());
         ppsm.setString(4, sanPham.getChatLieu());
-        ppsm.setString(5,sanPham.getMaSanPham());
-        ppsm.setBytes(6,sanPham.getHinhAnh());
+        ppsm.setString(6,sanPham.getMaSanPham());
+        ppsm.setBytes(5,sanPham.getHinhAnh());
 
         ppsm.execute();
         // đóng kết nối

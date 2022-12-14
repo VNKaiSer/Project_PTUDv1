@@ -150,14 +150,22 @@ public class CTRL_MainMenu implements Initializable {
         lblQuanLyCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(qlcn);
+                try {
+                    loadScene("UI_CongNhan_FXMLv2.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         lblChiaCongDoan.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(ccd);
+                try {
+                    loadScene("UI_ChiaCongDoan.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -165,13 +173,21 @@ public class CTRL_MainMenu implements Initializable {
         lblChamCongNV.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(ccnv);
+                try {
+                    loadScene("UI_ChamCongNhanVien.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         lblQuanLyNV.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(qlnv);
+                try {
+                    loadScene("UI_NhanVien_FX_Ver3.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -199,28 +215,44 @@ public class CTRL_MainMenu implements Initializable {
         lblPhanCong.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(pc);
+                try {
+                    loadScene("UI_PhanCong.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         lblChamCongCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(cccn);
+                try {
+                    loadScene("UI_ChamCongCongNhan.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         lblTinhLuong.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(tl);
+                try {
+                    loadScene("UI_TinhLuong.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         lblQuanLySanPham.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent actionEvent) {
-                pn_Feature.setCenter(qlsp);
+                try {
+                    loadScene("SanPham_v2.fxml");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -240,6 +272,17 @@ public class CTRL_MainMenu implements Initializable {
                     ctrl_doiMatKhau.setMaNhanVien(maNV);
                     secondStage.showAndWait();
 
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        lblThongKe.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    loadScene("UI_ThongKe.fxml");
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

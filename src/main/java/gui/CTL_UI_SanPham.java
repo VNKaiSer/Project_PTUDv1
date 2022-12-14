@@ -110,8 +110,11 @@ public class CTL_UI_SanPham implements Initializable {
 
     private File file;
     private ArrayList listSP= new ArrayList();
+    private boolean checkXoa = true;
+    private boolean checkSua = true;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        btnAnh.setDisable(true);
         try {
             Cbo_ChatLieu.setItems(listChatLieu);
 
@@ -183,6 +186,8 @@ public class CTL_UI_SanPham implements Initializable {
             });
 
 
+
+
         } catch (Exception e) {
 
         }
@@ -233,6 +238,8 @@ public class CTL_UI_SanPham implements Initializable {
         btn_themMoi.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                btnAnh.setDisable(false);
+                imgv_anhSp.setImage(null);
                 if(btn_themMoi.getText().equalsIgnoreCase("Thêm")){
                     btn_themMoi.setText("Lưu");
                     btn_Xoa.setText("Hủy");
@@ -272,7 +279,10 @@ public class CTL_UI_SanPham implements Initializable {
                     Clear();
                     btn_themMoi.setText("Thêm");
                     btn_Xoa.setText("Xóa");
+                    btn_Sua.setText("Sửa");
                     btn_Sua.setDisable(false);
+                    btn_themMoi.setDisable(false);
+                    tbl_SanPham.setDisable(false);
                     HideInfo();
                 } else if (btn_Xoa.getText().equalsIgnoreCase("Xóa")) {
                     xoaSP();
@@ -280,16 +290,26 @@ public class CTL_UI_SanPham implements Initializable {
 
             }
         });
-        /*btn_Sua.setOnAction(new EventHandler<ActionEvent>() {
+        btn_Sua.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                if (tbl_SanPham.getSelectionModel().getSelectedItem() == null){
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn dòng cần sửa", ButtonType.CANCEL);
+                    a.showAndWait();
+                    return;
+                }
                 try {
+                    btnAnh.setDisable(false);
+                    btn_themMoi.setDisable(true);
+                    btn_Xoa.setText("Hủy");
+                    tbl_SanPham.setDisable(true);
                     SuaSP();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-        });*/
+        });
         btn_DatLai.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -495,12 +515,17 @@ public class CTL_UI_SanPham implements Initializable {
             loadTableSP();
         }
     }
-    /*private void SuaSP() throws IOException {
+
+    /**
+     * Hàm cập nhật sản phẩm
+     * @throws IOException
+     */
+    private void SuaSP() throws IOException {
         if(btn_Sua.getText().equalsIgnoreCase("Sửa")){
             btn_Sua.setText("Lưu");
             ShowInfo();
         }
-        else {
+        else { // là nút lưu
             String maSP = txt_maSP.getText();
             String tenSP = txt_tenSP.getText();
             int sl = Integer.parseInt(txt_soLuongSPYeuCau.getText());
@@ -511,8 +536,15 @@ public class CTL_UI_SanPham implements Initializable {
             bus_sanPham.updateSP(sp);
             HideInfo();
             btn_Sua.setText("Sửa");
+            Alert a = new Alert(Alert.AlertType.INFORMATION, "Cập nhật thành công", ButtonType.APPLY);
+            a.showAndWait();
+            Clear();
+            btnAnh.setDisable(true);
+            btn_themMoi.setDisable(false);
+            tbl_SanPham.setDisable(false);
+
         }
-    }*/
+    }
     private void loadTableSP(){
 
         try {
@@ -600,4 +632,6 @@ public class CTL_UI_SanPham implements Initializable {
 
         return byteArray;
     }
+
+
 }

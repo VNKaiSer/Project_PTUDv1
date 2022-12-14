@@ -30,6 +30,9 @@ public class CTL_UIThongKe implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         lineChart.getChildren().add(createPieChart());
     }
+    private void handleEvent(){
+
+    }
 
     public LineChart createLineChart(ArrayList<Integer> listTime, ArrayList<Double> listTien) {
         CategoryAxis xAxis = new CategoryAxis();

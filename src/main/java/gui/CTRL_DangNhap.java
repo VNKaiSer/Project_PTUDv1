@@ -39,7 +39,7 @@ public class CTRL_DangNhap implements Initializable {
     private Button btnDangNhap;
 
     private String nguoiDangNhap;
-    private int tk;
+    private int tk = 999;
     @FXML
     private Button btnQuenPass;
 
@@ -66,6 +66,9 @@ public class CTRL_DangNhap implements Initializable {
     @FXML
     private TextField txtOTP;
 
+    public int getTk() {
+        return tk;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,7 +87,7 @@ public class CTRL_DangNhap implements Initializable {
                     if (dangNhap()){
                         try {
                             FXMLLoader fxmlLoader = new FXMLLoader();
-                            fxmlLoader.setLocation(getClass().getResource("MainMenu.fxml"));
+                            fxmlLoader.setLocation(getClass().getResource("mm-v3.fxml"));
                             Scene scene = new Scene(fxmlLoader.load());
                             Stage stage = new Stage();
                             stage.setTitle("Main Menu");
@@ -95,10 +98,13 @@ public class CTRL_DangNhap implements Initializable {
                             ctrlMainMenu.setMaNV(txtUser.getText());
                             if (tk == 1) ctrlMainMenu.isQuanLy();
                             else if (tk == 2) ctrlMainMenu.isNhanVien();
-                            stage.show();
+                            new main().start(new Stage());
+                            //stage.show();
                         } catch (IOException e) {
                             Logger logger = Logger.getLogger(getClass().getName());
                             logger.log(Level.SEVERE, "Failed to create new Window.", e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 } catch (SQLException e) {
@@ -156,8 +162,11 @@ public class CTRL_DangNhap implements Initializable {
            Alert alert = new Alert(Alert.AlertType.ERROR, "Sai mật khẩu", ButtonType.APPLY);
            alert.showAndWait();
            return false;
-       }else {
+       }else if (tk == 2){
            nguoiDangNhap = getName();
+           return true;
+       } else {
+           nguoiDangNhap = "";
            return true;
        }
 
