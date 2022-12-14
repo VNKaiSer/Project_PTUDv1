@@ -51,7 +51,20 @@ public class BUS_PhanCong {
     public int getSoLuongPC(String maCN, String date, int ca) throws SQLException {
         return dal_bangPhanCong.laySoLuongSanPham(maCN, date, ca);
     }
-
+    public int getSoLuong(String maSP){
+        try {
+            return dal_bangPhanCong.LaySoLuong(maSP);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public int getSoCD(String maSP){
+        try {
+            return dal_bangPhanCong.LaySoCongDoan(maSP);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public ArrayList<String> getDSMaCongNhanTheoCa(String date, int ca) throws SQLException {
         return dal_bangPhanCong.getCongNhanTheoCa(date, ca);
     }

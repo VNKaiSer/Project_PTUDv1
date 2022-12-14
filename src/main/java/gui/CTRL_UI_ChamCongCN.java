@@ -123,7 +123,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
 
 
         // băt sự kiện trên các componet
-        txtNgayChamCong.setOnAction(new EventHandler<ActionEvent>() {
+        /*txtNgayChamCong.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // ngày chấm công lơn hơn ngày hiện tại
@@ -170,7 +170,7 @@ public class CTRL_UI_ChamCongCN implements Initializable {
                     tblBCCCN.setDisable(true);
                 }
             }
-        });
+        });*/
 //        txtNgayChamCong.setOnAction(new EventHandler<ActionEvent>() {
 //            @Override
 //            public void handle(ActionEvent event) {

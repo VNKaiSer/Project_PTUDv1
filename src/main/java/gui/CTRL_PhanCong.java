@@ -159,7 +159,7 @@ public class CTRL_PhanCong implements Initializable {
         handleEvent();
     }
     public void handleEvent(){
-        dtk_ngayPhanCong.setOnAction(new EventHandler<ActionEvent>() {
+        /*dtk_ngayPhanCong.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Date ngayPhanCong = Date.from(dtk_ngayPhanCong.getValue().atStartOfDay()
@@ -184,7 +184,7 @@ public class CTRL_PhanCong implements Initializable {
                 }
 
             }
-        });
+        });*/
         cbo_sanPham.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -440,11 +440,8 @@ public class CTRL_PhanCong implements Initializable {
                     SL=SL+cnDuocPhanCong.getSoLuongPhanCong();
                 }
                 String ca = cbo_ca.getSelectionModel().getSelectedItem();
-                ArrayList<DTO_SanPham> dsSP = bus_sanPham.getSPTheoMaSP(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
-                int slYC = 0;
-                for (DTO_SanPham sanPham: dsSP){
-                    slYC = sanPham.getSoLuongYeuCau();
-                }
+                int slYC = (bus_phanCong.getSoLuong(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6)))/ bus_phanCong.getSoCD(cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6));
+
                 ArrayList<DTO_CNDuocPhanCong> dsCN = new ArrayList<>();
                 for(int i = 0;i<selectedItems.size();i++){
                     String maSP = cbo_sanPham.getSelectionModel().getSelectedItem().substring(0,6);

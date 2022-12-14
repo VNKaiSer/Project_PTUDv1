@@ -140,71 +140,6 @@ public class DAL_BangPhanCong {
         // đóng kết nối
         ConnectDB.getConnection().close();
     }
-    /*/**
-     * Hàm cập nhật thông tin bảng phân công
-     * @param BangPhanCong DTO_BangPhanCong
-     *
-     */
-    /*public void updateBangPhanCong(DTO_BangPhanCong BangPhanCong) throws SQLException {
-        ConnectDB.getInstance().connect();
-        String sql = "UPDATE BangPhanCong " +
-                "SET ngayPhanCong = ?, maCongNhan = ?, maCongDoan = ?, ngayKetThuc = ? " +
-                "WHERE maBangPhanCong = ?";
-        PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
-
-        String dateTmp = new SimpleDateFormat("yyyy-MM-dd").format(BangPhanCong.getNgayPhanCong());
-        ppsm.setString(1,dateTmp);
-        ppsm.setString(2,BangPhanCong.getCongNhan().getMaCongNhan());
-        ppsm.setString(3,BangPhanCong.getCongDoan().getMaCongDoan());
-        //String dateTmpp = new SimpleDateFormat("yyyy-MM-dd").format(BangPhanCong.getNgayKetThuc());
-        //ppsm.setString(4,dateTmpp);
-        ppsm.setString(5,BangPhanCong.getMaPhanCong());
-        ppsm.execute();
-        // đóng kết nối
-        ConnectDB.getConnection().close();
-    }*/
-    /*public ArrayList<DTO_CongNhan> getMaCongNhan(Date ngayPhanCong, int ca, String maCongDoan) throws SQLException, ParseException {
-        ArrayList<DTO_CongNhan> ds = new ArrayList<DTO_CongNhan>();
-        ConnectDB.getInstance().connect();
-        String sql = "select * from BangPhanCong where ngayBatDau <= ? and ngayKetThuc >= ? and ca = ? and maCongDoan = ?";
-        try {
-
-            PreparedStatement state =ConnectDB.getConnection().prepareStatement(sql);
-            String dateNgayPhanCong = new SimpleDateFormat("yyyy-MM-dd").format(ngayPhanCong);
-            state.setString(1, dateNgayPhanCong);
-            state.setString(2, dateNgayPhanCong);
-            state.setInt(3,ca);
-            state.setString(4,maCongDoan);
-            ResultSet rs = state.executeQuery();
-            while (rs.next() ){
-                DTO_CongNhan tmp;
-                String maCN = rs.getString(1);
-                String tenCN = rs.getString(2);
-
-                String date = rs.getString(3);
-                Date ngayVaoLam = new SimpleDateFormat("yyy-MM-dd").parse(date);
-                Boolean phai = rs.getBoolean(4);
-                date = rs.getString(5);
-                Date ngaySinh = new SimpleDateFormat("yyy-MM-dd").parse(date);
-                String sdt = rs.getString(6);
-                String email = rs.getString(7);
-                String diaChi = rs.getString(8);
-                String trinhDo = rs.getString(9);
-                tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLam, true, sdt, ngaySinh, email, diaChi, trinhDo);
-                ds.add(tmp);
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                ConnectDB.getConnection().close();
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-        }
-        return ds;
-    }*/
     public ArrayList<DTO_BangPhanCong> getBPCTheoNgayPhanCong(String ngayPC,String maSanPham) throws SQLException {
         ArrayList<DTO_BangPhanCong> ds = new ArrayList<DTO_BangPhanCong>();
         ConnectDB.getInstance().connect();
@@ -271,7 +206,54 @@ public class DAL_BangPhanCong {
         }
         return flag;
     }
-
+    public int LaySoLuong(String ma) throws SQLException {
+        int soluong = 0;
+        ConnectDB.getInstance();
+        ConnectDB.getInstance().connect();
+        PreparedStatement state = null;
+        try {
+            String sql = "select tienDo from tienDoSanPham where maSanPham = ?";
+            state = ConnectDB.getConnection().prepareStatement(sql);
+            state.setString(1, ma);
+            ResultSet rs = state.executeQuery();
+            while(rs.next()){
+               soluong = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                state.close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return soluong;
+    }
+    public int LaySoCongDoan(String ma) throws SQLException {
+        int soluong = 0;
+        ConnectDB.getInstance();
+        ConnectDB.getInstance().connect();
+        PreparedStatement state = null;
+        try {
+            String sql = "select count(maCongDoan) from ChiTietCongDoan where maSanPham = ?";
+            state = ConnectDB.getConnection().prepareStatement(sql);
+            state.setString(1, ma);
+            ResultSet rs = state.executeQuery();
+            while(rs.next()){
+                soluong = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                state.close();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+        return soluong;
+    }
     public int laySoLuongSanPham(String maCN, String date, int ca) throws SQLException {
         int soLuong = 0;
         String sql = "{?= call laySoLuongPhanCong(?,?, ?)}";

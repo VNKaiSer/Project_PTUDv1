@@ -16,7 +16,7 @@ public class StartApp extends Thread {
     @Override
     public void  run(){
         Platform.runLater(() ->{
-            FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("UI_DangNhap.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(main.class.getResource("mm-v3.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load());

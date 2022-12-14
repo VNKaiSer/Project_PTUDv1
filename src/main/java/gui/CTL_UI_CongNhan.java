@@ -427,6 +427,7 @@ public class CTL_UI_CongNhan implements Initializable {
             public void handle(ActionEvent actionEvent) {
                 try {
                     suaCongNhan(actionEvent);
+                    filerTableCongDoan();
                 } catch (IOException | ParseException e) {
                     throw new RuntimeException(e);
                 }

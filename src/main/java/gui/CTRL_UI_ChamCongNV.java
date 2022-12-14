@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
@@ -96,7 +97,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
         loadDanhSachChamCongHomNay();
 
         // băt sự kiện trên các componet
-        txtNGayChamCong.setOnAction(new EventHandler<ActionEvent>() {
+        /*txtNGayChamCong.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 // ngày chấm công lơn hơn ngày hiện tại
@@ -128,7 +129,7 @@ public class CTRL_UI_ChamCongNV implements Initializable {
 
 
             }
-        });
+        });*/
 
 //        tblBCCCN.setOnMouseClicked(new EventHandler<MouseEvent>() {
 //            @Override
@@ -227,7 +228,8 @@ public class CTRL_UI_ChamCongNV implements Initializable {
     }
 
     private String taoMaBCC(String maNV){
-        String date = new SimpleDateFormat("ddMMyyyy").format(new Date());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String date = formatter.format(txtNGayChamCong.getValue());
         return "CCNV"+date +maNV;
     }
 

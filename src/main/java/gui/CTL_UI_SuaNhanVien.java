@@ -73,6 +73,7 @@ public class CTL_UI_SuaNhanVien implements Initializable {
     private TextField txt_luongCoBan;
 
     private CTRL_UI_NhanVien tmpDianalog;
+    private BUS_NhanVien bus_nhanVien = new BUS_NhanVien();
 
     private boolean checkFrom = false;
     ObservableList<String> listGioiTinh = FXCollections.observableArrayList("Nam", "Nữ");
@@ -345,8 +346,15 @@ public class CTL_UI_SuaNhanVien implements Initializable {
 
             String maCN = txtMaNV.getText();
             String tenCN = txtHoTen.getText();
-            String ngaySinh = txtNgaySinh.getValue().toString();
-            String ngayVaoLam = txtNgayVaoLam.getValue().toString();
+            Date ngayVL = Date.from(txtNgayVaoLam.getValue().atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            Date ngayS = Date.from(txtNgaySinh.getValue().atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String strNgayVL = formatter.format(ngayVL);
+            String strNgayS = formatter.format(ngayS);
             String gioiTinh = cboGioiTinh.getSelectionModel().getSelectedItem();
             boolean phai = true;
             if(gioiTinh.equalsIgnoreCase("Nữ")){
@@ -356,14 +364,14 @@ public class CTL_UI_SuaNhanVien implements Initializable {
             String sdt = txtSoDienThoai.getText().toString();
             String email = txtEmail.getText().toString();
             String diaChi = txtDiaChi.getText().toString() +"," + cboPhuong.getValue()+ ", " +cboHuyen.getValue() + ", "+cboTinh.getValue();
-            Date ngaySinhDate = new SimpleDateFormat("YYYY-MM-dd").parse(ngaySinh);
-            Date ngayVaoLamDate = new SimpleDateFormat("YYYY-MM-dd").parse(ngayVaoLam);
+            Date ngaySinhDate = formatter.parse(strNgayS);
+            Date ngayVaoLamDate = formatter.parse(strNgayVL);
 
             // Tạo đối tượng
             DTO_NhanVien tmp = new DTO_NhanVien(maCN,tenCN,ngayVaoLamDate,phai,ngaySinhDate,sdt,email,diaChi,Double.parseDouble(luong));
-            BUS_NhanVien bus_nhanVien = new BUS_NhanVien();
-            cn_Sua = tmp;
             bus_nhanVien.updateNhanVien(tmp);
+            cn_Sua = tmp;
+
             stopDialog();
         } catch (ParseException e) {
             throw new RuntimeException(e);

@@ -66,6 +66,7 @@ public class CTL_UI_SuaCongNhan implements Initializable {
 
     @FXML
     private ComboBox<String> cboTinh;
+    private BUS_CongNhan bus_congNhan = new BUS_CongNhan();
     private boolean checkFrom = false;
     ObservableList<String> listGioiTinh = FXCollections.observableArrayList("Nam", "Nữ");
     ObservableList<String> listTrinhDo = FXCollections.observableArrayList("Trung học phổ thông", "Cao đẳng", "Đại học", "Cao học");
@@ -348,20 +349,29 @@ public class CTL_UI_SuaCongNhan implements Initializable {
 
             String maCN = txtMaCN.getText();
             String tenCN = txtHoTen.getText();
-            String ngaySinh = txtNgaySinh.getValue().toString();
-            String ngayVaoLam = txtNgayVaoLam.getValue().toString();
-            boolean gioiTinh = cboGioiTinh.getValue().equals("Nam");
+            Date ngayVL = Date.from(txtNgayVaoLam.getValue().atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            Date ngayS = Date.from(txtNgaySinh.getValue().atStartOfDay()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String strNgayVL = formatter.format(ngayVL);
+            String strNgayS = formatter.format(ngayS);
+            String gioiTinh = cboGioiTinh.getSelectionModel().getSelectedItem();
+            boolean phai = true;
+            if(gioiTinh.equalsIgnoreCase("Nữ")){
+                phai = false;
+            }
             String trinhDo = cboTrinhDo.getValue().toString();
             String sdt = txtSoDienThoai.getText().toString();
             String email = txtEmail.getText().toString();
             String diaChi = txtDiaChi.getText().toString() +"," + cboPhuong.getValue()+ ", " +cboHuyen.getValue() + ", "+cboTinh.getValue();
-            Date ngaySinhDate = new SimpleDateFormat("YYYY-MM-dd").parse(ngaySinh);
-            Date ngayVaoLamDate = new SimpleDateFormat("YYYY-MM-dd").parse(ngayVaoLam);
-
+            Date ngaySinhDate = formatter.parse(strNgayS);
+            Date ngayVaoLamDate = formatter.parse(strNgayVL);
             // Tạo đối tượng
-            DTO_CongNhan tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLamDate, gioiTinh, sdt, ngaySinhDate, email, diaChi, trinhDo);
-            BUS_CongNhan bus_congNhan = new BUS_CongNhan();
-            cn_Sua = tmp;            bus_congNhan.updateCongNhan(tmp);
+            DTO_CongNhan tmp = new DTO_CongNhan(maCN, tenCN, ngayVaoLamDate, phai, sdt, ngaySinhDate, email, diaChi, trinhDo);
+            bus_congNhan.updateCongNhan(tmp);//cn_Sua = tmp;
             stopDialog();
         } catch (ParseException | SQLException e) {
             throw new RuntimeException(e);

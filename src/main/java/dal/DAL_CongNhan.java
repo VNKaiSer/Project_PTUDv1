@@ -115,11 +115,11 @@ public class DAL_CongNhan {
                      "WHERE maCongNhan = ?";
         PreparedStatement ppsm = ConnectDB.getConnection().prepareStatement(sql);
         ppsm.setString(1,congNhan.getTenCongNhan());
-        String dateTmp = new SimpleDateFormat("yyyy-MM-dd").format(congNhan.getNgayVaoLam());
-        ppsm.setString(2,dateTmp);
+        String dateNVL = new SimpleDateFormat("yyyy-MM-dd").format(congNhan.getNgayVaoLam());
+        ppsm.setString(2,dateNVL);
         ppsm.setBoolean(3, congNhan.isPhai());
-        dateTmp = new SimpleDateFormat("yyyy-MM-dd").format(congNhan.getNgaySinh());
-        ppsm.setString(4, dateTmp);
+        String dateNS = new SimpleDateFormat("yyyy-MM-dd").format(congNhan.getNgaySinh());
+        ppsm.setString(4, dateNS);
         ppsm.setString(5, congNhan.getSoDienThoai());
         ppsm.setString(6, congNhan.getEmail());
         ppsm.setString(7,congNhan.getDiaChi());
