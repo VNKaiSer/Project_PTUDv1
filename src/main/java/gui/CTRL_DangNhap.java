@@ -1,6 +1,7 @@
 package gui;
 
 import bus.BUS_TaiKhoan;
+import gui.splashscreen.SplashScreen;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -98,7 +99,10 @@ public class CTRL_DangNhap implements Initializable {
                             ctrlMainMenu.setMaNV(txtUser.getText());
                             if (tk == 1) ctrlMainMenu.isQuanLy();
                             else if (tk == 2) ctrlMainMenu.isNhanVien();
-                            new main().start(new Stage());
+                            new SplashScreen(null, true).disPlaySplashCard();
+                            Thread.sleep(3700);
+                            stage.show();
+                            //new main().start(new Stage());
                         } catch (IOException e) {
                             Logger logger = Logger.getLogger(getClass().getName());
                             logger.log(Level.SEVERE, "Failed to create new Window.", e);
