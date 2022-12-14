@@ -2,6 +2,7 @@ package gui;
 
 import bus.BUS_ChiTietCongDoan;
 import bus.BUS_CongDoan;
+import bus.BUS_CongNhan;
 import bus.BUS_SanPham;
 import dto.DTO_ChiTietCongDoan;
 import dto.DTO_CongDoan;
@@ -179,7 +180,6 @@ public class CTRL_ChiaCongDoan implements Initializable {
      */
     private void loadCongDong() {
 
-        try {
             listCongDoan = new BUS_CongDoan().getAllCongDoan();
             maCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("maCongDoan"));
             tenCongDoanCol.setCellValueFactory(new PropertyValueFactory<>("tenCongDoan"));
@@ -187,11 +187,6 @@ public class CTRL_ChiaCongDoan implements Initializable {
             modelCongDoan = FXCollections.observableArrayList(listCongDoan);
             tblCongDoan.setItems(modelCongDoan);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /***
@@ -234,8 +229,6 @@ public class CTRL_ChiaCongDoan implements Initializable {
                     btnDatLai.setDisable(false);
                 }
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            } catch (ParseException ex) {
                 throw new RuntimeException(ex);
             }
 
@@ -284,14 +277,12 @@ public class CTRL_ChiaCongDoan implements Initializable {
         btnDatLai.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                try {
-                    tblCongDoan.setItems(FXCollections.observableArrayList(bus_congDoan.getAllCongDoan()));
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
+                tblCongDoan.setItems(FXCollections.observableArrayList(bus_congDoan.getAllCongDoan()));
                 // xoa chitietcongdoan da them
+                if(sanPhamClick.getMaSanPham()==null){
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn sản phẩm cần đặt lại", ButtonType.OK);
+                    a.showAndWait();
+                }
                 bus_chiTietCongDoan.rmDSTheoMaSP(bus_chiTietCongDoan.getDSTheoMaSP(sanPhamClick.getMaSanPham()));
                 tblPCCD.getItems().clear();
                 tblPCCD.setItems(FXCollections.observableArrayList());
@@ -367,9 +358,10 @@ public class CTRL_ChiaCongDoan implements Initializable {
         btnSuaGia.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (tblCongDoan.getSelectionModel().getSelectedItem() == null) {
+                if (tblCongDoan.getSelectionModel().getSelectedIndex() == -1) {
                     Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn cần sửa", ButtonType.OK);
-                    return;
+                    a.showAndWait();
+
                 }
 
 
@@ -392,6 +384,7 @@ public class CTRL_ChiaCongDoan implements Initializable {
                 if (clickedButton.get() == ButtonType.OK) {
                     modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
                     modelCongDoan.add(controller.getData());
+                    tblCongDoan.getItems().clear();
                     tblCongDoan.setItems(modelCongDoan);
                     //bus_congDoan.update();
                 }
@@ -402,16 +395,29 @@ public class CTRL_ChiaCongDoan implements Initializable {
         btnXoaCD.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (tblCongDoan.getSelectionModel().getSelectedItem() == null) {
-                    Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn cần sửa", ButtonType.OK);
+                if (tblCongDoan.getSelectionModel().getSelectedIndex() == -1) {
+                    Alert a = new Alert(Alert.AlertType.ERROR, "Vui lòng chọn công đoạn cần xóa", ButtonType.OK);
+                    a.showAndWait();
                 } else {
-                    try {
+                    Alert alert =
+                            new Alert(Alert.AlertType.WARNING,
+                                    "Bạn có chắc muốn xóa không?",
+                                    ButtonType.YES,
+                                    ButtonType.NO);
+                    alert.setTitle("Cảnh báo");
+                    Optional<ButtonType> result = alert.showAndWait();
+
+                    if (result.get() == ButtonType.YES) {
                         bus_congDoan.removeCD(tblCongDoan.getSelectionModel().getSelectedItem().getMaCongDoan());
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                        modelCongDoan = tblCongDoan.getItems();
+                        modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
+                        //tblCongDoan.getSelectionModel().clearSelection();
+                        //tblCongDoan.getItems().clear();
+                        //System.out.println(modelCongDoan);
+                        tblCongDoan.setItems(modelCongDoan);
+                        filerTableCongDoan();
                     }
-                    modelCongDoan.remove(tblCongDoan.getSelectionModel().getSelectedItem());
-                    tblCongDoan.getSelectionModel().clearSelection();
+
                 }
             }
         });
