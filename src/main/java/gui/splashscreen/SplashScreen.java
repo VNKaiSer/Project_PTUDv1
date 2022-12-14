@@ -121,7 +121,7 @@ public class SplashScreen extends JDialog implements Runnable {
 
     private void doTask(String taskName, int progress) throws Exception {
         lbStatus.setText(taskName);
-        Thread.sleep(580); //  For Test
+        Thread.sleep(300); //  For Test
         pro.setValue(progress);
     }
 

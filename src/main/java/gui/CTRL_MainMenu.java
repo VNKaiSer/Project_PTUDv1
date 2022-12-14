@@ -94,20 +94,20 @@ public class CTRL_MainMenu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            qlcn = FXMLLoader.load(getClass().getResource("UI_CongNhan_FXMLv2.fxml"));
-            qlnv = FXMLLoader.load(getClass().getResource("UI_NhanVien_FX_Ver3.fxml"));
-            ccnv = FXMLLoader.load(getClass().getResource("UI_ChamCongNhanVien.fxml"));
-            cccn = FXMLLoader.load(getClass().getResource("UI_ChamCongCongNhan.fxml"));
-            tl = FXMLLoader.load(getClass().getResource("UI_TinhLuong.fxml"));
-
-            qlsp = FXMLLoader.load(getClass().getResource("SanPham_v2.fxml"));
-            ccd = FXMLLoader.load(getClass().getResource("UI_ChiaCongDoan.fxml"));
-            pc = FXMLLoader.load(getClass().getResource("UI_PhanCong.fxml"));
-            tk = FXMLLoader.load(getClass().getResource("UI_ThongKe.fxml"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            qlcn = FXMLLoader.load(getClass().getResource("UI_CongNhan_FXMLv2.fxml"));
+//            qlnv = FXMLLoader.load(getClass().getResource("UI_NhanVien_FX_Ver3.fxml"));
+//            ccnv = FXMLLoader.load(getClass().getResource("UI_ChamCongNhanVien.fxml"));
+//            cccn = FXMLLoader.load(getClass().getResource("UI_ChamCongCongNhan.fxml"));
+//            tl = FXMLLoader.load(getClass().getResource("UI_TinhLuong.fxml"));
+//
+//            qlsp = FXMLLoader.load(getClass().getResource("SanPham_v2.fxml"));
+//            ccd = FXMLLoader.load(getClass().getResource("UI_ChiaCongDoan.fxml"));
+//            pc = FXMLLoader.load(getClass().getResource("UI_PhanCong.fxml"));
+//            tk = FXMLLoader.load(getClass().getResource("UI_ThongKe.fxml"));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         Slider.setTranslateX(-200);
         Menu.setOnMouseClicked(mouseEvent -> {
             TranslateTransition slide = new TranslateTransition();
@@ -302,18 +302,19 @@ public class CTRL_MainMenu implements Initializable {
     }
 
     public void isQuanLy() {
-        lblQuanLyCN.setDisable(true);
-        lblChamCongCN.setDisable(true);
-        lblChamCongNV.setDisable(true);
-        lblChamCongNV.setDisable(true);
-        lblTinhLuong.setDisable(true);
+        lblQuanLySanPham.setDisable(true);
+        lblChiaCongDoan.setDisable(true);
+        lblPhanCong.setDisable(true);
 
     }
 
     public void isNhanVien() {
-        lblQuanLySanPham.setDisable(true);
-        lblChiaCongDoan.setDisable(true);
-        lblPhanCong.setDisable(true);
+        lblQuanLyCN.setDisable(true);
+        lblChamCongCN.setDisable(true);
+        lblChamCongNV.setDisable(true);
+        lblQuanLyNV.setDisable(true);
+        lblTinhLuong.setDisable(true);
+
         //lblThongKe.setDisable(true);
     }
 
