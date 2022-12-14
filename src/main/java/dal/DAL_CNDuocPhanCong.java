@@ -169,14 +169,16 @@ public class DAL_CNDuocPhanCong {
         }
         return ds;
     }
-    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCongDoanvaSanPham(String maCD, String maSP) throws SQLException {
+    public ArrayList<DTO_CNDuocPhanCong> getCNTheoCongDoanvaSanPham(String maCD, String maSP,String ngayPC) throws SQLException {
         ArrayList<DTO_CNDuocPhanCong> ds = new ArrayList<DTO_CNDuocPhanCong>();
         ConnectDB.getInstance().connect();
         try {
-            String sql = "select * from CNDuocPhanCong where maCongDoan = ? and maSanPham = ? ";
+            String sql = "select * from CNDuocPhanCong where maCongDoan = ? and maSanPham = ? and ngayPhanCong =?";
             PreparedStatement state = ConnectDB.getConnection().prepareStatement(sql);
             state.setString(1, maCD);
             state.setString(2, maSP);
+            state.setString(3, ngayPC);
+
             ResultSet rs = state.executeQuery();
             while(rs.next()){
                 DTO_CNDuocPhanCong tmp;

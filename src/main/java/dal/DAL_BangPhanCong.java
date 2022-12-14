@@ -242,7 +242,7 @@ public class DAL_BangPhanCong {
         }
         return ds;
     }
-    public int checkPhanCong(String ma) throws SQLException {
+    public int checkPhanCong(String ma,String ngay) throws SQLException {
         int flag = 0;
         ConnectDB.getInstance();
         ConnectDB.getInstance().connect();
@@ -254,7 +254,7 @@ public class DAL_BangPhanCong {
 
             ResultSet rs = state.executeQuery();
             while(rs.next()){
-                ArrayList<DTO_CNDuocPhanCong> dsCN = dal_cnDuocPhanCong.getCNTheoCongDoanvaSanPham(rs.getString(1),ma);
+                ArrayList<DTO_CNDuocPhanCong> dsCN = dal_cnDuocPhanCong.getCNTheoCongDoanvaSanPham(rs.getString(1),ma,ngay);
                 if(dsCN.isEmpty()){
                     flag = 1;
                     break;

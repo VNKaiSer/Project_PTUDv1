@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -32,6 +33,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -84,6 +87,8 @@ public class CTL_UI_CongNhan implements Initializable {
 
     private ObservableList<DTO_CongNhan> listCongNhan;
 
+    private ArrayList<DTO_CongNhan> listCN;
+
     public static Dialog<ButtonType> dialogSua;
 
     @FXML
@@ -127,222 +132,36 @@ public class CTL_UI_CongNhan implements Initializable {
     private boolean checkFrom = false;
     ObservableList<String> listGioiTinh = FXCollections.observableArrayList("Nam", "Nữ");
     ObservableList<String> listTrinhDo = FXCollections.observableArrayList("Trung học phổ thông", "Cao đẳng", "Đại học", "Cao học");
-
+    private BUS_CongNhan bus_congNhan = new BUS_CongNhan();
     @FXML
     private TextField txtTimCongNhan;
     private boolean checkLuu = false;
     private boolean checkXoa = true;
 
-
+    private DTO_CongNhan CNCLick;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        refeshTable();
         connectAPI = new BUS_API();
-
-        // thêm các sự kiện kiểm lỗi cho các componet
-        try {
-            // table
-            maCNCol.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
-            hoTenCol.setCellValueFactory(new PropertyValueFactory<>("tenCongNhan"));
-            diaChiCol.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
-            gioiTinhCol.setCellValueFactory(new PropertyValueFactory<>("phai"));
-            ngayVaoLamCol.setCellValueFactory(new PropertyValueFactory<>("ngayVaoLam"));
-            ngaySinhCol.setCellValueFactory(new PropertyValueFactory<>("ngaySinh"));
-            soDienThoaiCol.setCellValueFactory(new PropertyValueFactory<>("soDienThoai"));
-            emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-            trinhDoCol.setCellValueFactory(new PropertyValueFactory<>("trinhDo"));
-
-            txtMaCN.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    txtMaCN.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (txtMaCN.getText().toString().equals("")) {
-                        txtMaCN.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-
-            txtHoTen.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    txtHoTen.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (txtHoTen.getText().toString().equals("")) {
-                        txtHoTen.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-
-            txtNgayVaoLam.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent keyEvent) {
-                    txtNgayVaoLam.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (txtNgayVaoLam.getValue().toString().equals(null)) {
-                        txtNgayVaoLam.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-
-                    Date ngayVaoLam = Date.from(txtNgayVaoLam.getValue().atStartOfDay()
-                            .atZone(ZoneId.systemDefault())
-                            .toInstant());
-                    if (getDiffDate(ngayVaoLam, new Date()) <= 0) {
-                        Alert er = new Alert(Alert.AlertType.ERROR, "Cảnh báo", ButtonType.OK);
-                        er.setContentText("Ngày vào làm phải bé hơn ngày hiện tại");
-                        txtNgayVaoLam.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                        Optional<ButtonType> a = er.showAndWait();
-                    }
-                }
-            });
-
-            txtNgaySinh.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent keyEvent) {
-                    txtNgaySinh.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (txtNgaySinh.getValue()==null) {
-                        txtNgaySinh.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-
-                    Date ngaySinh = Date.from(txtNgaySinh.getValue().atStartOfDay()
-                            .atZone(ZoneId.systemDefault())
-                            .toInstant());
-                    if (new Date().getYear() - ngaySinh.getYear() < 18 || new Date().getYear() - ngaySinh.getYear() > 60) {
-                        Alert er = new Alert(Alert.AlertType.ERROR, "Cảnh báo", ButtonType.OK);
-                        er.setContentText("Nhân viên phải từ 18-60 tuổi");
-                        txtNgaySinh.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                        Optional<ButtonType> a = er.showAndWait();
-                    }
-                }
-            });
-
-            cboGioiTinh.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    cboGioiTinh.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (cboGioiTinh.getValue().toString().equals("")) {
-                        cboGioiTinh.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-
-            cboTrinhDo.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    cboTrinhDo.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (cboTrinhDo.getValue().toString().equals("")) {
-                        cboTrinhDo.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-
-            txtSoDienThoai.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    txtSoDienThoai.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (txtSoDienThoai.getText().toString().equals("")) {
-                        txtSoDienThoai.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-
-            txtSoDienThoai.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-                if (!newValue.matches("\\d*")) {
-                    txtSoDienThoai.setText(newValue.replaceAll("[^\\d,]", ""));
-                    StringBuilder aus = new StringBuilder();
-                    aus.append(txtSoDienThoai.getText());
-                    boolean firstPointFound = false;
-
-//                    for (int i = 0; i < aus.length(); i++) {
-//                        if (aus.charAt(i) == '') {Change the , with . if you want the . to be the decimal separator
-//                            if (!firstPointFound) {
-//                                firstPointFound = true;
-//                            } else {
-//                                aus.deleteCharAt(i);
-//                            }
-//                        }
-//                    }
-                    newValue = aus.toString();
-                    txtSoDienThoai.setText(newValue);
-                } else {
-                    txtSoDienThoai.setText(newValue);
-                }
-            });
-
-            txtEmail.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    if (txtEmail.getText().toString().equals("")) {
-                        txtEmail.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                    if (!txtEmail.getText().toString().matches("^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$")) {
-                        txtEmail.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    } else {
-                        txtEmail.setStyle("-fx-border-color: GREEN;");
-                        checkFrom = true;
-                    }
-                }
-            });
-
-            txtDiaChi.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    txtDiaChi.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (txtDiaChi.getText().toString().equals("")) {
-                        txtDiaChi.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-
-
-            cboPhuong.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    cboPhuong.setStyle("-fx-border-color: GREEN;");
-                    checkFrom = true;
-                    if (cboPhuong.getValue().equals("")) {
-                        cboPhuong.setStyle("-fx-border-color: RED;");
-                        checkFrom = false;
-                    }
-                }
-            });
-        } catch (Exception ignored) {
-
-        }
-
 
         cboGioiTinh.setItems(listGioiTinh);
         cboTrinhDo.setItems(listTrinhDo);
-
+        connectAPI = new BUS_API();
         cboTinh.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachTinh()));
+        CheckRed();
         cboTinh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                String tinh = cboTinh.getValue();
-                cboHuyen.setDisable(false);
                 String codeProvince = cboTinh.getValue();
+                cboPhuong.setStyle("-fx-border-color: RED;");
+                cboPhuong.setStyle("-fx-border-color: RED;");
                 cboHuyen.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachHuyen(codeProvince)));
-                cboTinh.setStyle("-fx-border-color: GREEN;");
-                checkFrom = true;
-                if (cboTinh.getValue().equals("")) {
+                if(cboTinh.getValue().equals("")){
                     cboTinh.setStyle("-fx-border-color: RED;");
-                    checkFrom = false;
+                }
+                else {
+                    cboTinh.setStyle("-fx-border-color: GREEN;");
                 }
             }
         });
@@ -350,24 +169,150 @@ public class CTL_UI_CongNhan implements Initializable {
         cboHuyen.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                String huyen = cboTinh.getValue();
-                cboPhuong.setDisable(false);
                 String codeDis = cboHuyen.getValue();
                 cboPhuong.setItems(FXCollections.observableArrayList(connectAPI.getDanhSachDuong(codeDis)));
-                cboHuyen.setStyle("-fx-border-color: GREEN;");
-                checkFrom = true;
-                if (cboHuyen.getValue().equals("")) {
+                if(cboHuyen.getValue().equals("")){
                     cboHuyen.setStyle("-fx-border-color: RED;");
-                    checkFrom = false;
+                }
+                else {
+                    cboHuyen.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
+        cboPhuong.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(cboPhuong.getValue().equals("")){
+                    cboPhuong.setStyle("-fx-border-color: RED;");
+                }
+                else {
+                    cboPhuong.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
+        txtSoDienThoai.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtSoDienThoai.setText(newValue.replaceAll("[^\\d,]", ""));
+                StringBuilder aus = new StringBuilder();
+                aus.append(txtSoDienThoai.getText());
+                boolean firstPointFound = false;
+                newValue = aus.toString();
+                txtSoDienThoai.setText(newValue);
+            } else {
+                txtSoDienThoai.setText(newValue);
+            }
+        });
+        txtHoTen.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(txtHoTen.getText().equals("")){
+                    txtHoTen.setStyle("-fx-border-color: RED;");
+                }
+                else {
+                    txtHoTen.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
+        txtEmail.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(txtEmail.getText().equals("")|| !txtEmail.getText().toString().matches("^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$")){
+                    txtEmail.setStyle("-fx-border-color: RED;");
+                }
+                else {
+                    txtEmail.setStyle("-fx-border-color: GREEN;");
                 }
             }
         });
 
-        refeshTable();
+        txtDiaChi.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(txtDiaChi.getText().equals("")){
+                    txtDiaChi.setStyle("-fx-border-color: RED;");
+                }
+                else {
+                    txtDiaChi.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
+        txtSoDienThoai.setOnKeyTyped(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(txtSoDienThoai.getText().equals("")||txtSoDienThoai.getText().length()!=10){
+                    txtSoDienThoai.setStyle("-fx-border-color: RED;");
+                }
+                else {
+                    txtSoDienThoai.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
+        txtNgayVaoLam.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent keyEvent) {
+                txtNgayVaoLam.setStyle("-fx-border-color: GREEN;");
+                if (txtNgayVaoLam.getValue()==null) {
+                    txtNgayVaoLam.setStyle("-fx-border-color: RED;");
+                }
 
-        filerTableCongDoan();
+                Date ngayVaoLam = Date.from(txtNgayVaoLam.getValue().atStartOfDay()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant());
+                if (getDiffDate(ngayVaoLam, new Date()) <= 0) {
+                    Alert er = new Alert(Alert.AlertType.ERROR, "Cảnh báo", ButtonType.OK);
+                    er.setContentText("Ngày vào làm phải bé hơn ngày hiện tại");
+                    txtNgayVaoLam.setStyle("-fx-border-color: RED;");
+                    Optional<ButtonType> a = er.showAndWait();
+                    txtNgayVaoLam.setValue(null);
+                }
+            }
+        });
 
+        txtNgaySinh.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent keyEvent) {
+                txtNgaySinh.setStyle("-fx-border-color: GREEN;");
+                checkFrom = true;
+                if (txtNgaySinh.getValue()==null) {
+                    txtNgaySinh.setStyle("-fx-border-color: RED;");
+                }
+
+                Date ngaySinh = Date.from(txtNgaySinh.getValue().atStartOfDay()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant());
+                if (new Date().getYear() - ngaySinh.getYear() < 18 || new Date().getYear() - ngaySinh.getYear() > 60) {
+                    Alert er = new Alert(Alert.AlertType.ERROR, "Cảnh báo", ButtonType.OK);
+                    er.setContentText("Nhân viên phải từ 18-60 tuổi");
+                    txtNgaySinh.setStyle("-fx-border-color: RED;");
+                    txtNgaySinh.setValue(null);
+                    Optional<ButtonType> a = er.showAndWait();
+                }
+            }
+        });
+        cboGioiTinh.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(cboGioiTinh.getSelectionModel().getSelectedItem().equals("")){
+                    cboGioiTinh.setStyle("-fx-border-color: RED;");
+                }else {
+                    cboGioiTinh.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
+        cboTrinhDo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if(cboTrinhDo.getSelectionModel().getSelectedItem().equals("")){
+                    cboTrinhDo.setStyle("-fx-border-color: RED;");
+                }else {
+                    cboTrinhDo.setStyle("-fx-border-color: GREEN;");
+                }
+            }
+        });
         handleEvent();
+        HideInfo();
+        refeshTable();
+        filerTableCongDoan();
     }
 
     private String taoMaCN() throws SQLException, ParseException {
@@ -413,38 +358,46 @@ public class CTL_UI_CongNhan implements Initializable {
      * Hàm mở dialog  thêm công nhân
      */
     public void handleEvent() {
+        tblCongNhan.addEventHandler(MouseEvent.MOUSE_CLICKED,(e)->{
+            listCN = bus_congNhan.getDSCongNhan();
+            CNCLick = tblCongNhan.getSelectionModel().getSelectedItem();
+            txtMaCN.setText(CNCLick.getMaCongNhan());
+            txtHoTen.setText(CNCLick.getTenCongNhan());
+            int phai = 1;
+            if(CNCLick.isPhai()==true){
+                phai = 0;
+            }
+            cboGioiTinh.getSelectionModel().select(phai);
+            cboTrinhDo.getSelectionModel().select(CNCLick.getTrinhDo());
+            LocalDate ngaySinh = Instant.ofEpochMilli(CNCLick.getNgaySinh().getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate ngayVaoLam = Instant.ofEpochMilli(CNCLick.getNgayVaoLam().getTime())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            txtNgayVaoLam.setValue(ngayVaoLam);
+            txtNgaySinh.setValue(ngaySinh);
+            String diaChi [] = CNCLick.getDiaChi().split(",");
+            cboTinh.setValue(diaChi[3]);
+            cboHuyen.setValue(diaChi[2]);
+            cboPhuong.setValue(diaChi[1]);
+            txtDiaChi.setText(diaChi[0]);
+            txtSoDienThoai.setText(CNCLick.getSoDienThoai());
+            txtEmail.setText(CNCLick.getEmail());
+            CheckGreen();
+
+        });
         btnThem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (!checkLuu) {
-                    // đổi nút
+                if(btnThem.getText().equalsIgnoreCase("Thêm")){
                     btnThem.setText("Lưu");
-                    checkLuu = true;
                     btnXoa.setText("Hủy");
-                    checkXoa = false;
                     btnSua.setDisable(true);
-                    btnLamMoi.setDisable(true);
-
-                    txtMaCN.setDisable(false);
-                    txtHoTen.setDisable(false);
-                    txtSoDienThoai.setDisable(false);
-                    txtEmail.setDisable(false);
-                    txtDiaChi.setDisable(false);
-                    txtNgaySinh.setDisable(false);
-                    txtNgayVaoLam.setDisable(false);
-                    cboTrinhDo.setDisable(false);
-                    cboGioiTinh.setDisable(false);
-                    cboTinh.setDisable(false);
-                    cboHuyen.setDisable(false);
-                    cboPhuong.setDisable(false);
-
-                    //txtMaCN.setText("1");
-                    /*try {
-                        txtMaCN.setText("1");
-                    } catch (SQLException | ParseException e) {
-                        throw new RuntimeException(e);
-                    }*/
-                } else {
+                    ShowInfo();
+                    Clear();
+                    CheckRed();
+                } else if (btnThem.getText().equalsIgnoreCase("Lưu")) {
                     themCongNhan();
                 }
             }
@@ -453,31 +406,18 @@ public class CTL_UI_CongNhan implements Initializable {
         btnXoa.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (!checkXoa){
-                    checkLuu = false;
-                    checkXoa = true;
-
+                if (btnXoa.getText().equalsIgnoreCase("Hủy")){
+                    Clear();
                     btnThem.setText("Thêm");
                     btnXoa.setText("Xóa");
-                    txtMaCN.setText("");
-                    btnLamMoi.setDisable(false);
                     btnSua.setDisable(false);
-
-                    txtMaCN.setDisable(true);
-                    txtHoTen.setDisable(true);
-                    txtSoDienThoai.setDisable(true);
-                    txtEmail.setDisable(true);
-                    txtDiaChi.setDisable(true);
-                    txtNgaySinh.setDisable(true);
-                    txtNgayVaoLam.setDisable(true);
-                    cboTrinhDo.setDisable(true);
-                    cboGioiTinh.setDisable(true);
-                    cboTinh.setDisable(true);
-                    cboHuyen.setDisable(true);
-                    cboPhuong.setDisable(true);
-                    return;
+                    HideInfo();
                 }
-                deleteCongNhan();
+                else {
+                    deleteCongNhan();
+                    Clear();
+                }
+
 
             }
         });
@@ -496,7 +436,7 @@ public class CTL_UI_CongNhan implements Initializable {
         btnLamMoi.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                refeshForm();
+                Clear();
             }
         });
         btn_themDanhSach.setOnAction(new EventHandler<ActionEvent>() {
@@ -561,6 +501,7 @@ public class CTL_UI_CongNhan implements Initializable {
 
                             ppsm.execute();
                             refeshTable();
+                            filerTableCongDoan();
                         }
                         wb.close();
                         fileIn.close();
@@ -675,15 +616,19 @@ public class CTL_UI_CongNhan implements Initializable {
     }
 
     public void refeshTable() {
-        BUS_CongNhan bus_congNhan = new BUS_CongNhan();
-        try {
-            ArrayList<DTO_CongNhan> ds = bus_congNhan.getDSCongNhan();
-            listCongNhan = FXCollections.observableArrayList(ds);
+        ArrayList<DTO_CongNhan> ds = bus_congNhan.getDSCongNhan();
+        listCongNhan = FXCollections.observableArrayList(ds);
+        maCNCol.setCellValueFactory(new PropertyValueFactory<>("maCongNhan"));
+        hoTenCol.setCellValueFactory(new PropertyValueFactory<>("tenCongNhan"));
+        gioiTinhCol.setCellValueFactory(new PropertyValueFactory<>("phai"));
+        ngaySinhCol.setCellValueFactory(new PropertyValueFactory<>("ngaySinh"));
+        ngayVaoLamCol.setCellValueFactory(new PropertyValueFactory<>("ngayVaoLam"));
+        soDienThoaiCol.setCellValueFactory(new PropertyValueFactory<>("soDienThoai"));
+        diaChiCol.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        trinhDoCol.setCellValueFactory(new PropertyValueFactory<>("trinhDo"));
+        tblCongNhan.setItems(listCongNhan);
 
-            tblCongNhan.setItems(listCongNhan);
-        } catch (SQLException | ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void deleteCongNhan() {
@@ -714,6 +659,7 @@ public class CTL_UI_CongNhan implements Initializable {
                     throw new RuntimeException(e);
                 }
                 refeshTable();
+                filerTableCongDoan();
             }
 
     }
@@ -724,21 +670,7 @@ public class CTL_UI_CongNhan implements Initializable {
     public void themCongNhan() {
         // lấy thông tin  công nhân
         try {
-            if (txtNgayVaoLam.getValue() == null)
-                checkFrom = false;
-            if (txtNgaySinh.getValue() == null)
-                checkFrom = false;
-            if (cboGioiTinh.getValue() == null)
-                checkFrom = false;
-            if (cboTrinhDo.getValue() == null)
-                checkFrom = false;
-            if (cboTinh.getValue() == null)
-                checkFrom = false;
-            if (cboHuyen.getValue() == null)
-                checkFrom = false;
-            if (cboPhuong.getValue() == null)
-                checkFrom = false;
-
+            checkInfo();
             if (!checkFrom) {
                 Alert wn = new Alert(Alert.AlertType.WARNING, "Cảnh báo", ButtonType.APPLY);
                 wn.setContentText("Vui lòng chỉnh sửa thông tin các trường bị đánh dấu");
@@ -766,27 +698,11 @@ public class CTL_UI_CongNhan implements Initializable {
             bus_congNhan.insertCongNhan(tmp);
 
             refeshTable();
-            // đổi lại nút
-            checkLuu = false;
-            checkXoa = false;
+            Clear();
+            HideInfo();
+            CheckRed();
+            filerTableCongDoan();
 
-            btnThem.setText("Thêm");
-            btnXoa.setText("Xóa");
-            btnLamMoi.setDisable(false);
-            btnSua.setDisable(false);
-            txtMaCN.setDisable(true);
-            txtHoTen.setDisable(true);
-            txtSoDienThoai.setDisable(true);
-            txtEmail.setDisable(true);
-            txtDiaChi.setDisable(true);
-            txtNgaySinh.setDisable(true);
-            txtNgayVaoLam.setDisable(true);
-            cboTrinhDo.setDisable(true);
-            cboGioiTinh.setDisable(true);
-            cboTinh.setDisable(true);
-            cboHuyen.setDisable(true);
-            cboPhuong.setDisable(true);
-            refeshForm();
 
         } catch (SQLException | ParseException e) {
             throw new RuntimeException(e);
@@ -794,58 +710,54 @@ public class CTL_UI_CongNhan implements Initializable {
 
 
     }
-
-    /***
-     * Hàm xóa trắng form thêm nhân viên
-     */
-    public void refeshForm() {
+    private void HideInfo(){
+        txtMaCN.setDisable(true);
+        txtHoTen.setDisable(true);
+        cboGioiTinh.setDisable(true);
+        txtNgayVaoLam.setDisable(true);
+        txtNgaySinh.setDisable(true);
+        txtSoDienThoai.setDisable(true);
+        txtEmail.setDisable(true);
+        cboTrinhDo.setDisable(true);
+        cboTinh.setDisable(true);
+        cboPhuong.setDisable(true);
+        cboHuyen.setDisable(true);
+        txtDiaChi.setDisable(true);
+    }
+    private void ShowInfo(){
+        txtMaCN.setDisable(false);
+        txtHoTen.setDisable(false);
+        cboGioiTinh.setDisable(false);
+        txtNgayVaoLam.setDisable(false);
+        txtNgaySinh.setDisable(false);
+        txtSoDienThoai.setDisable(false);
+        txtEmail.setDisable(false);
+        cboTrinhDo.setDisable(false);
+        cboTinh.setDisable(false);
+        cboPhuong.setDisable(false);
+        cboHuyen.setDisable(false);
+        txtDiaChi.setDisable(false);
+    }
+    private void Clear(){
         txtMaCN.setText("");
         txtHoTen.setText("");
-        txtHoTen.setStyle("-fx-border-color: RED;");
         txtSoDienThoai.setText("");
-        txtSoDienThoai.setStyle("-fx-border-color: RED;");
         txtEmail.setText("");
-        txtEmail.setStyle("-fx-border-color: RED;");
-        txtDiaChi.setText("");
-        txtDiaChi.setStyle("-fx-border-color: RED;");
-        txtNgaySinh.setValue(null);
-        txtNgaySinh.setStyle("-fx-border-color: RED;");
-        txtNgayVaoLam.setValue(null);
-        txtNgayVaoLam.setStyle("-fx-border-color: RED;");
-        cboTrinhDo.getSelectionModel().clearSelection();
-        cboTrinhDo.setStyle("-fx-border-color: RED;");
         cboGioiTinh.getSelectionModel().clearSelection();
-        cboGioiTinh.setStyle("-fx-border-color: RED;");
+
+        cboTrinhDo.getSelectionModel().clearSelection();
         cboTinh.getSelectionModel().clearSelection();
-        cboTinh.setStyle("-fx-border-color: RED;");
         cboHuyen.getSelectionModel().clearSelection();
-        cboHuyen.setStyle("-fx-border-color: RED;");
         cboPhuong.getSelectionModel().clearSelection();
-        cboPhuong.setStyle("-fx-border-color: RED;");
-
+        cboTrinhDo.setValue("");
+        cboTinh.setValue("");
+        cboHuyen.setValue("");
+        cboPhuong.setValue("");
+        txtDiaChi.setText("");
+        txtNgaySinh.setValue(null);
+        txtNgayVaoLam.setValue(null);
+        CheckRed();
     }
-
-    /**
-     * Hàm check dữ liệu của form
-     *
-     * @return true or false
-     */
-    private boolean check() {
-        boolean check = true;
-        if (txtHoTen.getText().equals("")) {
-            txtHoTen.requestFocus();
-            return false;
-        }
-        Date ngayVaoLam = Date.from(txtNgayVaoLam.getValue().atStartOfDay()
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        if (getDiffDate(ngayVaoLam, new Date()) <= 0) {
-
-        }
-
-        return check;
-    }
-
     /**
      * Hàm trở trả về số ngày cách nhau giưa 2 ngày
      *
@@ -874,15 +786,33 @@ public class CTL_UI_CongNhan implements Initializable {
 
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = newValue.toLowerCase();
-
+                String gioiTinh = "Nam";
+                if(dto_congNhan.isPhai() == false){
+                    gioiTinh = "Nữ";
+                }
                 if (dto_congNhan.getMaCongNhan().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 } else if (dto_congNhan.getTenCongNhan().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (String.valueOf(dto_congNhan.getSoDienThoai()).contains(lowerCaseFilter))
+                } if(dto_congNhan.getNgaySinh().toString().toLowerCase().indexOf(lowerCaseFilter) != -1){
                     return true;
-                else
-                    return false; // Does not match.
+                }
+                if(gioiTinh.toLowerCase().indexOf(lowerCaseFilter) != -1){
+                    return true;
+                }
+                if(dto_congNhan.getNgayVaoLam().toString().toLowerCase().indexOf(lowerCaseFilter) != -1){
+                    return true;
+                }
+                if(dto_congNhan.getSoDienThoai().toLowerCase().indexOf(lowerCaseFilter) != -1){
+                    return true;
+                }
+                if(dto_congNhan.getTrinhDo().toLowerCase().indexOf(lowerCaseFilter) != -1){
+                    return true;
+                }
+                if(dto_congNhan.getDiaChi().toLowerCase().indexOf(lowerCaseFilter) != -1){
+                    return true;
+                }
+                else return dto_congNhan.getEmail().toLowerCase().indexOf(lowerCaseFilter) != -1;
             });
         });
         SortedList<DTO_CongNhan> sortedData = new SortedList<>(filteredListCongDoan);
@@ -895,6 +825,49 @@ public class CTL_UI_CongNhan implements Initializable {
         //refeshTable();
         dialogSua.setResult(ButtonType.CLOSE);
         dialogSua.close();
+
+    }
+    private void checkInfo(){
+        if(txtHoTen.getText().equals("")||
+                txtEmail.getText().equals("")|| !txtEmail.getText().toString().matches("^[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9]+)*$")||
+                cboTrinhDo.getValue()==null||txtSoDienThoai.getText().equals("")||txtSoDienThoai.getText().equals("")||txtSoDienThoai.getText().length()!=10||
+                txtDiaChi.getText().equals("")||cboGioiTinh.getValue()==null||cboPhuong.getValue()==null||
+                cboTinh.getValue()==null||cboHuyen.getValue()==null||txtNgayVaoLam.getValue()==null||
+                txtNgaySinh.getValue()==null){
+            checkFrom = false;
+        }
+        else {
+            checkFrom = true;
+        }
+
+    }
+    private void CheckRed(){
+        txtHoTen.setStyle("-fx-border-color: RED;");
+        txtSoDienThoai.setStyle("-fx-border-color: RED;");
+        cboTrinhDo.setStyle("-fx-border-color: RED;");
+        txtEmail.setStyle("-fx-border-color: RED;");
+        txtDiaChi.setStyle("-fx-border-color: RED;");
+        txtNgaySinh.setStyle("-fx-border-color: RED;");
+        txtNgayVaoLam.setStyle("-fx-border-color: RED;");
+        cboPhuong.setStyle("-fx-border-color: RED;");
+        cboTinh.setStyle("-fx-border-color: RED;");
+        cboGioiTinh.setStyle("-fx-border-color: RED;");
+        cboHuyen.setStyle("-fx-border-color: RED;");
+    }
+    private void CheckGreen(){
+        if(checkFrom){
+            txtHoTen.setStyle("-fx-border-color: GREEN;");
+            txtSoDienThoai.setStyle("-fx-border-color: GREEN;");
+            cboTrinhDo.setStyle("-fx-border-color: GREEN;");
+            txtEmail.setStyle("-fx-border-color: GREEN;");
+            txtDiaChi.setStyle("-fx-border-color: GREEN;");
+            txtNgaySinh.setStyle("-fx-border-color: GREEN;");
+            txtNgayVaoLam.setStyle("-fx-border-color: GREEN;");
+            cboPhuong.setStyle("-fx-border-color: GREEN;");
+            cboTinh.setStyle("-fx-border-color: GREEN;");
+            cboGioiTinh.setStyle("-fx-border-color: GREEN;");
+            cboHuyen.setStyle("-fx-border-color: GREEN;");
+        }
 
     }
 }
